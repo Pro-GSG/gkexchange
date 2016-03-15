@@ -1,0 +1,7 @@
+<?
+if($INCLUDE_FROM_CACHE!='Y')return false;
+$datecreate = '001458026672';
+$dateexpire = '001458030272';
+$ser_content = 'a:2:{s:7:"CONTENT";s:0:"";s:4:"VARS";a:10:{s:40:"options_225cb1a4e35d18908de613503a33cba6";a:4:{s:3:"pin";s:5:"false";s:9:"transform";s:5:"false";s:4:"left";s:5:"false";s:3:"top";s:5:"false";}s:40:"options_2d4049b6dec1d9d78f27d5949417102c";a:4:{s:3:"pin";s:5:"false";s:9:"transform";s:5:"false";s:4:"left";s:5:"false";s:3:"top";s:5:"false";}s:17:"options_undefined";a:4:{s:3:"pin";s:9:"undefined";s:3:"top";s:5:"false";s:4:"left";s:5:"false";s:9:"transform";s:5:"false";}s:40:"options_8e97a8ed19a3e7f3779c6cb7dd3c5fcc";a:4:{s:3:"pin";s:5:"false";s:9:"transform";s:5:"false";s:3:"top";s:5:"false";s:4:"left";s:5:"false";}s:42:"size_/bitrix/admin/iblock_element_edit.php";a:2:{s:5:"width";s:3:"544";s:6:"height";s:3:"584";}s:43:"size_/bitrix/admin/iblock_element_admin.php";a:2:{s:5:"width";s:3:"602";s:6:"height";s:3:"561";}s:32:"size_bx_component_properties_res";a:2:{s:5:"width";s:4:"1164";s:6:"height";s:3:"512";}s:43:"size_/bitrix/admin/public_file_edit_src.php";a:2:{s:5:"width";s:4:"1139";s:6:"height";s:3:"546";}s:39:"size_/bitrix/admin/public_menu_edit.php";a:2:{s:5:"width";s:4:"1139";s:6:"height";s:3:"609";}s:38:"size_/bitrix/admin/component_props.php";a:2:{s:5:"width";s:4:"1000";s:6:"height";s:3:"782";}}}';
+return true;
+?>

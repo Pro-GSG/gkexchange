@@ -1,0 +1,1 @@
+<? $arFilesInfo = array( 'FILES' => array("/bitrix/templates/GkExchange_copy_copy/components/bitrix/system.auth.authorize/.default/style.css" => "1453369491475",), 'CUR_SEL_CNT' => '4', 'CUR_IE_CNT' => '0'); ?>

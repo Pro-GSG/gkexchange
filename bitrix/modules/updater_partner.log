@@ -1,0 +1,370 @@
+2014-11-19 15:06:56 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:06:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:06:56 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:06:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:06:56 -  - TIME GetUpdatesList(request) 0.555 sec
+2014-11-19 15:06:56 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:07:55 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:07:55 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:07:55 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:07:55 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:07:56 -  - TIME GetUpdatesList(request) 0.225 sec
+2014-11-19 15:07:56 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:02 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:02 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:08:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:02 -  - TIME GetUpdatesList(request) 0.245 sec
+2014-11-19 15:08:02 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:27 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:27 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:27 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:08:27 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:28 -  - TIME GetUpdatesList(request) 0.352 sec
+2014-11-19 15:08:28 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:31 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:31 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:08:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:31 -  - TIME GetUpdatesList(request) 0.278 sec
+2014-11-19 15:08:31 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:36 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:36 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:36 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings
+2014-11-19 15:08:36 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:37 -  - TIME GetUpdatesList(request) 0.311 sec
+2014-11-19 15:08:37 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:45 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=grain.customsettings&lim=Y
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:45 -  - TIME LoadModulesUpdates(request) 0.316 sec
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:45 - LMU01 - LoadModulesUpdates-Step
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:45 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:46 - DOWNLOAD - Time - 0.42513513565063 sec
+2014-11-19 15:08:46 -  - exec CUpdateClientPartner::UnGzipArchive
+2014-11-19 15:08:46 -  - TIME UnGzipArchive 0.07 sec
+2014-11-19 15:08:46 -  - TIME UpdateStepModules 0.115 sec
+2014-11-19 15:08:46 - UPD_SUCCESS - Updated: grain.customsettings
+2014-11-19 15:08:46 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2014-11-19 15:08:46 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:46 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=grain.customsettings&lim=Y
+2014-11-19 15:08:46 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:47 -  - TIME LoadModulesUpdates(request) 0.309 sec
+2014-11-19 15:08:47 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:47 - STEP - Finish - NOUPDATES
+2014-11-19 15:08:47 - STEP - Finish - NOUPDATES
+2014-11-19 15:08:50 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:50 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:50 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings&fullmoduleinfo=Y
+2014-11-19 15:08:50 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:50 -  - TIME GetUpdatesList(request) 0.323 sec
+2014-11-19 15:08:50 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:08:51 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:08:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:08:51 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings&fullmoduleinfo=Y
+2014-11-19 15:08:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:08:51 -  - TIME GetUpdatesList(request) 0.383 sec
+2014-11-19 15:08:51 -  - exec CUpdateClientPartner::ParseServerData
+2014-11-19 15:09:03 -  - exec CUpdateClientPartner::GetUpdatesList
+2014-11-19 15:09:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2014-11-19 15:09:03 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=D&CLIENT_PHPVER=5.3.3-7%2Bsqueeze15&dbv=5.1.66&instm=main%2C14.5.0%2CY%3Bhighloadblock%2C14.0.6%2CN%3Biblock%2C14.5.0%2CN%3Bfileman%2C14.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C14.0.1%2CN%3Bbitrixcloud%2C14.0.4%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C14.5.0%2CN%3Bsocialservices%2C14.0.4%2CN%3Bseo%2C14.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C14.5.0%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings%2Cgrain.customsettings
+2014-11-19 15:09:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2014-11-19 15:09:03 -  - TIME GetUpdatesList(request) 0.298 sec
+2014-11-19 15:09:03 -  - exec CUpdateClientPartner::ParseServerData
+2015-05-06 17:20:41 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-05-06 17:20:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-05-06 17:20:41 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.29&dbv=5.5.36&instm=main%2C15.0.6%2CN%3Bscale%2C14.5.2%2CN%3Bseo%2C14.5.1%2CN%3Bsocialservices%2C14.5.8%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bclouds%2C15.0.0%2CN%3Btranslate%2C12.5.0%2CN%3Biblock%2C15.0.5%2CN%3Bfileman%2C15.0.1%2CN%3Bbitrixcloud%2C14.5.0%2CN%3Bhighloadblock%2C15.0.0%2CN%3Bperfmon%2C15.0.1%2CN%3Bcompression%2C14.0.0%2CN%3Bsearch%2C14.5.3%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN&reqm=grain.customsettings%2Cbitrix.sitecorporate&SUPD_SRS=RU&SUPD_CMP=N
+2015-05-06 17:20:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-05-06 17:20:41 -  - TIME GetUpdatesList(request) 0.349 sec
+2015-05-06 17:20:41 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:36 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-06-17 10:28:36 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:36 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.sitecorporate%2Cgrain.customsettings%2Cbitrix.xscan&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:36 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:36 -  - TIME GetUpdatesList(request) 0.319 sec
+2015-06-17 10:28:36 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:48 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.xscan&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:48 -  - TIME LoadModulesUpdates(request) 0.351 sec
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:48 - LMU01 - LoadModulesUpdates-Step
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:48 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:49 - DOWNLOAD - Time - 0.23782706260681 sec
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-06-17 10:28:49 -  - TIME UnGzipArchive 0.021 sec
+2015-06-17 10:28:49 -  - TIME UpdateStepModules 0.029 sec
+2015-06-17 10:28:49 - UPD_SUCCESS - Updated: bitrix.xscan
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:49 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.0%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.xscan&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:49 -  - TIME LoadModulesUpdates(request) 0.243 sec
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:49 - LMU01 - LoadModulesUpdates-Step
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:49 - DOWNLOAD - Time - 0.24940490722656 sec
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-06-17 10:28:49 -  - TIME UnGzipArchive 0.002 sec
+2015-06-17 10:28:49 -  - TIME UpdateStepModules 0.006 sec
+2015-06-17 10:28:49 - UPD_SUCCESS - Updated: bitrix.xscan (1.0.1)<br>Дополнены сигнатуры, добавлены исключения
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:49 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.1%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.xscan&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:49 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:50 -  - TIME LoadModulesUpdates(request) 0.267 sec
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:50 - LMU01 - LoadModulesUpdates-Step
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:50 - DOWNLOAD - Time - 0.37055015563965 sec
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-06-17 10:28:50 -  - TIME UnGzipArchive 0.001 sec
+2015-06-17 10:28:50 -  - TIME UpdateStepModules 0.002 sec
+2015-06-17 10:28:50 - UPD_SUCCESS - Updated: bitrix.xscan (1.0.2)<br>Исправлена сигнатура
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:50 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.2%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.xscan&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:50 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:51 -  - TIME LoadModulesUpdates(request) 0.261 sec
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:51 - LMU01 - LoadModulesUpdates-Step
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:51 - DOWNLOAD - Time - 0.22509002685547 sec
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-06-17 10:28:51 -  - TIME UnGzipArchive 0.001 sec
+2015-06-17 10:28:51 -  - TIME UpdateStepModules 0.004 sec
+2015-06-17 10:28:51 - UPD_SUCCESS - Updated: bitrix.xscan (1.0.3)<br><li>Пропускаются папки кеша, удалите весь кеш после сканирования <li>Детализирован вывод подозрительных файлов <li>Добавлена сигнатура \"variable as function\"
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:28:51 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.xscan&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:28:51 -  - TIME LoadModulesUpdates(request) 0.232 sec
+2015-06-17 10:28:51 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:28:51 - STEP - Finish - NOUPDATES
+2015-06-17 10:28:51 - STEP - Finish - NOUPDATES
+2015-06-17 10:29:04 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-06-17 10:29:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:29:04 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:29:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:29:05 -  - TIME GetUpdatesList(request) 0.426 sec
+2015-06-17 10:29:05 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:29:05 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-06-17 10:29:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:29:05 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:29:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:29:05 -  - TIME GetUpdatesList(request) 0.38 sec
+2015-06-17 10:29:05 -  - exec CUpdateClientPartner::ParseServerData
+2015-06-17 10:41:56 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-06-17 10:41:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-06-17 10:41:56 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.3.27&dbv=5.5.30&instm=main%2C15.0.16%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.0.1%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.0%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.0.1%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.0.9%2CN%3Bclouds%2C15.0.1%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.0.4%2CN%3Biblock%2C15.0.7%2CN%3Bperfmon%2C15.0.3%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings%2Cbitrix.xscan&SUPD_SRS=RU&SUPD_CMP=N
+2015-06-17 10:41:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-06-17 10:41:57 -  - TIME GetUpdatesList(request) 0.464 sec
+2015-06-17 10:41:57 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 11:58:52 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 11:58:52 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 11:58:52 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 11:58:52 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 11:58:53 -  - TIME GetUpdatesList(request) 0.307 sec
+2015-09-25 11:58:53 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 11:59:01 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 11:59:01 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 11:59:01 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 11:59:01 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 11:59:01 -  - TIME GetUpdatesList(request) 0.305 sec
+2015-09-25 11:59:01 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:00:54 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:00:54 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:00:54 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cbitrix.xscan%2Cgrain.customsettings%2Cuniplug.sqladminer&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:00:54 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:00:55 -  - TIME GetUpdatesList(request) 0.805 sec
+2015-09-25 12:00:55 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:01 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:01 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:01 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:01 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:01 -  - TIME LoadModulesUpdates(request) 0.532 sec
+2015-09-25 12:01:01 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:01 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:02 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:02 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:03 - DOWNLOAD - Time - 0.8874340057373 sec
+2015-09-25 12:01:03 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:03 -  - TIME UnGzipArchive 0.175 sec
+2015-09-25 12:01:03 -  - TIME UpdateStepModules 0.08 sec
+2015-09-25 12:01:03 - UPD_SUCCESS - Updated: uniplug.sqladminer
+2015-09-25 12:01:03 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:03 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C0.0.3%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:04 -  - TIME LoadModulesUpdates(request) 0.82 sec
+2015-09-25 12:01:04 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:04 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:04 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:04 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:05 - DOWNLOAD - Time - 0.80676078796387 sec
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:05 -  - TIME UnGzipArchive 0.009 sec
+2015-09-25 12:01:05 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171665/uniplug.sqladminer/updater0.0.4.php'
+2015-09-25 12:01:05 -  - TIME UpdateStepModules 0.017 sec
+2015-09-25 12:01:05 - UPD_SUCCESS - Updated: uniplug.sqladminer (0.0.4)<br>Добавлена поддержка переключения языков
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:05 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C0.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:05 -  - TIME LoadModulesUpdates(request) 0.463 sec
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:05 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:06 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:06 - DOWNLOAD - Time - 0.81437802314758 sec
+2015-09-25 12:01:06 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:06 -  - TIME UnGzipArchive 0.006 sec
+2015-09-25 12:01:06 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171666/uniplug.sqladminer/updater0.0.5.php'
+2015-09-25 12:01:06 -  - TIME UpdateStepModules 0.011 sec
+2015-09-25 12:01:06 - UPD_SUCCESS - Updated: uniplug.sqladminer (0.0.5)<br>Обновление версии SQL Adminer (4.0.3). Исправление ошибки двойного перекодирования при кодировке cp1251.
+2015-09-25 12:01:06 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:06 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C0.0.5%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:07 -  - TIME LoadModulesUpdates(request) 0.556 sec
+2015-09-25 12:01:07 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:07 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:07 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:07 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:07 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:08 - DOWNLOAD - Time - 0.84329891204834 sec
+2015-09-25 12:01:08 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:08 -  - TIME UnGzipArchive 0.004 sec
+2015-09-25 12:01:08 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171668/uniplug.sqladminer/updater0.0.6.php'
+2015-09-25 12:01:08 -  - TIME UpdateStepModules 0.005 sec
+2015-09-25 12:01:08 - UPD_SUCCESS - Updated: uniplug.sqladminer (0.0.6)<br>Обновление версии SQL Adminer (4.1.0)
+2015-09-25 12:01:08 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:08 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:08 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C0.0.6%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:08 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:09 -  - TIME LoadModulesUpdates(request) 0.843 sec
+2015-09-25 12:01:09 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:09 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:09 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:09 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:09 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:11 - DOWNLOAD - Time - 1.678848028183 sec
+2015-09-25 12:01:11 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:11 -  - TIME UnGzipArchive 0.008 sec
+2015-09-25 12:01:11 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171671/uniplug.sqladminer/updater1.0.1.php'
+2015-09-25 12:01:13 -  - TIME UpdateStepModules 1.846 sec
+2015-09-25 12:01:13 - UPD_SUCCESS - Updated: uniplug.sqladminer (1.0.1)<br>Обновление версии SQL Adminer (4.2.0)
+2015-09-25 12:01:13 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:13 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:13 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.1%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:13 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:14 -  - TIME LoadModulesUpdates(request) 0.686 sec
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:14 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:14 - DOWNLOAD - Time - 0.42943906784058 sec
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:14 -  - TIME UnGzipArchive 0.001 sec
+2015-09-25 12:01:14 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171674/uniplug.sqladminer/updater1.0.2.php'
+2015-09-25 12:01:14 -  - TIME UpdateStepModules 0.003 sec
+2015-09-25 12:01:14 - UPD_SUCCESS - Updated: uniplug.sqladminer (1.0.2)<br>Исправление: не показывать пункт меню если пользователь не имеет прав доступа к модулю 
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:14 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.2%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:14 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:15 -  - TIME LoadModulesUpdates(request) 0.438 sec
+2015-09-25 12:01:15 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:15 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:15 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:15 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:15 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:16 - DOWNLOAD - Time - 0.8060290813446 sec
+2015-09-25 12:01:16 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:16 -  - TIME UnGzipArchive 0.005 sec
+2015-09-25 12:01:16 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171676/uniplug.sqladminer/updater1.0.3.php'
+2015-09-25 12:01:16 -  - TIME UpdateStepModules 0.006 sec
+2015-09-25 12:01:16 - UPD_SUCCESS - Updated: uniplug.sqladminer (1.0.3)<br>Обновление версии SQL Adminer (4.2.1)
+2015-09-25 12:01:16 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:16 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:16 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.3%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:16 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:17 -  - TIME LoadModulesUpdates(request) 0.785 sec
+2015-09-25 12:01:17 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:17 - LMU01 - LoadModulesUpdates-Step
+2015-09-25 12:01:17 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:17 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:17 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:18 - DOWNLOAD - Time - 0.79323482513428 sec
+2015-09-25 12:01:18 -  - exec CUpdateClientPartner::UnGzipArchive
+2015-09-25 12:01:18 -  - TIME UnGzipArchive 0.004 sec
+2015-09-25 12:01:18 - CSURUS1 - Run updater '/bitrix/updates/update_m1443171678/uniplug.sqladminer/updater1.0.4.php'
+2015-09-25 12:01:18 -  - TIME UpdateStepModules 0.005 sec
+2015-09-25 12:01:18 - UPD_SUCCESS - Updated: uniplug.sqladminer (1.0.4)<br>Обновление версии SQL Adminer (4.2.2)
+2015-09-25 12:01:18 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2015-09-25 12:01:18 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:18 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=uniplug.sqladminer&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:18 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:18 -  - TIME LoadModulesUpdates(request) 0.57 sec
+2015-09-25 12:01:18 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:18 - STEP - Finish - NOUPDATES
+2015-09-25 12:01:18 - STEP - Finish - NOUPDATES
+2015-09-25 12:01:20 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:01:20 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:20 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:20 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:21 -  - TIME GetUpdatesList(request) 0.661 sec
+2015-09-25 12:01:21 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:21 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:01:21 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:21 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:21 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:22 -  - TIME GetUpdatesList(request) 0.925 sec
+2015-09-25 12:01:22 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:01:59 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:01:59 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:01:59 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cbitrix.xscan%2Cgrain.customsettings&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:01:59 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:01:59 -  - TIME GetUpdatesList(request) 0.503 sec
+2015-09-25 12:01:59 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:02:04 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:02:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:02:04 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cbitrix.xscan%2Cgrain.customsettings&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:02:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:02:05 -  - TIME GetUpdatesList(request) 0.54 sec
+2015-09-25 12:02:05 -  - exec CUpdateClientPartner::ParseServerData
+2015-09-25 12:02:06 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-09-25 12:02:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-09-25 12:02:06 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.4.35&dbv=5.6.21&instm=main%2C15.5.1%2CN%3Bcompression%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Btranslate%2C14.0.0%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bscale%2C14.5.2%2CN%3Bsocialservices%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN%3Bsearch%2C15.5.0%2CN%3Bhighloadblock%2C15.0.3%2CN%3Bfileman%2C15.5.1%2CN%3Bclouds%2C15.5.0%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bseo%2C15.5.4%2CN%3Biblock%2C15.5.4%2CN%3Bperfmon%2C15.5.0%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cbitrix.xscan%2Cgrain.customsettings&SUPD_SRS=RU&SUPD_CMP=N
+2015-09-25 12:02:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-09-25 12:02:07 -  - TIME GetUpdatesList(request) 0.916 sec
+2015-09-25 12:02:07 -  - exec CUpdateClientPartner::ParseServerData
+2015-12-01 14:26:07 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-12-01 14:26:07 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-12-01 14:26:07 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.6.9&dbv=5.5.43&instm=main%2C15.5.9%2CN%3Bhighloadblock%2C15.5.0%2CN%3Biblock%2C15.5.8%2CN%3Bfileman%2C15.5.2%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C15.5.1%2CN%3Btranslate%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C15.5.1%2CN%3Bsocialservices%2C15.5.3%2CN%3Bseo%2C15.5.6%2CN%3Bscale%2C14.5.2%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cgrain.customsettings%2Cbitrix.xscan&SUPD_SRS=RU&SUPD_CMP=N
+2015-12-01 14:26:07 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-12-01 14:26:08 -  - TIME GetUpdatesList(request) 0.514 sec
+2015-12-01 14:26:08 -  - exec CUpdateClientPartner::ParseServerData
+2015-12-01 14:27:20 -  - exec CUpdateClientPartner::GetUpdatesList
+2015-12-01 14:27:20 -  - exec CUpdateClientPartner::__CollectRequestData
+2015-12-01 14:27:20 -  - utf=N&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.webgk.net&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=1&TYPENC=F&CLIENT_PHPVER=5.6.9&dbv=5.5.43&instm=main%2C15.5.9%2CN%3Bhighloadblock%2C15.5.0%2CN%3Biblock%2C15.5.8%2CN%3Bfileman%2C15.5.2%2CN%3Bbitrix.sitecorporate%2C14.5.0%2CN%3Bperfmon%2C15.5.1%2CN%3Btranslate%2C14.0.0%2CN%3Bbitrixcloud%2C15.5.0%2CN%3Bcompression%2C14.0.0%2CN%3Bclouds%2C15.5.1%2CN%3Bsocialservices%2C15.5.3%2CN%3Bseo%2C15.5.6%2CN%3Bscale%2C14.5.2%2CN%3Buniplug.sqladminer%2C1.0.4%2CN%3Bgrain.customsettings%2C2.0.0%2CN%3Bsearch%2C15.5.1%2CN%3Bbitrix.xscan%2C1.0.3%2CN&reqm=bitrix.sitecorporate%2Cuniplug.sqladminer%2Cgrain.customsettings%2Cbitrix.xscan&SUPD_SRS=RU&SUPD_CMP=N
+2015-12-01 14:27:20 -  - exec CUpdateClientPartner::GetHTTPPage
+2015-12-01 14:27:21 -  - TIME GetUpdatesList(request) 0.367 sec
+2015-12-01 14:27:21 -  - exec CUpdateClientPartner::ParseServerData

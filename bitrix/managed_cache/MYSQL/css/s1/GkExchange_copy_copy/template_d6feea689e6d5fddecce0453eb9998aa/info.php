@@ -1,0 +1,1 @@
+<? $arFilesInfo = array( 'FILES' => array("/bitrix/templates/GkExchange_copy_copy/styles.css" => "14545119961467","/bitrix/templates/GkExchange_copy_copy/template_styles.css" => "145681776210925",), 'CUR_SEL_CNT' => '169', 'CUR_IE_CNT' => '0'); ?>

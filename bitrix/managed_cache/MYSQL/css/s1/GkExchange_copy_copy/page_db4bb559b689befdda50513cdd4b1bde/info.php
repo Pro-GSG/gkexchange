@@ -1,0 +1,1 @@
+<? $arFilesInfo = array( 'FILES' => array("/bitrix/templates/.default/components/bitrix/iblock.element.add.form/brief/style.css" => "14545128891190",), 'CUR_SEL_CNT' => '16', 'CUR_IE_CNT' => '0'); ?>
