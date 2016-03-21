@@ -1,7 +1,7 @@
 <?
 if($INCLUDE_FROM_CACHE!='Y')return false;
-$datecreate = '001456472088';
-$dateexpire = '001456475688';
+$datecreate = '001458048438';
+$dateexpire = '001458052038';
 $ser_content = 'a:2:{s:7:"CONTENT";s:0:"";s:4:"VARS";a:2:{s:5:"names";a:0:{}s:3:"ids";a:0:{}}}';
 return true;
 ?>
