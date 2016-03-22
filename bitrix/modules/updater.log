@@ -5565,3 +5565,9 @@ CREATE TABLE b_seo_yandex_direct_stat(
 2016-03-15 10:24:36 -  - exec CUpdateClient::GetHTTPPage
 2016-03-15 10:24:36 -  - TIME GetUpdatesList(request) 0.29 sec
 2016-03-15 10:24:36 -  - exec CUpdateClient::ParseServerData
+2016-03-22 10:17:54 -  - exec CUpdateClient::GetUpdatesList
+2016-03-22 10:17:54 -  - exec CUpdateClient::CollectRequestData
+2016-03-22 10:17:54 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=15.5.1&VERSION=15.5.10&TYPENC=F&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=gkexchange.ru&CHHB=gkexchange.ru&CSAB=127.0.0.1&CANGZIP=Y&CLIENT_PHPVER=5.4.45&stable=Y&rerere=Y&bitm_main=15.5.10&bitm_compression=16.0.0&bitm_bitrixcloud=16.0.0&bitm_translate=14.0.0&bitm_scale=16.0.0&bitm_socialservices=15.5.3&bitm_search=16.0.0&bitm_highloadblock=15.5.0&bitm_fileman=16.0.0&bitm_clouds=16.0.0&bitm_seo=15.5.6&bitm_iblock=15.5.8&bitm_perfmon=16.0.0&bitl_ru=&bitl_en=20070905&bith_ru=&bith_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y
+2016-03-22 10:17:54 -  - exec CUpdateClient::GetHTTPPage
+2016-03-22 10:17:55 -  - TIME GetUpdatesList(request) 0.653 sec
+2016-03-22 10:17:55 -  - exec CUpdateClient::ParseServerData
