@@ -1,4 +1,1 @@
-/bitrix/modules/seo/lang/ini.php	[630] long line
-/bitrix/components/bitrix/news.detail/ini.php	[630] long line
-/bitrix/components/bitrix/rss.show/ini.php	[630] long line
-/bitrix/components/bitrix/system.auth.otp/lang/ini.php	[630] long line
+/bitrix/components/bitrix/system.auth.otp/lang/ini.php	[610] strange vars

@@ -1,7 +1,7 @@
 <?
 if($INCLUDE_FROM_CACHE!='Y')return false;
-$datecreate = '001458631546';
-$dateexpire = '001458635146';
+$datecreate = '001458714902';
+$dateexpire = '001458718502';
 $ser_content = 'a:2:{s:7:"CONTENT";s:0:"";s:4:"VARS";a:8:{s:19:"stickers_last_color";i:0;s:11:"last_pathes";s:357:"a:10:{i:0;s:6:"/about";i:1;s:42:"/integratsiya-internet-magazina-i-bitrix24";i:2;s:27:"/vygruzka-iz-excel-v-bitrix";i:3;s:31:"/integratsiya-bitrix-cherez-api";i:4;s:9:"/services";i:5;s:49:"/bitrix/components/bitrix/iblock.element.add.form";i:6;s:37:"/bitrix/templates/corp_services_green";i:7;s:17:"/bitrix/templates";i:8;s:7:"/bitrix";i:9;s:9:"/contacts";}";s:11:"code_editor";a:2:{s:5:"theme";s:5:"light";s:9:"highlight";s:1:"1";}s:17:"medialib_def_type";s:1:"1";s:28:"taskbar_settings_filesrc_pub";s:246:"a:3:{s:19:"BXPropertiesTaskbar";a:3:{s:4:"show";b:1;s:3:"set";i:3;s:6:"active";b:1;}s:20:"BXComponents2Taskbar";a:3:{s:4:"show";b:1;s:3:"set";s:1:"2";s:6:"active";b:1;}s:17:"BXSnippetsTaskbar";a:3:{s:4:"show";b:1;s:3:"set";i:3;s:6:"active";b:0;}}";s:31:"taskbarset_settings_filesrc_pub";s:90:"a:2:{i:2;a:2:{s:4:"show";b:1;s:4:"size";i:200;}i:3;a:2:{s:4:"show";b:0;s:4:"size";i:160;}}";s:18:"file_dialog_config";s:18:"s1;/;list;type;asc";s:17:"medialib_user_set";s:9:"600,450,4";}}';
 return true;
 ?>
