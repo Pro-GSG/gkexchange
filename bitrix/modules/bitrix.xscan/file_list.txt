@@ -1,1 +1,1 @@
-/bitrix/components/bitrix/system.auth.otp/lang/ini.php	[610] strange vars
+/ai-bolit.php	[630] long line

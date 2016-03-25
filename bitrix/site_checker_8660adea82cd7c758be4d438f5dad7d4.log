@@ -1,66 +1,125 @@
-2016-Feb-25 17:00:48 Наличие необходимых модулей php (check_php_modules): Ok
+2016-Mar-23 11:03:08 Наличие необходимых модулей php (check_php_modules): Ok
 Все необходимые модули установлены
-2016-Feb-25 17:00:49 Обязательные параметры PHP (check_php_settings): Ok
+2016-Mar-23 11:03:08 Обязательные параметры PHP (check_php_settings): Ok
 Настройки правильные
-2016-Feb-25 17:00:49 Модули веб-сервера (check_security): Warning
+2016-Mar-23 11:03:08 Модули веб-сервера (check_security): Warning
 Замечание. Загружен модуль mod_dav/mod_dav_fs, WebDav не будет работать
-2016-Feb-25 17:00:49 Значения переменных сервера (check_server_vars): Ok
+2016-Mar-23 11:03:08 Значения переменных сервера (check_server_vars): Ok
 Корректные
-2016-Feb-25 17:00:49 Сохранение сессии (check_session): Ok
+2016-Mar-23 11:03:08 Сохранение сессии (check_session): Ok
 50% done
-2016-Feb-25 17:00:49 Сохранение сессии (check_session): Ok
+2016-Mar-23 11:03:08 Сохранение сессии (check_session): Ok
 Успешно
-2016-Feb-25 17:00:49 Параметры настройки UTF (mbstring и константа BX_UTF) (check_mbstring): Ok
+2016-Mar-23 11:03:09 Параметры настройки UTF (mbstring и константа BX_UTF) (check_mbstring): Ok
 Правильные. Сайт работает в однобайтовой кодировке
-2016-Feb-25 17:00:49 Служебные скрипты в корне сайта (check_install_scripts): Ok
+2016-Mar-23 11:03:09 Служебные скрипты в корне сайта (check_install_scripts): Ok
 Отсутствуют
-2016-Feb-25 17:00:49 Работа с сокетами (check_socket): Ok
+2016-Mar-23 11:03:09 Работа с сокетами (check_socket): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:49 Параметры подключения к базе данных (check_dbconn_settings): Ok
+2016-Mar-23 11:03:09 Параметры подключения к базе данных (check_dbconn_settings): Ok
 Успешно
-2016-Feb-25 17:00:50 Лишний вывод в файлах конфигурации (check_dbconn): Ok
+2016-Mar-23 11:03:09 Лишний вывод в файлах конфигурации (check_dbconn): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:50 Выполнение агентов на cron (check_bx_crontab): Warning
+2016-Mar-23 11:03:09 Выполнение агентов на cron (check_bx_crontab): Warning
 Замечание. Агенты выполняются на хитах, рекомендуется перевести выполнение агентов на cron
-2016-Feb-25 17:00:50 Сохранение сессии без UserAgent (check_session_ua): Ok
+2016-Mar-23 11:03:09 Сохранение сессии без UserAgent (check_session_ua): Ok
 50% done
 Connection to gkexchange.ru:80	Success
 
-2016-Feb-25 17:00:50 Сохранение сессии без UserAgent (check_session_ua): Ok
+2016-Mar-23 11:03:09 Сохранение сессии без UserAgent (check_session_ua): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:50 Настройки сайтов (check_sites): Ok
+2016-Mar-23 11:03:10 Настройки сайтов (check_sites): Ok
 Правильные
-2016-Feb-25 17:00:50 Передача объектов по ссылке (check_clone): Ok
+2016-Mar-23 11:03:10 Передача объектов по ссылке (check_clone): Ok
 Успешно
-2016-Feb-25 17:00:50 Размер стека и pcre.recursion_limit (check_pcre_recursion): Ok
+2016-Mar-23 11:03:10 Размер стека и pcre.recursion_limit (check_pcre_recursion): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:50 Вызов method_exists на строке (check_method_exists): Ok
+2016-Mar-23 11:03:10 Вызов method_exists на строке (check_method_exists): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:50 Загрузка файла (check_upload): Ok
+2016-Mar-23 11:03:10 Загрузка файла (check_upload): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:51 Загрузка файла больше 4Мб (check_upload_big): Ok
+2016-Mar-23 11:03:10 Загрузка файла больше 4Мб (check_upload_big): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:51 Загрузка файла через php://input (check_upload_raw): Ok
+2016-Mar-23 11:03:10 Загрузка файла через php://input (check_upload_raw): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:51 Передача POST запроса с большим числом параметров (check_post): Ok
+2016-Mar-23 11:03:11 Передача POST запроса с большим числом параметров (check_post): Ok
 Connection to gkexchange.ru:80	Success
 
 Успешно
-2016-Feb-25 17:00:51 Отправка почты (check_mail): Ok
+2016-Mar-23 11:03:11 Отправка почты (check_mail): Ok
+Успешно
+2016-Mar-23 11:03:11 Отправка почтового сообщения больше 64Кб (check_mail_big): Ok
+Успешно
+2016-Mar-23 11:03:11 Проверка на наличие неотправленных сообщений (check_mail_b_event): Ok
+Успешно
+2016-Mar-23 11:03:11 Внутреннее перенаправление (функция LocalRedirect) (check_localredirect): Ok
+50% done
+Connection to gkexchange.ru:80	Success
+
+2016-Mar-23 11:03:11 Внутреннее перенаправление (функция LocalRedirect) (check_localredirect): Ok
+Connection to gkexchange.ru:80	Success
+
+Успешно
+2016-Mar-23 11:03:11 Фактическое ограничение памяти (check_memory_limit): Ok
+20% done
+Connection to gkexchange.ru:80	Success
+
+2016-Mar-23 11:03:11 Фактическое ограничение памяти (check_memory_limit): Ok
+40% done
+Connection to gkexchange.ru:80	Success
+
+2016-Mar-23 11:03:12 Фактическое ограничение памяти (check_memory_limit): Ok
+60% done
+Connection to gkexchange.ru:80	Success
+
+2016-Mar-23 11:03:12 Фактическое ограничение памяти (check_memory_limit): Ok
+80% done
+Connection to gkexchange.ru:80	Success
+
+2016-Mar-23 11:03:12 Фактическое ограничение памяти (check_memory_limit): Ok
+Connection to gkexchange.ru:80	Success
+== Request ==
+GET /bitrix/admin/site_checker.php?test_type=memory_test&unique_id=a285f9007ac613ced2b20d23b2d8413d&max=255 HTTP/1.1
+Host: gkexchange.ru
+
+
+== Response ==
+HTTP/1.1 200 OK
+Server: nginx
+Date: Wed, 23 Mar 2016 08:03:12 GMT
+Content-Type: text/html; charset=UTF-8
+Content-Length: 192
+Connection: keep-alive
+X-Powered-By: PHP/5.4.45
+
+== Body ==
+
+Fatal error: Allowed memory size of 268435456 bytes exhausted (tried to allocate 1048577 bytes) in /srv/www/gkexchange.de.osg.ru/htdocs/bitrix/modules/main/admin/site_checker.php on line 132
+
+==========
+
+Не менее 128 М
+2016-Mar-23 11:03:14 Работа с файлами кеша (check_cache): Ok
+Успешно
+2016-Mar-23 11:03:15 Доступ к серверу обновлений (check_update): Ok
+Успешно
+2016-Mar-23 11:03:15 HTTP авторизация (check_http_auth): Ok
+Connection to gkexchange.ru:80	Success
+
 Успешно
