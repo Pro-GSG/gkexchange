@@ -10,4 +10,5 @@ $MESS["BLOG_C_HIDE"] = "Kommentare ausblenden";
 $MESS["BPC_MES_VOTE"] = "\"Gefällt mir\"-Angaben";
 $MESS["BPC_MES_VOTE1"] = "Gefällt mir";
 $MESS["BPC_MES_VOTE2"] = "Gefällt mir nicht";
+$MESS["INCORRECT_SERVER_RESPONSE"] = "Die Antwort des Servers ist nicht korrekt.";
 ?>

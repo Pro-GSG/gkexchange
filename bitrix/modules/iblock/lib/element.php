@@ -197,18 +197,6 @@ class ElementTable extends Main\Entity\DataManager
 			'SHOW_COUNTER_START' => new Main\Entity\DatetimeField('SHOW_COUNTER_START', array(
 				'title' => Loc::getMessage('ELEMENT_ENTITY_SHOW_COUNTER_START_FIELD'),
 			)),
-			'PREVIEW_PICTURE_FILE' => new Main\Entity\ReferenceField(
-				'PREVIEW_PICTURE_FILE',
-				'Bitrix\File\File',
-				array('=this.PREVIEW_PICTURE' => 'ref.ID'),
-				array('join_type' => 'LEFT')
-			),
-			'DETAIL_PICTURE_FILE' => new Main\Entity\ReferenceField(
-				'DETAIL_PICTURE_FILE',
-				'Bitrix\File\File',
-				array('=this.DETAIL_PICTURE' => 'ref.ID'),
-				array('join_type' => 'LEFT')
-			),
 			'IBLOCK' => new Main\Entity\ReferenceField(
 				'IBLOCK',
 				'Bitrix\Iblock\Iblock',
@@ -229,19 +217,19 @@ class ElementTable extends Main\Entity\DataManager
 			),
 			'MODIFIED_BY_USER' => new Main\Entity\ReferenceField(
 				'MODIFIED_BY_USER',
-				'Bitrix\User\User',
+				'Bitrix\Main\User',
 				array('=this.MODIFIED_BY' => 'ref.ID'),
 				array('join_type' => 'LEFT')
 			),
 			'CREATED_BY_USER' => new Main\Entity\ReferenceField(
 				'CREATED_BY_USER',
-				'Bitrix\User\User',
+				'Bitrix\Main\User',
 				array('=this.CREATED_BY' => 'ref.ID'),
 				array('join_type' => 'LEFT')
 			),
 			'WF_LOCKED_BY_USER' => new Main\Entity\ReferenceField(
 				'WF_LOCKED_BY_USER',
-				'Bitrix\User\User',
+				'Bitrix\Main\User',
 				array('=this.WF_LOCKED_BY' => 'ref.ID'),
 				array('join_type' => 'LEFT')
 			),

@@ -40,6 +40,9 @@ if (!$templateData['BLOG']['BLOG_FROM_AJAX'])
 		),
 		'settings' => array(
 
+		),
+		'tabs' => array(
+
 		)
 	);
 
@@ -141,23 +144,42 @@ if (!$templateData['BLOG']['BLOG_FROM_AJAX'])
 			"ID" => $templateData['TABS_ID']
 		);
 
-		if (isset($arResult["WIDTH"]))
+?><div id="<? echo $templateData['TABS_FRAME_ID']; ?>" class="bx_soc_comments_div bx_important <? echo $templateData['TEMPLATE_CLASS']; ?>"><?
+		$content = "";
+		$activeTabId = "";
+		$tabIDList = array();
+?><div id="<? echo $templateData['TABS_ID']; ?>" class="bx-catalog-tab-section-container"<?=isset($arResult["WIDTH"]) ? ' style="width: '.$arResult["WIDTH"].'px;"' : ''?>>
+	<ul class="bx-catalog-tab-list" style="left: 0;"><?
+		foreach ($arData as $tabId => $arTab)
 		{
-			$arTabsParams["WIDTH"] = $arResult["WIDTH"];
+			if (isset($arTab["NAME"]) && isset($arTab["CONTENT"]))
+			{
+				$id = $templateData['TABS_ID'].$tabId;
+				$tabActive = (isset($arTab["ACTIVE"]) && $arTab["ACTIVE"] == "Y");
+				?><li id="<?=$id?>"><span><?=$arTab["NAME"]?></span></li><?
+				if($tabActive || $activeTabId == "")
+					$activeTabId = $tabId;
+
+				$content .= '<div id="'.$id.'_cont" class="tab-off">'.$arTab["CONTENT"].'</div>';
+				$tabIDList[] = $tabId;
+			}
 		}
-		?><div id="<? echo $templateData['TABS_FRAME_ID']; ?>" class="bx_soc_comments_div bx_important <? echo $templateData['TEMPLATE_CLASS']; ?>"><?
-		$APPLICATION->IncludeComponent(
-			"bitrix:catalog.tabs",
-			"",
-			$arTabsParams,
-			$component,
-			array("HIDE_ICONS" => "Y")
+		unset($tabId, $arTab);
+	?></ul>
+	<div class="bx-catalog-tab-body-container">
+		<div class="bx-catalog-tab-container"><?=$content?></div>
+	</div>
+</div>
+<?
+		$arJSParams['tabs'] = array(
+			'activeTabId' =>  $activeTabId,
+			'tabsContId' => $templateData['TABS_ID'],
+			'tabList' => $tabIDList
 		);
-		?></div>
+?></div>
 <script type="text/javascript">
 var obCatalogComments_<? echo $arResult['ELEMENT']['ID']; ?> = new JCCatalogSocnetsComments(<? echo CUtil::PhpToJSObject($arJSParams, false, true); ?>);
-</script>
-		<?
+</script><?
 	}
 	else
 	{

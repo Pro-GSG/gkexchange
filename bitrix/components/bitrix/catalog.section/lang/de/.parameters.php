@@ -111,4 +111,11 @@ $MESS["COMPARE_PATH_TIP"] = "Gibt den Pfad zur Seite mit der Komponente des Prod
 $MESS["CP_BCS_SET_LAST_MODIFIED"] = "Im Header der Antwort den Zeitpunkt der Seitenänderung angeben";
 $MESS["T_IBLOCK_BACKGROUND_IMAGE"] = "Das Bild aus den Eigenschaften als Hintergrundbild für Vorlage benutzen";
 $MESS["LINE_ELEMENT_COUNT_TIP"] = "Die Zahl gibt die Anzahl der Elemente pro Zeile bei der Ansicht der Bereichselemente an. In der Standardvorlage reichen die möglichen Werte von 2 bis 5.";
+$MESS["IBLOCK_EXTENDED_SETTINGS"] = "Erweiterte Parameter";
+$MESS["CP_BCS_DISABLE_INIT_JS_IN_COMPONENT"] = "Zusätzliche JavaScript-Bibliotheken nicht benutzen";
+$MESS["DISABLE_INIT_JS_IN_COMPONENT_TIP"] = "Ist diese Option aktiviert, wird die Komponente die \"popup\" Bibliothek nicht einschließen. Wenn die Komponentenvorlage auf der Vorlage der Version 12.5 des \"Onlineshops\" basiert, wird die Benutzung dieser Option die Funktionalität einschränken.";
+$MESS["CP_BCS_HIDE_NOT_AVAILABLE_EXT"] = "Nicht verfügbare Produkte in allen Lagern";
+$MESS["CP_BCS_HIDE_NOT_AVAILABLE_HIDE"] = "nicht anzeigen";
+$MESS["CP_BCS_HIDE_NOT_AVAILABLE_LAST"] = "zum Schluss anzeigen";
+$MESS["CP_BCS_HIDE_NOT_AVAILABLE_SHOW"] = "wie üblich anzeigen";
 ?>

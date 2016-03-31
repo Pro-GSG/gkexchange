@@ -476,7 +476,7 @@ foreach($arTypes as $type_id => $arType)
 	}
 }
 
-if($bUserIsAdmin || $bHasWRight || $bHasXRight)
+if($bUserIsAdmin || $bHasWRight || $bHasXRight || $bHasSRight)
 {
 	$arItems = array();
 	if($bHasXRight)
@@ -571,6 +571,29 @@ if($bUserIsAdmin || $bHasWRight || $bHasXRight)
 		);
 	}
 
+	$adminToolsMenu = array();
+	if ($bHasSRight)
+	{
+		$adminToolsMenu[] = array(
+			"text" => GetMessage('IBLOCK_MENU_ADMIN_TOOLS_REDIRECT_IBLOCK'),
+			"title" => GetMessage('IBLOCK_MENU_ADMIN_TOOLS_REDIRECT_IBLOCK_TITLE'),
+			"url" => "iblock_redirect_entity.php?lang=".LANGUAGE_ID,
+			"module_id" => "iblock"
+		);
+	}
+
+	if (!empty($adminToolsMenu))
+	{
+		$arItems[] = array(
+			"text" => GetMessage('IBLOCK_MENU_ADMIN_TOOLS'),
+			"title" => GetMessage('IBLOCK_MENU_ADMIN_TOOLS_TITLE'),
+			"module_id" => "iblock",
+			"items_id" => "iblock_redirect",
+			"items" => $adminToolsMenu
+		);
+	}
+	unset($adminToolsMenu);
+
 	$aMenu[] = array(
 		"parent_menu" => "global_menu_content",
 		"section" => "iblock",
@@ -587,4 +610,3 @@ if($bUserIsAdmin || $bHasWRight || $bHasXRight)
 }
 
 return $aMenu;
-?>

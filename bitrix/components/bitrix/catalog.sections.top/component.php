@@ -548,11 +548,9 @@ if($this->StartResultCache(false, array($arrFilter, CDBResult::NavStringForCache
 	)
 	{
 		$currencyList[$arConvertParams['CURRENCY_ID']] = $arConvertParams['CURRENCY_ID'];
-		$CACHE_MANAGER->StartTagCache($this->GetCachePath());
 		foreach ($currencyList as &$oneCurrency)
 			$CACHE_MANAGER->RegisterTag('currency_id_'.$oneCurrency);
 		unset($oneCurrency);
-		$CACHE_MANAGER->EndTagCache();
 	}
 	unset($currencyList);
 

@@ -301,6 +301,7 @@ function _ShowFilePropertyField($name, $property_fields, $values, $max_file_size
 			echo \Bitrix\Main\UI\FileInput::createInstance((
 				array(
 					"name" => $name."[n#IND#]",
+					"id" => $name."[n#IND#]_".mt_rand(1, 1000000),
 					"description" => $property_fields["WITH_DESCRIPTION"]=="Y",
 					"allowUpload" => "F",
 					"allowUploadExt" => $property_fields["FILE_TYPE"]

@@ -98,7 +98,7 @@ if(!defined("BX_COMP_MANAGED_CACHE") && COption::GetOptionString("main", "compon
 require_once($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/filter_tools.php");
 require_once($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/ajax_tools.php");
 
-/*ZDUyZmZNWU0ZWQyZmVhMzg1MTZjMDEyYjA2ZjFjMzg5MGI3YTI=*/class CBXFeatures{ public static function IsFeatureEnabled($_1956555546){ return true;} public static function IsFeatureEditable($_1956555546){ return true;} public static function SetFeatureEnabled($_1956555546, $_1717018553= true){} public static function SaveFeaturesSettings($_157795463, $_2081511711){} public static function GetFeaturesList(){ return array();} public static function InitiateEditionsSettings($_932869386){} public static function ModifyFeaturesSettings($_932869386, $_1108261036){} public static function IsFeatureInstalled($_1956555546){ return true;}}/**/			//Do not remove this
+/*ZDUyZmZNTIzMjcyODNkODNiNGQwNTI3YmUwZTgyODFmODEzMDE=*/class CBXFeatures{ public static function IsFeatureEnabled($_2053399730){ return true;} public static function IsFeatureEditable($_2053399730){ return true;} public static function SetFeatureEnabled($_2053399730, $_549918818= true){} public static function SaveFeaturesSettings($_817290932, $_797293460){} public static function GetFeaturesList(){ return array();} public static function InitiateEditionsSettings($_900241107){} public static function ModifyFeaturesSettings($_900241107, $_129973973){} public static function IsFeatureInstalled($_2053399730){ return true;}}/**/			//Do not remove this
 
 //component 2.0 template engines
 $GLOBALS["arCustomTemplateEngines"] = array();
@@ -166,6 +166,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/classes/general/ur
 		"CSmileSet" => "classes/general/smile.php",
 		"CGlobalCounter" => "classes/general/global_counter.php",
 		"CUserCounter" => "classes/".$DBType."/user_counter.php",
+		"CUserCounterPage" => "classes/".$DBType."/user_counter.php",
 		"CHotKeys" => "classes/general/hot_keys.php",
 		"CHotKeysCode" => "classes/general/hot_keys.php",
 		"CBXSanitizer" => "classes/general/sanitizer.php",
@@ -445,7 +446,7 @@ if(!defined("NOT_CHECK_PERMISSIONS") || NOT_CHECK_PERMISSIONS!==true)
 			}
 			elseif($_REQUEST["TYPE"] == "SEND_PWD")
 			{
-				$arAuthResult = $GLOBALS["USER"]->SendPassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_EMAIL"], $USER_LID);
+				$arAuthResult = CUser::SendPassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_EMAIL"], $USER_LID);
 			}
 			elseif($_SERVER['REQUEST_METHOD'] == 'POST' && $_REQUEST["TYPE"] == "CHANGE_PWD")
 			{

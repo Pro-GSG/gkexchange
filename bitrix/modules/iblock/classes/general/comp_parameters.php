@@ -444,20 +444,28 @@ class CIBlockParameters
 				),
 			),
 		);
+		$catalog = false;
+		$showCatalogSeo = false;
 		if (self::$catalogIncluded === null)
 			self::$catalogIncluded = Loader::includeModule('catalog');
 		if (self::$catalogIncluded)
 		{
-			$result["store"] = array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE"),
-				"MENU" => array(),
-			);
-			foreach (self::getCatalogStores() as $store)
+			if ($iblock_id > 0)
+				$catalog = CCatalogSKU::GetInfoByIBlock($iblock_id);
+			$showCatalogSeo = (is_array($catalog) && $catalog['CATALOG_TYPE'] != \CCatalogSKU::TYPE_PRODUCT);
+			if ($showCatalogSeo)
 			{
-				$result["store"]["MENU"][] = array(
-					"TEXT" => ($store["TITLE"] != '' ? $store["TITLE"] : $store["ADDRESS"]),
-					"ONCLICK" => "$action_function('{=catalog.store.".$store["ID"].".name}', '$menuID', '$inputID')",
+				$result["store"] = array(
+					"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE"),
+					"MENU" => array(),
 				);
+				foreach (self::getCatalogStores() as $store)
+				{
+					$result["store"]["MENU"][] = array(
+						"TEXT" => ($store["TITLE"] != '' ? $store["TITLE"] : $store["ADDRESS"]),
+						"ONCLICK" => "$action_function('{=catalog.store.".$store["ID"].".name}', '$menuID', '$inputID')",
+					);
+				}
 			}
 		}
 		$result["misc"] = array(
@@ -468,14 +476,15 @@ class CIBlockParameters
 			"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SECTIONS_PATH"),
 			"ONCLICK" => "$action_function('{=concat this.sections.name this.name \" / \"}', '$menuID', '$inputID')",
 		);
-		if (self::$catalogIncluded === null)
-			self::$catalogIncluded = Loader::includeModule('catalog');
 		if (self::$catalogIncluded)
 		{
-			$result["misc"]["MENU"][] =  array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE_LIST"),
-				"ONCLICK" => "$action_function('{=concat catalog.store \", \"}', '$menuID', '$inputID')",
-			);
+			if ($showCatalogSeo)
+			{
+				$result["misc"]["MENU"][] = array(
+					"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE_LIST"),
+					"ONCLICK" => "$action_function('{=concat catalog.store \", \"}', '$menuID', '$inputID')",
+				);
+			}
 		}
 		$r = array();
 		foreach($result as $category)
@@ -568,100 +577,109 @@ class CIBlockParameters
 				),
 			),
 		);
+		$arCatalog = false;
+		$showCatalogSeo = false;
 		if (self::$catalogIncluded === null)
 			self::$catalogIncluded = Loader::includeModule('catalog');
 		if (self::$catalogIncluded)
 		{
-			$arCatalog = \CCatalogSKU::GetInfoByProductIBlock($iblock_id);
+			if ($iblock_id > 0)
+				$arCatalog = \CCatalogSKU::GetInfoByIBlock($iblock_id);
 			if (is_array($arCatalog))
 			{
-				$result["sku_properties"] = array(
-					"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SKU_PROPERTIES"),
-					"MENU" => array(
-					),
-				);
-				$rsProperty = CIBlockProperty::GetList(array(), array("IBLOCK_ID" => $arCatalog["IBLOCK_ID"]));
-				while($property = $rsProperty->fetch())
+				$showCatalogSeo = ($arCatalog['CATALOG_TYPE'] != \CCatalogSKU::TYPE_PRODUCT);
+				if ($arCatalog['CATALOG_TYPE'] == \CCatalogSKU::TYPE_PRODUCT || $arCatalog['CATALOG_TYPE'] == \CCatalogSKU::TYPE_FULL)
 				{
-					if ($property["PROPERTY_TYPE"] != "F")
+					$result["sku_properties"] = array(
+						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SKU_PROPERTIES"),
+						"MENU" => array(),
+					);
+					$rsProperty = CIBlockProperty::GetList(array(), array("IBLOCK_ID" => $arCatalog["IBLOCK_ID"]));
+					while ($property = $rsProperty->fetch())
 					{
-						$result["sku_properties"]["MENU"][] = array(
-							"TEXT" => $property["NAME"],
-							"ONCLICK" => "$action_function('{=concat {=distinct this.catalog.sku.property.".($property["CODE"]!=""? $property["CODE"]: $property["ID"])." \", \"}}', '$menuID', '$inputID')",
-						);
+						if ($property["PROPERTY_TYPE"] != "F")
+						{
+							$result["sku_properties"]["MENU"][] = array(
+								"TEXT" => $property["NAME"],
+								"ONCLICK" => "$action_function('{=concat {=distinct this.catalog.sku.property.".($property["CODE"] != "" ? $property["CODE"] : $property["ID"])." \", \"}}', '$menuID', '$inputID')",
+							);
+						}
+					}
+					$result["sku_price"] = array(
+						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SKU_PRICE"),
+						"MENU" => array(),
+					);
+					foreach (self::getCatalogPrices() as $price)
+					{
+						if (preg_match("/^[a-zA-Z0-9]+\$/", $price["NAME"]))
+						{
+							$result["sku_price"]["MENU"][] = array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MIN_PRICE")." ".$price["NAME"],
+								"ONCLICK" => "$action_function('{=min this.catalog.sku.price.".$price["NAME"]."}', '$menuID', '$inputID')",
+							);
+							$result["sku_price"]["MENU"][] = array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MAX_PRICE")." ".$price["NAME"],
+								"ONCLICK" => "$action_function('{=max this.catalog.sku.price.".$price["NAME"]."}', '$menuID', '$inputID')",
+							);
+						}
+						else
+						{
+							$result["sku_price"]["MENU"][] = array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MIN_PRICE")." ".$price["NAME"],
+								"ONCLICK" => "$action_function('{=min this.catalog.sku.price.".$price["ID"]."}', '$menuID', '$inputID')",
+							);
+							$result["sku_price"]["MENU"][] = array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MAX_PRICE")." ".$price["NAME"],
+								"ONCLICK" => "$action_function('{=max this.catalog.sku.price.".$price["ID"]."}', '$menuID', '$inputID')",
+							);
+						}
 					}
 				}
-				$result["sku_price"] = array(
-					"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SKU_PRICE"),
-					"MENU" => array(),
-				);
-				foreach (self::getCatalogPrices() as $price)
-				{
-					if (preg_match("/^[a-zA-Z0-9]+\$/", $price["NAME"]))
-					{
-						$result["sku_price"]["MENU"][] = array(
-							"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MIN_PRICE")." ".$price["NAME"],
-							"ONCLICK" => "$action_function('{=min this.catalog.sku.price.".$price["NAME"]."}', '$menuID', '$inputID')",
-						);
-						$result["sku_price"]["MENU"][] = array(
-							"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MAX_PRICE")." ".$price["NAME"],
-							"ONCLICK" => "$action_function('{=max this.catalog.sku.price.".$price["NAME"]."}', '$menuID', '$inputID')",
-						);
-					}
-					else
-					{
-						$result["sku_price"]["MENU"][] = array(
-							"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MIN_PRICE")." ".$price["NAME"],
-							"ONCLICK" => "$action_function('{=min this.catalog.sku.price.".$price["ID"]."}', '$menuID', '$inputID')",
-						);
-						$result["sku_price"]["MENU"][] = array(
-							"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_MAX_PRICE")." ".$price["NAME"],
-							"ONCLICK" => "$action_function('{=max this.catalog.sku.price.".$price["ID"]."}', '$menuID', '$inputID')",
-						);
-					}
-				}
-			}
 
-			$result["catalog"] = array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG"),
-				"MENU" => array(
-					array(
-						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG_WEIGHT"),
-						"ONCLICK" => "$action_function('{=this.catalog.weight}', '$menuID', '$inputID')",
-					),
-					array(
-						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG_MEASURE"),
-						"ONCLICK" => "$action_function('{=this.catalog.measure}', '$menuID', '$inputID')",
-					),
-				),
-			);
-			$result["price"] = array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_PRICE"),
-				"MENU" => array(),
-			);
-			foreach (self::getCatalogPrices() as $price)
-			{
-				if (preg_match("/^[a-zA-Z0-9]+\$/", $price["NAME"]))
-					$result["price"]["MENU"][] = array(
-						"TEXT" => $price["NAME"],
-						"ONCLICK" => "$action_function('{=this.catalog.price.".$price["NAME"]."}', '$menuID', '$inputID')",
+				if ($showCatalogSeo)
+				{
+					$result["catalog"] = array(
+						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG"),
+						"MENU" => array(
+							array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG_WEIGHT"),
+								"ONCLICK" => "$action_function('{=this.catalog.weight}', '$menuID', '$inputID')",
+							),
+							array(
+								"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_CATALOG_MEASURE"),
+								"ONCLICK" => "$action_function('{=this.catalog.measure}', '$menuID', '$inputID')",
+							),
+						),
 					);
-				else
-					$result["price"]["MENU"][] = array(
-						"TEXT" => $price["NAME"],
-						"ONCLICK" => "$action_function('{=this.catalog.price.".$price["ID"]."}', '$menuID', '$inputID')",
+					$result["price"] = array(
+						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_PRICE"),
+						"MENU" => array(),
 					);
-			}
-			$result["store"] = array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE"),
-				"MENU" => array(),
-			);
-			foreach (self::getCatalogStores() as $store)
-			{
-				$result["store"]["MENU"][] = array(
-					"TEXT" => ($store["TITLE"] != '' ? $store["TITLE"] : $store["ADDRESS"]),
-					"ONCLICK" => "$action_function('{=catalog.store.".$store["ID"].".name}', '$menuID', '$inputID')",
-				);
+					foreach (self::getCatalogPrices() as $price)
+					{
+						if (preg_match("/^[a-zA-Z0-9]+\$/", $price["NAME"]))
+							$result["price"]["MENU"][] = array(
+								"TEXT" => $price["NAME"],
+								"ONCLICK" => "$action_function('{=this.catalog.price.".$price["NAME"]."}', '$menuID', '$inputID')",
+							);
+						else
+							$result["price"]["MENU"][] = array(
+								"TEXT" => $price["NAME"],
+								"ONCLICK" => "$action_function('{=this.catalog.price.".$price["ID"]."}', '$menuID', '$inputID')",
+							);
+					}
+					$result["store"] = array(
+						"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE"),
+						"MENU" => array(),
+					);
+					foreach (self::getCatalogStores() as $store)
+					{
+						$result["store"]["MENU"][] = array(
+							"TEXT" => ($store["TITLE"] != '' ? $store["TITLE"] : $store["ADDRESS"]),
+							"ONCLICK" => "$action_function('{=catalog.store.".$store["ID"].".name}', '$menuID', '$inputID')",
+						);
+					}
+				}
 			}
 		}
 		$result["misc"] = array(
@@ -672,14 +690,15 @@ class CIBlockParameters
 			"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_SECTIONS_PATH"),
 			"ONCLICK" => "$action_function('{=concat this.sections.name \" / \"}', '$menuID', '$inputID')",
 		);
-		if (self::$catalogIncluded === null)
-			self::$catalogIncluded = Loader::includeModule('catalog');
 		if (self::$catalogIncluded)
 		{
-			$result["misc"]["MENU"][] =  array(
-				"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE_LIST"),
-				"ONCLICK" => "$action_function('{=concat catalog.store \", \"}', '$menuID', '$inputID')",
-			);
+			if ($showCatalogSeo)
+			{
+				$result["misc"]["MENU"][] = array(
+					"TEXT" => Loc::getMessage("IB_COMPLIB_POPUP_STORE_LIST"),
+					"ONCLICK" => "$action_function('{=concat catalog.store \", \"}', '$menuID', '$inputID')",
+				);
+			}
 		}
 		$r = array();
 		foreach($result as $category)

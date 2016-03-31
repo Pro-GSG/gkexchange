@@ -374,6 +374,8 @@ if($this->StartResultCache(false, array(($arParams["CACHE_GROUPS"]==="N"? false:
 		);
 		$arResult["NAV_CACHED_DATA"] = null;
 		$arResult["NAV_RESULT"] = $rsElement;
+		$arResult["NAV_PARAM"] = $navComponentParameters;
+
 		$this->SetResultCacheKeys(array(
 			"ID",
 			"IBLOCK_TYPE_ID",

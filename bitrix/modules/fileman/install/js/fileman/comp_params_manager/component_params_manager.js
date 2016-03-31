@@ -1473,6 +1473,9 @@
 				}
 			}
 
+			if (result.COMPONENT_TEMPLATE)
+				delete(result.COMPONENT_TEMPLATE);
+
 			return result;
 		},
 

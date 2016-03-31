@@ -217,7 +217,6 @@
 .bx_catalog_tile_home_type_2 .bx_catalog_item_controls .bx_catalog_item_controls_blocktwo a{margin:5px 3px}
 
 @media (max-width:640px) {
-	.bx-touch .bx_catalog_tile_home_type_2 .bx_catalog_item_controls .bx_catalog_item_controls_blockone{display: none;}
 	.bx-touch .bx_catalog_tile_home_type_2 .bx_catalog_item_controls .bx_catalog_item_controls_blocktwo{float: none;width: 100%;text-align: center;}
 }
 .bx_catalog_tile_home_type_2 .bx_catalog_item_controls input[type=text]{border: none;}

@@ -31,4 +31,5 @@ $MESS["CT_BCE_CATALOG_MESS_COMPARE_OK"] = "Produkt wurde zur Vergleichsliste hin
 $MESS["CT_BCE_CATALOG_MESS_COMPARE_TITLE"] = "Produktvergleich";
 $MESS["CT_BCE_CATALOG_MESS_COMPARE_UNKNOWN_ERROR"] = "Fehler beim Hinzufügen des Produktes zur Vergleichsliste";
 $MESS["CT_BCE_CATALOG_BTN_MESSAGE_COMPARE_REDIRECT"] = "Produkte vergleichen";
+$MESS["CT_BCE_CATALOG_PRODUCT_GIFT_LABEL"] = "Geschenk";
 ?>

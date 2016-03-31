@@ -911,15 +911,8 @@ do{ //one iteration loop
 			$DB->Commit();
 
 			// i have only savebtn and cancel
-			if ((true == isset($_POST['Update'])) && (0 < strlen($_POST['Update'])))
-			{
-				?><script type="text/javascript">
-				top.BX.closeWait(); top.BX.WindowManager.Get().AllowClose(); top.BX.WindowManager.Get().Close();
-				if (!!top.ReloadSubList)
-					top.ReloadSubList();
-				</script><?
-				die();
-			}
+			if (isset($_POST['Update']) && (0 < strlen($_POST['Update'])))
+				CAdminSubForm::closeSubForm();
 		}
 	}
 
@@ -929,10 +922,7 @@ do{ //one iteration loop
 		if($bWorkflow)
 			CIBlockElement::WF_UnLock($ID);
 
-		?><script type="text/javascript">
-		top.BX.closeWait(); top.BX.WindowManager.Get().AllowClose(); top.BX.WindowManager.Get().Close();
-		</script><?
-		die();
+		CAdminSubForm::closeSubForm(false);
 	}
 
 }while(false);
@@ -983,6 +973,18 @@ else
 	$str_NAME = htmlspecialcharsbx($arIBlock["FIELDS"]["NAME"]["DEFAULT_VALUE"]);
 	if ('' != $strProductName)
 		$str_NAME = htmlspecialcharsbx($strProductName);
+
+	$currentTime = time() + CTimeZone::GetOffset();
+	if ($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=now")
+		$str_ACTIVE_FROM = ConvertTimeStamp($currentTime, "FULL");
+	elseif ($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=today")
+		$str_ACTIVE_FROM = ConvertTimeStamp($currentTime, "SHORT");
+
+	$dayOffset = (int)$arIBlock["FIELDS"]["ACTIVE_TO"]["DEFAULT_VALUE"];
+	if ($dayOffset > 0)
+		$str_ACTIVE_TO = ConvertTimeStamp($currentTime + $dayOffset*86400, "FULL");
+	unset($dayOffset);
+	unset($currentTime);
 
 	$str_PREVIEW_TEXT_TYPE = $arIBlock["FIELDS"]["PREVIEW_TEXT_TYPE"]["DEFAULT_VALUE"] !== "html"? "text": "html";
 	$str_PREVIEW_TEXT = htmlspecialcharsbx($arIBlock["FIELDS"]["PREVIEW_TEXT"]["DEFAULT_VALUE"]);
@@ -1438,6 +1440,7 @@ if($bVarsFromForm && !array_key_exists("SUB_PREVIEW_PICTURE", $_REQUEST) && $arE
 				{
 					echo \Bitrix\Main\UI\FileInput::createInstance(array(
 						"name" => "SUB_PREVIEW_PICTURE",
+						"id" => "SUB_PREVIEW_PICTURE_".mt_rand(1, 1000000),
 						"description" => true,
 						"upload" => true,
 						"allowUpload" => "I",
@@ -1560,6 +1563,7 @@ if($bVarsFromForm && !array_key_exists("SUB_DETAIL_PICTURE", $_REQUEST) && $arEl
 				{
 					echo \Bitrix\Main\UI\FileInput::createInstance(array(
 						"name" => "SUB_DETAIL_PICTURE",
+						"id" => "SUB_DETAIL_PICTURE_".mt_rand(1, 1000000),
 						"description" => true,
 						"upload" => true,
 						"allowUpload" => "I",

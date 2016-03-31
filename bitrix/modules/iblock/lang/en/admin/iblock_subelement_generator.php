@@ -30,4 +30,6 @@ $MESS["IB_SEG_BASE_WIDTH"] = "Width (mm)";
 $MESS["IB_SEG_BASE_HEIGHT"] = "Height (mm)";
 $MESS["IB_SEG_SKU_PROPERTIES"] = "SKU properties";
 $MESS["IB_SEG_PARENT_PROPERTIES"] = "Parent properties";
+$MESS["IB_SEG_QUANTITY"] = "Quantity in stock";
+$MESS["IB_SEG_MEASURE"] = "Unit of measurement";
 ?>

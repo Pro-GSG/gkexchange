@@ -40,4 +40,8 @@ $MESS["RATING_TYPE_STANDART_GRAPHIC"] = "Нравится / Не нравится (графический)";
 $MESS["RATING_TYPE_LIKE_TEXT"] = "Мне нравится (текстовый)";
 $MESS["RATING_TYPE_LIKE_GRAPHIC"] = "Мне нравится (графический)";
 $MESS["CATALOG_SC_IBLOCK_TYPE"] = "Тип инфоблока";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD"] = "Разрешить загрузку изображений";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_A"] = "Всем";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_R"] = "Зарегистрированным пользователям";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_N"] = "Никому";
 ?>

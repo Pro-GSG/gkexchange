@@ -17,9 +17,9 @@ class UserTypePropertyHtml extends UserTypeProperty
 	 */
 	public static function convertTo(FieldType $fieldType, $value, $toTypeClass)
 	{
-		if (isset($value['VALUE']))
+		if (is_array($value) && isset($value['VALUE']))
 			$value = $value['VALUE'];
-		if (isset($value['TEXT']))
+		if (is_array($value) && isset($value['TEXT']))
 			$value = $value['TEXT'];
 
 		return parent::convertTo($fieldType, $value, $toTypeClass);
@@ -32,9 +32,9 @@ class UserTypePropertyHtml extends UserTypeProperty
 	 */
 	protected static function formatValuePrintable(FieldType $fieldType, $value)
 	{
-		if (isset($value['VALUE']))
+		if (is_array($value) && isset($value['VALUE']))
 			$value = $value['VALUE'];
-		if (isset($value['TEXT']))
+		if (is_array($value) && isset($value['TEXT']))
 			$value = $value['TEXT'];
 
 		return HTMLToTxt(htmlspecialcharsback((string)$value));
@@ -88,9 +88,9 @@ class UserTypePropertyHtml extends UserTypeProperty
 		$name = static::generateControlName($field);
 		$controlId = static::generateControlId($field);
 
-		if (isset($value['VALUE']))
+		if (is_array($value) && isset($value['VALUE']))
 			$value = $value['VALUE'];
-		if (isset($value['TEXT']))
+		if (is_array($value) && isset($value['TEXT']))
 			$value = $value['TEXT'];
 
 		return \CBPViewHelper::getHtmlEditor($controlId, $name, $value);
@@ -117,7 +117,7 @@ class UserTypePropertyHtml extends UserTypeProperty
 
 		if ($allowSelection)
 		{
-			$renderResult .= static::renderControlSelector($field, $selectorValue, true);
+			$renderResult .= static::renderControlSelector($field, $selectorValue, true, '', $fieldType);
 		}
 
 		return $renderResult;
@@ -168,7 +168,7 @@ class UserTypePropertyHtml extends UserTypeProperty
 
 		if ($allowSelection)
 		{
-			$renderResult .= static::renderControlSelector($field, $selectorValue, true);
+			$renderResult .= static::renderControlSelector($field, $selectorValue, true, '', $fieldType);
 		}
 
 		return $renderResult;

@@ -143,6 +143,10 @@ $arComponentParameters = array(
 		),
 		"COMPARE" => array(
 			"NAME" => GetMessage("IBLOCK_COMPARE")
+		),
+		"EXTENDED_SETTINGS" => array(
+			"NAME" => GetMessage("IBLOCK_EXTENDED_SETTINGS"),
+			"SORT" => 10000
 		)
 	),
 	"PARAMETERS" => array(
@@ -524,6 +528,12 @@ $arComponentParameters = array(
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "Y",
 		),
+		"DISABLE_INIT_JS_IN_COMPONENT" => array(
+			"PARENT" => "EXTENDED_SETTINGS",
+			"NAME" => GetMessage('CP_BCS_DISABLE_INIT_JS_IN_COMPONENT'),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "N"
+		)
 	),
 );
 
@@ -551,9 +561,15 @@ if ($catalogIncluded)
 {
 	$arComponentParameters["PARAMETERS"]['HIDE_NOT_AVAILABLE'] = array(
 		'PARENT' => 'DATA_SOURCE',
-		'NAME' => GetMessage('CP_BCS_HIDE_NOT_AVAILABLE'),
-		'TYPE' => 'CHECKBOX',
+		'NAME' => GetMessage('CP_BCS_HIDE_NOT_AVAILABLE_EXT'),
+		'TYPE' => 'LIST',
 		'DEFAULT' => 'N',
+		'VALUES' => array(
+			'Y' => GetMessage('CP_BCS_HIDE_NOT_AVAILABLE_HIDE'),
+			'L' => GetMessage('CP_BCS_HIDE_NOT_AVAILABLE_LAST'),
+			'N' => GetMessage('CP_BCS_HIDE_NOT_AVAILABLE_SHOW')
+		),
+		'ADDITIONAL_VALUES' => 'N'
 	);
 	$arComponentParameters["PARAMETERS"]['CONVERT_CURRENCY'] = array(
 		'PARENT' => 'PRICES',

@@ -451,57 +451,38 @@ window.JCCatalogSection.prototype.Init = function()
 		if (!!this.obBuyBtn)
 		{
 			if (this.basketAction === 'ADD')
-			{
 				BX.bind(this.obBuyBtn, 'click', BX.delegate(this.Add2Basket, this));
-			}
 			else
-			{
 				BX.bind(this.obBuyBtn, 'click', BX.delegate(this.BuyBasket, this));
-			}
 		}
 		if (this.lastElement)
 		{
-			this.containerHeight = parseInt(this.obProduct.parentNode.offsetHeight, 10);
-			if (isNaN(this.containerHeight))
-			{
-				this.containerHeight = 0;
-			}
+			this.checkHeight();
 			this.setHeight();
 			BX.bind(window, 'resize', BX.delegate(this.checkHeight, this));
-			BX.bind(this.obProduct.parentNode, 'mouseover', BX.delegate(this.setHeight, this));
-			BX.bind(this.obProduct.parentNode, 'mouseout', BX.delegate(this.clearHeight, this));
+			BX.bind(this.obProduct.parentNode, 'mouseenter', BX.delegate(this.setHeight, this));
 		}
 		if (this.useCompare)
 		{
 			this.obCompare = BX(this.visual.COMPARE_LINK_ID);
 			if (!!this.obCompare)
-			{
 				BX.bind(this.obCompare, 'click', BX.proxy(this.Compare, this));
-			}
 		}
 	}
 };
 
 window.JCCatalogSection.prototype.checkHeight = function()
 {
+	BX.adjust(this.obProduct.parentNode, {style: { height: 'auto'}});
 	this.containerHeight = parseInt(this.obProduct.parentNode.offsetHeight, 10);
 	if (isNaN(this.containerHeight))
-	{
 		this.containerHeight = 0;
-	}
 };
 
 window.JCCatalogSection.prototype.setHeight = function()
 {
 	if (0 < this.containerHeight)
-	{
 		BX.adjust(this.obProduct.parentNode, {style: { height: this.containerHeight+'px'}});
-	}
-};
-
-window.JCCatalogSection.prototype.clearHeight = function()
-{
-	BX.adjust(this.obProduct.parentNode, {style: { height: 'auto'}});
 };
 
 window.JCCatalogSection.prototype.QuantityUp = function()
@@ -1558,6 +1539,13 @@ window.JCCatalogSection.prototype.BasketResult = function(arResult)
 		if (successful)
 		{
 			BX.onCustomEvent('OnBasketChange');
+
+			//todo crunch for gifts: Zhukov's idea.
+			if(BX.findParent(this.obProduct, {className: 'bx_sale_gift_main_products'}, 10))
+			{
+				BX.onCustomEvent('onAddToBasketMainProduct', [this]);
+			}
+
 			switch(this.productType)
 			{
 			case 1://

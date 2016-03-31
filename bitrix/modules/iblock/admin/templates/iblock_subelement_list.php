@@ -70,7 +70,7 @@ $boolCatalogPrice = false;
 $boolCatalogPurchasInfo = false;
 $catalogPurchasInfoEdit = false;
 $boolCatalogSet = false;
-$arProductTypeList = array();
+$productTypeList = array();
 if ($boolSubCatalog)
 {
 	$strUseStoreControl = COption::GetOptionString('catalog', 'default_use_store_control');
@@ -79,9 +79,7 @@ if ($boolSubCatalog)
 	$boolCatalogPrice = $USER->CanDoOperation('catalog_price');
 	$boolCatalogPurchasInfo = $USER->CanDoOperation('catalog_purchas_info');
 	$boolCatalogSet = CBXFeatures::IsFeatureEnabled('CatCompleteSet');
-	$arProductTypeList = array(
-		CCatalogProduct::TYPE_OFFER => GetMessage('IBEL_CATALOG_TYPE_MESS_OFFER')
-	);
+	$productTypeList = CCatalogAdminTools::getIblockProductTypeList($intSubIBlockID, true);
 	if ($boolCatalogPurchasInfo)
 		$catalogPurchasInfoEdit = $boolCatalogPrice && $strUseStoreControl != 'Y';
 }
@@ -130,7 +128,23 @@ $sTableID = "tbl_iblock_sub_element_".md5($strSubIBlockType.".".$intSubIBlockID)
 
 $arHideFields = array('PROPERTY_'.$arCatalog['SKU_PROPERTY_ID']);
 $lAdmin = new CAdminSubList($sTableID,false,$strSubElementAjaxPath,$arHideFields);
-$arOrder = (strtoupper($by) === "ID"? array($by => $order): array($by => $order, "ID" => "ASC"));
+if (!isset($by))
+	$by = 'ID';
+if (!isset($order))
+	$order = 'asc';
+$by = strtoupper($by);
+switch ($by)
+{
+	case 'ID':
+		$arOrder = array('ID' => $order);
+		break;
+	case 'CATALOG_TYPE':
+		$arOrder = array('CATALOG_TYPE' => $order, 'CATALOG_BUNDLE' => $order, 'ID' => 'ASC');
+		break;
+	default:
+		$arOrder = array($by => $order, 'ID' => 'ASC');
+		break;
+}
 
 // only sku property filter
 $arFilterFields = array(
@@ -347,6 +361,14 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 					$arCatalogProduct = array();
 					if (isset($arFields['CATALOG_WEIGHT']) && '' != $arFields['CATALOG_WEIGHT'])
 						$arCatalogProduct['WEIGHT'] = $arFields['CATALOG_WEIGHT'];
+
+					if (isset($arFields['CATALOG_WIDTH']) && '' != $arFields['CATALOG_WIDTH'])
+						$arCatalogProduct['WIDTH'] = $arFields['CATALOG_WIDTH'];
+					if (isset($arFields['CATALOG_LENGTH']) && '' != $arFields['CATALOG_LENGTH'])
+						$arCatalogProduct['LENGTH'] = $arFields['CATALOG_LENGTH'];
+					if (isset($arFields['CATALOG_HEIGHT']) && '' != $arFields['CATALOG_HEIGHT'])
+						$arCatalogProduct['HEIGHT'] = $arFields['CATALOG_HEIGHT'];
+
 					if (isset($arFields['CATALOG_VAT_INCLUDED']) && !empty($arFields['CATALOG_VAT_INCLUDED']))
 						$arCatalogProduct['VAT_INCLUDED'] = $arFields['CATALOG_VAT_INCLUDED'];
 					if (isset($arFields['CATALOG_QUANTITY_TRACE']) && !empty($arFields['CATALOG_QUANTITY_TRACE']))
@@ -768,6 +790,7 @@ if ($boolSubCatalog)
 		"content" => GetMessage("IBEL_CATALOG_TYPE"),
 		"title" => GetMessage('IBEL_CATALOG_TYPE_TITLE'),
 		"align" => "right",
+		"sort" => "CATALOG_TYPE",
 		"default" => true,
 	);
 }
@@ -822,6 +845,14 @@ if ($boolSubWorkFlow)
 if ($boolSubCatalog)
 {
 	$arHeader[] = array(
+		"id" => "CATALOG_AVAILABLE",
+		"content" => GetMessage("IBEL_CATALOG_AVAILABLE"),
+		"title" => GetMessage("IBEL_CATALOG_AVAILABLE_TITLE"),
+		"align" => "center",
+		"sort" => "CATALOG_AVAILABLE",
+		"default" => true,
+	);
+	$arHeader[] = array(
 		"id" => "CATALOG_QUANTITY",
 		"content" => GetMessage("IBEL_CATALOG_QUANTITY_EXT"),
 		"align" => "right",
@@ -856,6 +887,27 @@ if ($boolSubCatalog)
 		"content" => GetMessage("IBEL_CATALOG_WEIGHT"),
 		"align" => "right",
 		"sort" => "CATALOG_WEIGHT",
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_WIDTH",
+		"content" => GetMessage("IBEL_CATALOG_WIDTH"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_LENGTH",
+		"content" => GetMessage("IBEL_CATALOG_LENGTH"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_HEIGHT",
+		"content" => GetMessage("IBEL_CATALOG_HEIGHT"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
 	);
 	$arHeader[] = array(
 		"id" => "CATALOG_VAT_INCLUDED",
@@ -994,6 +1046,8 @@ if ($boolSubCatalog)
 {
 	if(in_array("CATALOG_QUANTITY_TRACE", $arSelectedFields))
 		$arSelectedFields[] = "CATALOG_QUANTITY_TRACE_ORIG";
+	if (in_array('CATALOG_TYPE', $arSelectedFields) && $boolCatalogSet)
+		$arSelectedFields[] = 'CATALOG_BUNDLE';
 	$boolPriceInc = false;
 	if ($boolCatalogPurchasInfo)
 	{
@@ -1086,7 +1140,6 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 	}
 
 	$arRows = array();
-	$arProductGroupIDs = array();
 
 	$boolSubSearch = Loader::includeModule('search');
 
@@ -1142,11 +1195,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 			$arRes['CATALOG_QUANTITY_TRACE'] = $arRes['CATALOG_QUANTITY_TRACE_ORIG'];
 			$f_CATALOG_QUANTITY_TRACE = $f_CATALOG_QUANTITY_TRACE_ORIG;
 		}
-		if (isset($arSelectedFieldsMap['CATALOG_TYPE']))
-		{
-			$arRes['CATALOG_TYPE'] = CCatalogProduct::TYPE_OFFER;
-			$arProductGroupIDs[$f_ID] = false;
-		}
+
 		if (isset($arSelectedFieldsMap['CATALOG_MEASURE']))
 		{
 			$arRes['CATALOG_MEASURE'] = (int)$arRes['CATALOG_MEASURE'];
@@ -1592,7 +1641,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 
 						if ($boolCatalogPrice && $boolEditPrice)
 						{
-							$sHTML = '<input type="text" size="5" id="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" name="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_PRICE_".$CatGroup["ID"]].'"';
+							$sHTML = '<input type="text" size="9" id="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" name="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_PRICE_".$CatGroup["ID"]].'"';
 							if ($CatGroup["BASE"]=="Y")
 								$sHTML .= ' onchange="top.SubChangeBasePrice('.$f_ID.')"';
 							if (intval($arRes["CATALOG_EXTRA_ID_".$CatGroup["ID"]])>0)
@@ -1711,25 +1760,6 @@ if (!empty($arRows))
 				{
 					$arRows[$product["PRODUCT_ID"]]->arRes["CATALOG_BAR_CODE"] = htmlspecialcharsEx($product["BARCODE"]);
 				}
-			}
-		}
-	}
-	if (!empty($arProductGroupIDs))
-	{
-		$rsSets = CCatalogProductSet::getList(
-			array(),
-			array('OWNER_ID' => array_keys($arProductGroupIDs), 'SET_ID' => 0, 'TYPE' => CCatalogProductSet::TYPE_GROUP),
-			false,
-			false,
-			array('ID', 'OWNER_ID', 'ITEM_ID', 'SET_ID', 'TYPE')
-		);
-		while ($arSet = $rsSets->Fetch())
-		{
-			$arSet['OWNER_ID'] = (int)$arSet['OWNER_ID'];
-			$arSet['ITEM_ID'] = (int)$arSet['ITEM_ID'];
-			if ($arSet['OWNER_ID'] == $arSet['ITEM_ID'] && isset($arProductGroupIDs[$arSet['OWNER_ID']]))
-			{
-				$arProductGroupIDs[$arSet['OWNER_ID']] = true;
 			}
 		}
 	}
@@ -1889,8 +1919,12 @@ if (!empty($arRows))
 				{
 					$row->AddInputField("CATALOG_QUANTITY");
 				}
+				$row->AddCheckField('CATALOG_AVAILABLE', false);
 				$row->AddSelectField("CATALOG_QUANTITY_TRACE", $arQuantityTrace);
 				$row->AddInputField("CATALOG_WEIGHT");
+				$row->AddInputField('CATALOG_WIDTH');
+				$row->AddInputField('CATALOG_HEIGHT');
+				$row->AddInputField('CATALOG_LENGTH');
 				$row->AddCheckField("CATALOG_VAT_INCLUDED");
 				if ($boolCatalogPurchasInfo)
 				{
@@ -1926,9 +1960,13 @@ if (!empty($arRows))
 			}
 			elseif ($boolCatalogRead)
 			{
+				$row->AddCheckField('CATALOG_AVAILABLE', false);
 				$row->AddInputField("CATALOG_QUANTITY", false);
-				$row->AddCheckField("CATALOG_QUANTITY_TRACE", $arQuantityTrace, false);
+				$row->AddSelectField("CATALOG_QUANTITY_TRACE", $arQuantityTrace, false);
 				$row->AddInputField("CATALOG_WEIGHT", false);
+				$row->AddInputField('CATALOG_WIDTH', false);
+				$row->AddInputField('CATALOG_HEIGHT', false);
+				$row->AddInputField('CATALOG_LENGTH', false);
 				$row->AddCheckField("CATALOG_VAT_INCLUDED", false);
 				if ($boolCatalogPurchasInfo)
 				{
@@ -1960,9 +1998,13 @@ if (!empty($arRows))
 			}
 			if ($boolSubCatalog)
 			{
+				$row->AddCheckField('CATALOG_AVAILABLE', false);
 				$row->AddInputField("CATALOG_QUANTITY", false);
 				$row->AddSelectField("CATALOG_QUANTITY_TRACE", $arQuantityTrace, false);
 				$row->AddInputField("CATALOG_WEIGHT", false);
+				$row->AddInputField('CATALOG_WIDTH', false);
+				$row->AddInputField('CATALOG_HEIGHT', false);
+				$row->AddInputField('CATALOG_LENGTH', false);
 				$row->AddCheckField("CATALOG_VAT_INCLUDED", false);
 				if ($boolCatalogPurchasInfo)
 				{
@@ -1983,9 +2025,9 @@ if (!empty($arRows))
 		if (isset($arSelectedFieldsMap['CATALOG_TYPE']))
 		{
 			$strProductType = '';
-			if (isset($arProductTypeList[$row->arRes["CATALOG_TYPE"]]))
-				$strProductType = $arProductTypeList[$row->arRes["CATALOG_TYPE"]];
-			if (isset($arProductGroupIDs[$f_ID]) && $arProductGroupIDs[$f_ID])
+			if (isset($productTypeList[$row->arRes["CATALOG_TYPE"]]))
+				$strProductType = $productTypeList[$row->arRes["CATALOG_TYPE"]];
+			if ($row->arRes['CATALOG_BUNDLE'] == 'Y' && $boolCatalogSet)
 				$strProductType .= ('' != $strProductType ? ', ' : '').GetMessage('IBEL_CATALOG_TYPE_MESS_GROUP');
 			$row->AddViewField('CATALOG_TYPE', $strProductType);
 		}
@@ -2008,37 +2050,22 @@ if (!empty($arRows))
 
 		$arActions = array();
 
-		$subElementEdit = CIBlock::GetAdminSubElementEditLink(
+		$actionEdit = $lAdmin->getRowAction(CIBlock::GetAdminSubElementEditLink(
 			$intSubIBlockID,
 			$intSubPropValue,
 			$row->arRes['orig']['ID'],
 			array('WF' => 'Y', 'TMP_ID' => $strSubTMP_ID),
 			$sThisSectionUrl,
 			defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1
-		);
-		$actionEdit = "{
-			'content_url': '".$subElementEdit."',
-			'content_post': '".(!(defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1) ? '&bxsku=Y' : '')."&bxpublic=Y&".bitrix_sessid_get()."',
-			'draggable': true,
-			'resizable': true,
-			'buttons': [BX.CAdminDialog.btnSave, BX.CAdminDialog.btnCancel]
-		}";
-
-		$subElementCopy = CIBlock::GetAdminSubElementEditLink(
+		));
+		$actionCopy = $lAdmin->getRowAction(CIBlock::GetAdminSubElementEditLink(
 			$intSubIBlockID,
 			$intSubPropValue,
 			$row->arRes['orig']['ID'],
 			array('WF' => 'Y', 'TMP_ID' => $strSubTMP_ID, 'action' => 'copy'),
 			$sThisSectionUrl,
 			defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1
-		);
-		$actionCopy = "{
-			'content_url': '".$subElementCopy."',
-			'content_post': '".(!(defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1) ? '&bxsku=Y' : '')."&bxpublic=Y&".bitrix_sessid_get()."',
-			'draggable': true,
-			'resizable': true,
-			'buttons': [BX.CAdminDialog.btnSave, BX.CAdminDialog.btnCancel]
-		}";
+		));
 
 		if($row->arRes['ACTIVE'] == 'Y')
 		{
@@ -2109,7 +2136,7 @@ if (!empty($arRows))
 						"ICON" => "edit",
 						"TEXT" => GetMessage("IBEL_A_CHANGE"),
 						"DEFAULT" => true,
-						"ACTION"=>"(new BX.CAdminDialog(".$actionEdit.")).Show();",
+						"ACTION" => $actionEdit
 					);
 					$arActions[] = $arActive;
 					$arActions[] = array('SEPARATOR' => 'Y');
@@ -2124,7 +2151,7 @@ if (!empty($arRows))
 					$arActions[] = array(
 						"ICON" => "copy",
 						"TEXT" => GetMessage("IBEL_A_COPY_ELEMENT"),
-						"ACTION"=>"(new BX.CAdminDialog(".$actionEdit.")).Show();",
+						"ACTION" => $actionCopy
 					);
 				}
 
@@ -2193,7 +2220,7 @@ if (!empty($arRows))
 					"ICON" => "edit",
 					"TEXT" => GetMessage("IBEL_A_CHANGE"),
 					"DEFAULT" => true,
-					"ACTION"=>"(new BX.CAdminDialog(".$actionEdit.")).Show();",
+					"ACTION" => $actionEdit
 				);
 				$arActions[] = $arActive;
 				$arActions[] = array('SEPARATOR' => 'Y');
@@ -2203,7 +2230,7 @@ if (!empty($arRows))
 				$arActions[] = array(
 					"ICON" => "copy",
 					"TEXT" => GetMessage("IBEL_A_COPY_ELEMENT"),
-					"ACTION"=>"(new BX.CAdminDialog(".$actionCopy.")).Show();",
+					"ACTION" => $actionCopy
 				);
 
 				$arActions[] = array("SEPARATOR" => true);
@@ -2226,7 +2253,7 @@ if (!empty($arRows))
 					"ICON" => "edit",
 					"TEXT" => GetMessage("IBEL_A_CHANGE"),
 					"DEFAULT" => true,
-					"ACTION"=>"(new BX.CAdminDialog(".$actionEdit.")).Show();",
+					"ACTION" => $actionEdit
 				);
 				$arActions[] = $arActive;
 				$arActions[] = array('SEPARATOR' => 'Y');
@@ -2240,7 +2267,7 @@ if (!empty($arRows))
 				$arActions[] = array(
 					"ICON" => "copy",
 					"TEXT" => GetMessage("IBEL_A_COPY_ELEMENT"),
-					"ACTION"=>"(new BX.CAdminDialog(".$actionCopy.")).Show();",
+					"ACTION" => $actionCopy
 				);
 			}
 

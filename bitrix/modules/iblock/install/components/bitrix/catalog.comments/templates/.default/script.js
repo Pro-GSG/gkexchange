@@ -46,7 +46,13 @@ window.JCCatalogSocnetsComments = function(arParams)
 		}
 	};
 
-	if ('object' === typeof arParams)
+	this.activeTabId = '';
+	this.currentTab = -1;
+	this.tabsContId = '';
+	this.tabList = [];
+	this.obTabList = [];
+
+	if (typeof arParams === 'object')
 	{
 		this.params = arParams;
 		if (!!this.params.serviceList && typeof(this.params.serviceList) === 'object')
@@ -54,18 +60,19 @@ window.JCCatalogSocnetsComments = function(arParams)
 			for (i in this.serviceList)
 			{
 				if (this.serviceList.hasOwnProperty(i) && !!this.params.serviceList[i])
-				{
 					this.serviceList[i] = true;
-				}
 			}
 		}
 		if (this.serviceList.blog)
-		{
 			this.initParams('blog');
-		}
 		if (this.serviceList.facebook)
-		{
 			this.initParams('facebook');
+
+		if (typeof(this.params.tabs) === 'object')
+		{
+			this.activeTabId = this.params.tabs.activeTabId;
+			this.tabsContId = this.params.tabs.tabsContId;
+			this.tabList = this.params.tabs.tabList;
 		}
 	}
 	else
@@ -74,9 +81,7 @@ window.JCCatalogSocnetsComments = function(arParams)
 	}
 
 	if (this.errorCode === 0)
-	{
-		BX.ready(BX.delegate(this.Init, this));
-	}
+		BX.ready(BX.proxy(this.Init, this));
 };
 
 window.JCCatalogSocnetsComments.prototype.initParams = function(id)
@@ -88,15 +93,41 @@ window.JCCatalogSocnetsComments.prototype.initParams = function(id)
 		for (i in this.settings[id])
 		{
 			if (this.settings[id].hasOwnProperty(i) && !!this.params.settings[id][i])
-			{
 				this.settings[id][i] = this.params.settings[id][i];
-			}
 		}
 	}
 };
 
 window.JCCatalogSocnetsComments.prototype.Init = function()
 {
+	if (!this.tabList || !BX.type.isArray(this.tabList) || this.tabList.length === 0)
+	{
+		this.errorCode = -1;
+		return;
+	}
+	var i,
+		strFullId;
+
+	for (i = 0; i < this.tabList.length; i++)
+	{
+		strFullId = this.tabsContId + this.tabList[i];
+		this.obTabList[i] = {
+			id: this.tabList[i],
+			tabId: strFullId,
+			contId: strFullId+'_cont',
+			tab: BX(strFullId),
+			cont: BX(strFullId+'_cont')
+		};
+		if (!this.obTabList[i].tab || !this.obTabList[i].cont)
+		{
+			this.errorCode = -2;
+			break;
+		}
+		if (this.activeTabId === this.tabList[i])
+			this.currentTab = i;
+		BX.bind(this.obTabList[i].tab, 'click', BX.proxy(this.onClick, this));
+	}
+
 	if (this.serviceList.blog)
 	{
 		this.services.blog.obBlogCont = BX(this.settings.blog.contID);
@@ -123,14 +154,11 @@ window.JCCatalogSocnetsComments.prototype.Init = function()
 
 	if (this.errorCode === 0)
 	{
+		this.showActiveTab();
 		if (this.serviceList.blog)
-		{
 			this.loadBlog();
-		}
 		if (this.serviceList.facebook)
-		{
 			this.loadFB();
-		}
 	}
 
 	this.params = {};
@@ -160,9 +188,7 @@ window.JCCatalogSocnetsComments.prototype.loadBlog = function()
 window.JCCatalogSocnetsComments.prototype.loadBlogResult = function(result)
 {
 	if (BX.type.isNotEmptyString(result))
-	{
 		BX.adjust(this.services.blog.obBlogCont, { html: result });
-	}
 };
 
 window.JCCatalogSocnetsComments.prototype.loadFB = function()
@@ -202,9 +228,7 @@ window.JCCatalogSocnetsComments.prototype.getFBParentWidth = function()
 	{
 		width = parseInt(this.services.facebook.obFBParentCont.offsetWidth, 10);
 		if (isNaN(width))
-		{
 			width = 0;
-		}
 	}
 	return width;
 };
@@ -241,8 +265,46 @@ window.JCCatalogSocnetsComments.prototype.setFBWidth = function(width)
 window.JCCatalogSocnetsComments.prototype.onResize = function()
 {
 	if (this.serviceList.facebook)
-	{
 		this.setFBWidth(this.getFBParentWidth());
+};
+
+window.JCCatalogSocnetsComments.prototype.onClick = function()
+{
+	var target = BX.proxy_context,
+		index = -1,
+		i;
+
+	for (i = 0; i < this.obTabList.length; i++)
+	{
+		if (target.id === this.obTabList[i].tabId)
+		{
+			index = i;
+			break;
+		}
 	}
+	if (index > -1)
+	{
+		if (index !== this.currentTab)
+		{
+			this.hideActiveTab();
+			this.currentTab = index;
+			this.showActiveTab();
+		}
+	}
+};
+
+window.JCCatalogSocnetsComments.prototype.hideActiveTab = function()
+{
+	BX.removeClass(this.obTabList[this.currentTab].tab, 'active');
+	BX.addClass(this.obTabList[this.currentTab].cont, 'tab-off');
+	BX.addClass(this.obTabList[this.currentTab].cont, 'hidden');
+};
+
+window.JCCatalogSocnetsComments.prototype.showActiveTab = function()
+{
+	BX.onCustomEvent('onAfterBXCatTabsSetActive_'+this.tabsContId,[{activeTab: this.obTabList[this.currentTab].id}]);
+	BX.addClass(this.obTabList[this.currentTab].tab, 'active');
+	BX.removeClass(this.obTabList[this.currentTab].cont, 'tab-off');
+	BX.removeClass(this.obTabList[this.currentTab].cont, 'hidden');
 };
 })(window);

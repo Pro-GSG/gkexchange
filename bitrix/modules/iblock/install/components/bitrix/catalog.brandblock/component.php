@@ -20,7 +20,9 @@ $arParams['CACHE_GROUPS'] = (isset($arParams['CACHE_GROUPS']) && $arParams['CACH
 if (!isset($arParams["CACHE_TIME"]))
 	$arParams["CACHE_TIME"] = 3600000;
 
-if(isset($arParams["SINGLE_COMPONENT"]) && $arParams["SINGLE_COMPONENT"] == "Y")
+$arParams['ELEMENT_COUNT'] = (isset($arParams['ELEMENT_COUNT']) ? (int)$arParams['ELEMENT_COUNT'] : 0);
+$arParams['SINGLE_COMPONENT'] = (isset($arParams['SINGLE_COMPONENT']) && $arParams['SINGLE_COMPONENT'] == 'Y' ? 'Y' : 'N');
+if ($arParams['SINGLE_COMPONENT'] == 'Y')
 {
 	$countImg = $arParams["ELEMENT_COUNT"];
 	if($arParams["ELEMENT_COUNT"] > 7)
@@ -228,23 +230,22 @@ if ($this->StartResultCache(false, $additionalCache))
 		return;
 	}
 
+	$fullCount = 0;
 	foreach ($reqParams as &$params)
 	{
 		$boolName = true;
 		$boolPict = true;
 
+		$hlblockName = $params['HLB']['NAME'];
 		$entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($params['HLB']);
 		$entityDataClass = $entity->getDataClass();
 		$fieldsList = $entityDataClass::getMap();
 		if (count($fieldsList) === 1 && isset($fieldsList['ID']))
-		{
 			$fieldsList = $entityDataClass::getEntity()->getFields();
-		}
+
 		$directoryOrder = array();
 		if (isset($fieldsList['UF_SORT']))
-		{
 			$directoryOrder['UF_SORT'] = 'ASC';
-		}
 		$directoryOrder['ID'] = 'ASC';
 
 		$arFilter = array(
@@ -259,7 +260,6 @@ if ($this->StartResultCache(false, $additionalCache))
 		}
 
 		$rsPropEnums = $entityDataClass::getList($arFilter);
-
 		while ($arEnum = $rsPropEnums->fetch())
 		{
 			$boolPict = true;
@@ -325,8 +325,7 @@ if ($this->StartResultCache(false, $additionalCache))
 			{
 				continue;
 			}
-
-			$arBrandBlocks[$arEnum['ID']] = array(
+			$arBrandBlocks[$hlblockName.'_'.$arEnum['ID']] = array(
 				'TYPE' => $type,
 				'NAME' => (isset($arEnum['UF_NAME']) ? $arEnum['UF_NAME'] : false),
 				'LINK' => (isset($arEnum['UF_LINK']) && '' != $arEnum['UF_LINK'] ? $arEnum['UF_LINK'] : false),
@@ -334,12 +333,15 @@ if ($this->StartResultCache(false, $additionalCache))
 				'FULL_DESCRIPTION' => (isset($arEnum['UF_FULL_DESCRIPTION']) && (string)$arEnum['UF_FULL_DESCRIPTION'] !== '' ? $arEnum['UF_FULL_DESCRIPTION'] : false),
 				'PICT' => ($boolPict ? $arEnum['PREVIEW_PICTURE'] : false)
 			);
+			$fullCount++;
+			if ($arParams['SINGLE_COMPONENT'] == 'Y' && $fullCount >= $arParams['ELEMENT_COUNT'])
+				break 2;
 		}
 	}
-	unset($params);
+	unset($params, $reqParams);
+	unset($fullCount);
 
 	$arResult["BRAND_BLOCKS"] = $arBrandBlocks;
 
 	$this->IncludeComponentTemplate();
 }
-?>

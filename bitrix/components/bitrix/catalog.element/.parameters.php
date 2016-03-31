@@ -161,6 +161,13 @@ $arComponentParameters = array(
 		),
 		"LINK" => array(
 			"NAME" => GetMessage("IBLOCK_LINK"),
+		),
+		"GIFTS_SETTINGS" => array(
+			"NAME" => GetMessage("SALE_T_DESC_GIFTS_SETTINGS"),
+		),
+		"EXTENDED_SETTINGS" => array(
+			"NAME" => GetMessage("IBLOCK_EXTENDED_SETTINGS"),
+			"SORT" => 10000
 		)
 	),
 	"PARAMETERS" => array(
@@ -545,18 +552,41 @@ $arComponentParameters = array(
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "Y",
 		),
+
+		"USE_GIFTS_DETAIL" => array(
+			"PARENT" => "GIFTS_SETTINGS",
+			"NAME" => GetMessage("SALE_T_DESC_USE_GIFTS_DETAIL"),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "Y",
+			"REFRESH" => "Y",
+		),
+
+		"USE_GIFTS_MAIN_PR_SECTION_LIST" => array(
+			"PARENT" => "GIFTS_SETTINGS",
+			"NAME" => GetMessage("SALE_T_DESC_USE_GIFTS_MAIN_PR_DETAIL"),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "Y",
+			"REFRESH" => "Y",
+		),
+
 		"USE_ELEMENT_COUNTER" => array(
-			"PARENT" => "ADDITIONAL_SETTINGS",
+			"PARENT" => "EXTENDED_SETTINGS",
 			"NAME" => GetMessage('CP_BCE_USE_ELEMENT_COUNTER'),
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "Y"
 		),
 		"SHOW_DEACTIVATED" => array(
-			"PARENT" => "ADDITIONAL_SETTINGS",
+			"PARENT" => "EXTENDED_SETTINGS",
 			"NAME" => GetMessage('CP_BCE_SHOW_DEACTIVATED'),
 			"TYPE" => "CHECKBOX",
 			"DEFAULT" => "N"
 		),
+		"DISABLE_INIT_JS_IN_COMPONENT" => array(
+			"PARENT" => "EXTENDED_SETTINGS",
+			"NAME" => GetMessage('CP_BCE_DISABLE_INIT_JS_IN_COMPONENT'),
+			"TYPE" => "CHECKBOX",
+			"DEFAULT" => "N"
+		)
 	),
 );
 
@@ -597,6 +627,13 @@ if ($catalogIncluded)
 			"ADDITIONAL_VALUES" => "Y",
 		);
 	}
+
+	$arComponentParameters['PARAMETERS']['SET_VIEWED_IN_COMPONENT'] = array(
+		"PARENT" => "EXTENDED_SETTINGS",
+		"NAME" => GetMessage('CP_BCE_SET_VIEWED_IN_COMPONENT'),
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "N"
+	);
 }
 
 if (empty($offers))
@@ -629,6 +666,100 @@ if (isset($arCurrentValues['DISPLAY_COMPARE']) && $arCurrentValues['DISPLAY_COMP
 		'TYPE' => 'STRING',
 		'DEFAULT' => ''
 	);
+}
+
+if(!\Bitrix\Main\ModuleManager::isModuleInstalled("sale"))
+{
+	unset($arComponentParameters["PARAMETERS"]["USE_GIFTS_DETAIL"]);
+	unset($arComponentParameters["PARAMETERS"]["USE_GIFTS_MAIN_PR_SECTION_LIST"]);
+	unset($arComponentParameters["GROUPS"]["GIFTS_SETTINGS"]);
+}
+else
+{
+	$useGiftsDetail = $arCurrentValues["USE_GIFTS_DETAIL"] === null && $arComponentParameters['PARAMETERS']['USE_GIFTS_DETAIL']['DEFAULT'] == 'Y' || $arCurrentValues["USE_GIFTS_DETAIL"] == "Y";
+	$useGiftsMainPrSectionList = $arCurrentValues["USE_GIFTS_MAIN_PR_SECTION_LIST"] === null && $arComponentParameters['PARAMETERS']['USE_GIFTS_MAIN_PR_SECTION_LIST']['DEFAULT'] == 'Y' || $arCurrentValues["USE_GIFTS_MAIN_PR_SECTION_LIST"] == "Y";
+	if($useGiftsDetail || $useGiftsMainPrSectionList)
+	{
+		if($useGiftsDetail)
+		{
+			$arComponentParameters["PARAMETERS"]["GIFTS_DETAIL_PAGE_ELEMENT_COUNT"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PAGE_ELEMENT_COUNT_DETAIL"),
+				"TYPE" => "STRING",
+				"DEFAULT" => "3",
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_DETAIL_HIDE_BLOCK_TITLE"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PARAMS_HIDE_BLOCK_TITLE_DETAIL"),
+				"TYPE" => "CHECKBOX",
+				"DEFAULT" => "",
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_DETAIL_BLOCK_TITLE"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PARAMS_BLOCK_TITLE"),
+				"TYPE" => "STRING",
+				"DEFAULT" => GetMessage('SGB_PARAMS_BLOCK_TITLE_DEFAULT'),
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_DETAIL_TEXT_LABEL_GIFT"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PARAMS_TEXT_LABEL_GIFT_DETAIL"),
+				"TYPE" => "STRING",
+				"DEFAULT" => GetMessage("SGP_PARAMS_TEXT_LABEL_GIFT_DEFAULT"),
+			);
+
+			$arComponentParameters["PARAMETERS"]["GIFTS_SHOW_DISCOUNT_PERCENT"] = array(
+				'PARENT' => 'GIFTS_SETTINGS',
+				'NAME' => GetMessage('CVP_SHOW_DISCOUNT_PERCENT'),
+				'TYPE' => 'CHECKBOX',
+				'DEFAULT' => 'Y'
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_SHOW_OLD_PRICE"] = array(
+				'PARENT' => 'GIFTS_SETTINGS',
+				'NAME' => GetMessage('CVP_SHOW_OLD_PRICE'),
+				'TYPE' => 'CHECKBOX',
+				'DEFAULT' => 'Y'
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_SHOW_NAME"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("CVP_SHOW_NAME"),
+				"TYPE" => "CHECKBOX",
+				"DEFAULT" => "Y",
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_SHOW_IMAGE"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("CVP_SHOW_IMAGE"),
+				"TYPE" => "CHECKBOX",
+				"DEFAULT" => "Y",
+			);
+			$arComponentParameters["PARAMETERS"]['GIFTS_MESS_BTN_BUY'] = array(
+				'PARENT' => 'GIFTS_SETTINGS',
+				'NAME' => GetMessage('CVP_MESS_BTN_BUY_GIFT'),
+				'TYPE' => 'STRING',
+				'DEFAULT' => GetMessage('CVP_MESS_BTN_BUY_GIFT_DEFAULT')
+			);
+		}
+		if($useGiftsMainPrSectionList)
+		{
+			$arComponentParameters["PARAMETERS"]["GIFTS_MAIN_PRODUCT_DETAIL_PAGE_ELEMENT_COUNT"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PAGE_ELEMENT_COUNT_MAIN_PR_DETAIL"),
+				"TYPE" => "STRING",
+				"DEFAULT" => "3",
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_MAIN_PRODUCT_DETAIL_HIDE_BLOCK_TITLE"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_PARAMS_HIDE_BLOCK_TITLE_MAIN_PR_DETAIL"),
+				"TYPE" => "CHECKBOX",
+				"DEFAULT" => "",
+			);
+			$arComponentParameters["PARAMETERS"]["GIFTS_MAIN_PRODUCT_DETAIL_BLOCK_TITLE"] = array(
+				"PARENT" => "GIFTS_SETTINGS",
+				"NAME" => GetMessage("SGP_MAIN_PRODUCT_PARAMS_BLOCK_TITLE"),
+				"TYPE" => "STRING",
+				"DEFAULT" => GetMessage('SGB_MAIN_PRODUCT_PARAMS_BLOCK_TITLE_DEFAULT'),
+			);
+		}
+	}
 }
 
 CIBlockParameters::Add404Settings($arComponentParameters, $arCurrentValues);

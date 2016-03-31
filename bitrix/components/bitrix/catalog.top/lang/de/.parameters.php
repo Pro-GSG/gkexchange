@@ -72,4 +72,8 @@ $MESS["HIDE_NOT_AVAILABLE_TIP"] = "Bei aktivierter Option werden die Produkte au
 $MESS["COMPARE_PATH_TIP"] = "Gibt den Pfad zur Seite mit der Komponente des Produktvergleichs an. Wenn der Wert leer ist, wird aktuelle Seite benutzt.";
 $MESS["USE_PRICE_COUNT_TIP"] = "Wenn diese Option aktiviert ist, werden alle existierenden Preisspannen ausgewählt.";
 $MESS["SHOW_PRICE_COUNT_TIP"] = "Ist die Option \"Preisspannen benutzen\" nicht aktiv (d.h. für jedes Produkt wird nur ein Preis angezeigt), aber dabei mengenbasierte Produkte mit flexiblen Preisen existieren, muss die Menge angegeben werden, damit ein korrekter Preis ausgewählt werden kann. Diese Option beeinflusst nicht die Produkte mit festgelegten Preisen.";
+$MESS["CP_BCT_HIDE_NOT_AVAILABLE_EXT"] = "Nicht verfügbare Produkte in allen Lagern";
+$MESS["CP_BCT_HIDE_NOT_AVAILABLE_HIDE"] = "nicht anzeigen";
+$MESS["CP_BCT_HIDE_NOT_AVAILABLE_LAST"] = "zum Schluss anzeigen";
+$MESS["CP_BCT_HIDE_NOT_AVAILABLE_SHOW"] = "wie üblich anzeigen";
 ?>

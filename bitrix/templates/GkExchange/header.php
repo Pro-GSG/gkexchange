@@ -415,6 +415,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             function send_offer(strmail,strname) { 
                 $.post( "/ajax/offer.php",{ name : strname, email : strmail }, function(data){ 
+                    dataLayer.push({'event': 'form1'});
                     if(data=="OK"){
                         $("#knopka").css("background","green").html("Заявка отправлена");
                         $("#knopka").css("pointerEvents","none");                                 

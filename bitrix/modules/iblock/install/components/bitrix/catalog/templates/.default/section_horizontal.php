@@ -1,11 +1,10 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
-<?
-use Bitrix\Main\Loader;
-use Bitrix\Main\ModuleManager;
+<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
+use Bitrix\Main\Loader,
+	Bitrix\Main\ModuleManager;
 ?>
 <div class="<?=($isSidebar ? "col-md-9 col-sm-8" : "col-xs-12")?>">
 	<div class="row">
-
 	<?if ($isFilter):?>
 		<div class="col-xs-12 hidden-xs">
 		<?$APPLICATION->IncludeComponent(
@@ -40,6 +39,92 @@ use Bitrix\Main\ModuleManager;
 		</div>
 	<?endif?>
 		<div class="col-xs-12">
+			<?
+				if(ModuleManager::isModuleInstalled("sale"))
+				{
+					$arRecomData = array();
+					$recomCacheID = array('IBLOCK_ID' => $arParams['IBLOCK_ID']);
+					$obCache = new CPHPCache();
+					if ($obCache->InitCache(36000, serialize($recomCacheID), "/sale/bestsellers"))
+					{
+						$arRecomData = $obCache->GetVars();
+					}
+					elseif ($obCache->StartDataCache())
+					{
+						if (Loader::includeModule("catalog"))
+						{
+							$arSKU = CCatalogSKU::GetInfoByProductIBlock($arParams['IBLOCK_ID']);
+							$arRecomData['OFFER_IBLOCK_ID'] = (!empty($arSKU) ? $arSKU['IBLOCK_ID'] : 0);
+						}
+						$obCache->EndDataCache($arRecomData);
+					}
+
+					if(!empty($arRecomData) && $arParams['USE_GIFTS_SECTION'] === 'Y')
+					{
+						$APPLICATION->IncludeComponent(
+							"bitrix:sale.gift.section",
+							".default",
+							array(
+								"HIDE_NOT_AVAILABLE" => $arParams["HIDE_NOT_AVAILABLE"],
+								"PRODUCT_SUBSCRIPTION" => $arParams['PRODUCT_SUBSCRIPTION'],
+								"SHOW_NAME" => "Y",
+								"SHOW_IMAGE" => "Y",
+								"MESS_BTN_BUY" => $arParams['MESS_BTN_BUY'],
+								"MESS_BTN_DETAIL" => $arParams['MESS_BTN_DETAIL'],
+								"MESS_NOT_AVAILABLE" => $arParams['MESS_NOT_AVAILABLE'],
+								"MESS_BTN_SUBSCRIBE" => $arParams['MESS_BTN_SUBSCRIBE'],
+								"TEMPLATE_THEME" => (isset($arParams['TEMPLATE_THEME']) ? $arParams['TEMPLATE_THEME'] : ''),
+								"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
+								"CACHE_TYPE" => $arParams["CACHE_TYPE"],
+								"CACHE_TIME" => $arParams["CACHE_TIME"],
+								"CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+								"FILTER_NAME" => $arParams["FILTER_NAME"],
+								"ORDER_FILTER_NAME" => "arOrderFilter",
+								"DISPLAY_COMPARE" => $arParams["USE_COMPARE"],
+								"PRICE_CODE" => $arParams["PRICE_CODE"],
+								"SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
+								"PRICE_VAT_INCLUDE" => $arParams["PRICE_VAT_INCLUDE"],
+								"CONVERT_CURRENCY" => $arParams["CONVERT_CURRENCY"],
+								"CURRENCY_ID" => $arParams["CURRENCY_ID"],
+								"BASKET_URL" => $arParams["BASKET_URL"],
+								"ACTION_VARIABLE" => (!empty($arParams["ACTION_VARIABLE"]) ? $arParams["ACTION_VARIABLE"] : "action").'_sgs',
+								"PRODUCT_ID_VARIABLE" => $arParams["PRODUCT_ID_VARIABLE"],
+								"PRODUCT_QUANTITY_VARIABLE" => $arParams["PRODUCT_QUANTITY_VARIABLE"],
+								"ADD_PROPERTIES_TO_BASKET" => (isset($arParams["ADD_PROPERTIES_TO_BASKET"]) ? $arParams["ADD_PROPERTIES_TO_BASKET"] : ''),
+								"PRODUCT_PROPS_VARIABLE" => $arParams["PRODUCT_PROPS_VARIABLE"],
+								"PARTIAL_PRODUCT_PROPERTIES" => (isset($arParams["PARTIAL_PRODUCT_PROPERTIES"]) ? $arParams["PARTIAL_PRODUCT_PROPERTIES"] : ''),
+								"USE_PRODUCT_QUANTITY" => 'N',
+								"SHOW_PRODUCTS_".$arParams["IBLOCK_ID"] => "Y",
+								"OFFER_TREE_PROPS_".$arRecomData['OFFER_IBLOCK_ID'] => $arParams["OFFER_TREE_PROPS"],
+								"ADDITIONAL_PICT_PROP_".$arParams['IBLOCK_ID'] => $arParams['ADD_PICT_PROP'],
+								"ADDITIONAL_PICT_PROP_".$arRecomData['OFFER_IBLOCK_ID'] => $arParams['OFFER_ADD_PICT_PROP'],
+
+								"SHOW_DISCOUNT_PERCENT" => $arParams['GIFTS_SHOW_DISCOUNT_PERCENT'],
+								"SHOW_OLD_PRICE" => $arParams['GIFTS_SHOW_OLD_PRICE'],
+								"TEXT_LABEL_GIFT" => $arParams['GIFTS_SECTION_LIST_TEXT_LABEL_GIFT'],
+								"HIDE_BLOCK_TITLE" => $arParams['GIFTS_SECTION_LIST_HIDE_BLOCK_TITLE'],
+								"BLOCK_TITLE" => $arParams['GIFTS_SECTION_LIST_BLOCK_TITLE'],
+								"PAGE_ELEMENT_COUNT" => $arParams['GIFTS_SECTION_LIST_PAGE_ELEMENT_COUNT'],
+								"LINE_ELEMENT_COUNT" => $arParams['GIFTS_SECTION_LIST_PAGE_ELEMENT_COUNT'],
+
+								"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+								"IBLOCK_ID" => $arParams["IBLOCK_ID"],
+							)
+							+ array(
+								"SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
+								"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+								"PRODUCT_ID_VARIABLE" => $arParams["PRODUCT_ID_VARIABLE"],
+								"SECTION_ID_VARIABLE" => $arParams["SECTION_ID_VARIABLE"],
+							),
+							$component,
+							array("HIDE_ICONS" => "Y")
+						);
+					}
+				}
+			?>
+		</div>
+
+		<div class="col-xs-12">
 		<?$APPLICATION->IncludeComponent(
 			"bitrix:catalog.section.list",
 			"",
@@ -73,24 +158,20 @@ use Bitrix\Main\ModuleManager;
 				"NAME" => $arParams["COMPARE_NAME"],
 				"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
 				"COMPARE_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["compare"],
-				"ACTION_VARIABLE" => $arParams["ACTION_VARIABLE"],
+				"ACTION_VARIABLE" => (!empty($arParams["ACTION_VARIABLE"]) ? $arParams["ACTION_VARIABLE"] : "action")."_ccl",
 				"PRODUCT_ID_VARIABLE" => $arParams["PRODUCT_ID_VARIABLE"],
 				'POSITION_FIXED' => isset($arParams['COMPARE_POSITION_FIXED']) ? $arParams['COMPARE_POSITION_FIXED'] : '',
 				'POSITION' => isset($arParams['COMPARE_POSITION']) ? $arParams['COMPARE_POSITION'] : ''
 			),
 			$component,
 			array("HIDE_ICONS" => "Y")
-		);?><?
+			);?><?
 		}
 
 		if (isset($arParams['USE_COMMON_SETTINGS_BASKET_POPUP']) && $arParams['USE_COMMON_SETTINGS_BASKET_POPUP'] == 'Y')
-		{
 			$basketAction = (isset($arParams['COMMON_ADD_TO_BASKET_ACTION']) ? $arParams['COMMON_ADD_TO_BASKET_ACTION'] : '');
-		}
 		else
-		{
 			$basketAction = (isset($arParams['SECTION_ADD_TO_BASKET_ACTION']) ? $arParams['SECTION_ADD_TO_BASKET_ACTION'] : '');
-		}
 		$intSectionID = 0;
 		?>
 		<?$intSectionID = $APPLICATION->IncludeComponent(
@@ -188,7 +269,8 @@ use Bitrix\Main\ModuleManager;
 				'ADD_TO_BASKET_ACTION' => $basketAction,
 				'SHOW_CLOSE_POPUP' => isset($arParams['COMMON_SHOW_CLOSE_POPUP']) ? $arParams['COMMON_SHOW_CLOSE_POPUP'] : '',
 				'COMPARE_PATH' => $arResult['FOLDER'].$arResult['URL_TEMPLATES']['compare'],
-				'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : '')
+				'BACKGROUND_IMAGE' => (isset($arParams['SECTION_BACKGROUND_IMAGE']) ? $arParams['SECTION_BACKGROUND_IMAGE'] : ''),
+				'DISABLE_INIT_JS_IN_COMPONENT' => (isset($arParams['DISABLE_INIT_JS_IN_COMPONENT']) ? $arParams['DISABLE_INIT_JS_IN_COMPONENT'] : '')
 			),
 			$component
 		);?>
@@ -196,33 +278,14 @@ use Bitrix\Main\ModuleManager;
 	<?
 		$GLOBALS['CATALOG_CURRENT_SECTION_ID'] = $intSectionID;
 		unset($basketAction);
-		?>
 
-		<?
 		if (ModuleManager::isModuleInstalled("sale"))
 		{
-			$arRecomData = array();
-			$recomCacheID = array('IBLOCK_ID' => $arParams['IBLOCK_ID']);
-			$obCache = new CPHPCache();
-			if ($obCache->InitCache(36000, serialize($recomCacheID), "/sale/bestsellers"))
-			{
-				$arRecomData = $obCache->GetVars();
-			}
-			elseif ($obCache->StartDataCache())
-			{
-				if (Loader::includeModule("catalog"))
-				{
-					$arSKU = CCatalogSKU::GetInfoByProductIBlock($arParams['IBLOCK_ID']);
-					$arRecomData['OFFER_IBLOCK_ID'] = (!empty($arSKU) ? $arSKU['IBLOCK_ID'] : 0);
-				}
-				$obCache->EndDataCache($arRecomData);
-			}
 			if (!empty($arRecomData))
 			{
 				if (!isset($arParams['USE_SALE_BESTSELLERS']) || $arParams['USE_SALE_BESTSELLERS'] != 'N')
 				{
 					?>
-
 		<div class="col-xs-12">
 					<?$APPLICATION->IncludeComponent("bitrix:sale.bestsellers", "", array(
 						"HIDE_NOT_AVAILABLE" => $arParams["HIDE_NOT_AVAILABLE"],
@@ -351,7 +414,6 @@ use Bitrix\Main\ModuleManager;
 		?>
 	</div>
 </div>
-
 <?if ($isSidebar):?>
 	<div class="col-md-3 col-sm-4">
 		<?$APPLICATION->IncludeComponent(
@@ -364,7 +426,7 @@ use Bitrix\Main\ModuleManager;
 				"EDIT_MODE" => "html",
 			),
 			false,
-			Array('HIDE_ICONS' => 'Y')
+			array('HIDE_ICONS' => 'Y')
 		);?>
 	</div>
-<?endif?>
+<?endif;

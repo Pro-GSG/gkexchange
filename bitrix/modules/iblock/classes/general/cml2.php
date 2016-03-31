@@ -3464,14 +3464,14 @@ class CIBlockCMLImport
 					unset($arElement["DETAIL_PICTURE"]);
 				}
 
-				$obElement->Update($arDBElement["ID"], $arElement, $bWF, true, $this->iblock_resize);
+				$updateResult = $obElement->Update($arDBElement["ID"], $arElement, $bWF, true, $this->iblock_resize);
 				//In case element was not active in database we have to activate its offers
 				if($arDBElement["ACTIVE"] != "Y")
 				{
 					$this->ChangeOffersStatus($arDBElement["ID"], "Y", $bWF);
 				}
 				$arElement["ID"] = $arDBElement["ID"];
-				if($arElement["ID"])
+				if($updateResult)
 				{
 					$counter["UPD"]++;
 				}

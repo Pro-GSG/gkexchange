@@ -155,10 +155,13 @@ class _CIBElement
 			return $arAllProps;
 		}
 
-		if(array_key_exists("ID", $arFilter) && !is_numeric(substr($arFilter["ID"], 0, 1)))
+		if(array_key_exists("ID", $arFilter) && is_string($arFilter['ID']))
 		{
-			$arFilter["CODE"] = $arFilter["ID"];
-			unset($arFilter["ID"]);
+			if (!is_numeric(substr($arFilter["ID"], 0, 1)))
+			{
+				$arFilter["CODE"] = $arFilter["ID"];
+				unset($arFilter["ID"]);
+			}
 		}
 
 		if(!array_key_exists("ACTIVE", $arFilter))

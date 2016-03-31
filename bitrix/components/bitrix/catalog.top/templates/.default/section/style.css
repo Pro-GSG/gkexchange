@@ -177,7 +177,6 @@
 }
 
 @media (max-width:640px) {
-	.bx-touch .bx_catalog_top_home .bx_catalog_item_controls .bx_catalog_item_controls_blockone{display:none;}
 	.bx-touch .bx_catalog_top_home .bx_catalog_item_controls .bx_catalog_item_controls_blocktwo{float:none;width:100%;text-align:center;}
 }
 .bx_catalog_top_home .bx_catalog_item_controls input[type=text]{border:none;}

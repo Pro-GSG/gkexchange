@@ -9,9 +9,10 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 /** @global CDatabase $DB */
 /** @global CUser $USER */
 /** @global CMain $APPLICATION */
-use Bitrix\Main\Loader;
-use Bitrix\Currency\CurrencyTable;
-use Bitrix\Iblock\InheritedProperty\ElementValues;
+use Bitrix\Main\Loader,
+	Bitrix\Currency\CurrencyTable,
+	Bitrix\Iblock\InheritedProperty\ElementValues,
+	Bitrix\Iblock;
 
 $this->setFrameMode(false);
 
@@ -105,13 +106,9 @@ $arParams["PRICE_VAT_INCLUDE"] = $arParams["PRICE_VAT_INCLUDE"] !== "N";
 $arParams['CONVERT_CURRENCY'] = (isset($arParams['CONVERT_CURRENCY']) && 'Y' == $arParams['CONVERT_CURRENCY'] ? 'Y' : 'N');
 $arParams['CURRENCY_ID'] = trim(strval($arParams['CURRENCY_ID']));
 if ('' == $arParams['CURRENCY_ID'])
-{
 	$arParams['CONVERT_CURRENCY'] = 'N';
-}
 elseif ('N' == $arParams['CONVERT_CURRENCY'])
-{
 	$arParams['CURRENCY_ID'] = '';
-}
 
 $arResult = array();
 
@@ -139,6 +136,7 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]))
 				$productID = (int)$_REQUEST[$arParams['PRODUCT_ID_VARIABLE']];
 				if ($productID > 0 && !isset($_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID]))
 				{
+					$found = true;
 					$arOffers = CIBlockPriceTools::GetOffersIBlock($arParams["IBLOCK_ID"]);
 					$OFFERS_IBLOCK_ID = $arOffers ? $arOffers["OFFERS_IBLOCK_ID"]: 0;
 
@@ -161,41 +159,89 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]))
 					$arFilter["IBLOCK_ID"] = ($OFFERS_IBLOCK_ID > 0 ? array($arParams["IBLOCK_ID"], $OFFERS_IBLOCK_ID) : $arParams["IBLOCK_ID"]);
 
 					$rsElement = CIBlockElement::GetList(array(), $arFilter, false, false, $arSelect);
+					$arElement = $rsElement->GetNext();
+					unset($rsElement);
+					if (empty($arElement))
+						$found = false;
 
-					$rsElement->SetUrlTemplates($arParams["DETAIL_URL"]);
-					if ($arElement = $rsElement->GetNext())
+					if ($found)
 					{
-						$arMaster = false;
-						if ($arElement["IBLOCK_ID"] == $OFFERS_IBLOCK_ID)
+						if ($arElement['IBLOCK_ID'] == $OFFERS_IBLOCK_ID)
 						{
 							$rsMasterProperty = CIBlockElement::GetProperty($arElement["IBLOCK_ID"], $arElement["ID"], array(), array("ID" => $arOffers["OFFERS_PROPERTY_ID"], "EMPTY" => "N"));
-							if ($arMasterProperty = $rsMasterProperty->Fetch())
+							$arMasterProperty = $rsMasterProperty->Fetch();
+							unset($rsMasterProperty);
+							if (empty($arMasterProperty))
+								$found = false;
+
+							if ($found)
+							{
+								$arMasterProperty['VALUE'] = (int)$arMasterProperty['VALUE'];
+								if ($arMasterProperty['VALUE'] <= 0)
+									$found = false;
+							}
+							if ($found)
 							{
 								$rsMaster = CIBlockElement::GetList(
-									array()
-									,array(
-										"ID" => $arMasterProperty["VALUE"],
-										"IBLOCK_ID" => $arMasterProperty["LINK_IBLOCK_ID"],
-										"ACTIVE" => "Y",
-									)
-									,false, false, $arSelect);
-								$rsMaster->SetUrlTemplates($arParams["DETAIL_URL"]);
+									array(),
+									array(
+										'ID' => $arMasterProperty['VALUE'],
+										'IBLOCK_ID' => $arMasterProperty['LINK_IBLOCK_ID'],
+										'ACTIVE' => 'Y',
+									),
+									false,
+									false,
+									$arSelect
+								);
+								$rsMaster->SetUrlTemplates($arParams['DETAIL_URL']);
 								$arMaster = $rsMaster->GetNext();
+								unset($rsMaster);
+								if (empty($arMaster))
+								{
+									$found = false;
+								}
+								else
+								{
+									$arMaster['NAME'] = $arElement['NAME'];
+									$arElement = $arMaster;
+								}
+								unset($arMaster);
 							}
 						}
-						if ($arMaster)
+					}
+					if ($found)
+					{
+						$sectionsList = array();
+						$sectionsIterator = Iblock\SectionElementTable::getList(array(
+							'select' => array('IBLOCK_SECTION_ID'),
+							'filter' => array('=IBLOCK_ELEMENT_ID' => $arElement['ID'], '=ADDITIONAL_PROPERTY_ID' => null)
+						));
+						while ($section = $sectionsIterator->fetch())
 						{
-							$arMaster['PARENT_ID'] = $productID;
-							$arMaster["NAME"] = $arElement["NAME"];
-							$arMaster["DELETE_URL"] = htmlspecialcharsbx($APPLICATION->GetCurPageParam($arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_RESULT&".$arParams['PRODUCT_ID_VARIABLE']."=".$arMaster["ID"], array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])));
-							$_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID] = $arMaster;
+							$sectionId = (int)$section['IBLOCK_SECTION_ID'];
+							$sectionsList[$sectionId] = $sectionId;
 						}
-						else
-						{
-							$arElement['PARENT_ID'] = $productID;
-							$arElement["DELETE_URL"] = htmlspecialcharsbx($APPLICATION->GetCurPageParam($arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_RESULT&".$arParams['PRODUCT_ID_VARIABLE']."=".$arElement["ID"], array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])));
-							$_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID] = $arElement;
-						}
+						unset($section, $sectionsIterator);
+						$_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']]['ITEMS'][$productID] = array(
+							'ID' => $arElement['ID'],
+							'~ID' => $arElement['~ID'],
+							'IBLOCK_ID' => $arElement['IBLOCK_ID'],
+							'~IBLOCK_ID' => $arElement['~IBLOCK_ID'],
+							'IBLOCK_SECTION_ID' => $arElement['IBLOCK_SECTION_ID'],
+							'~IBLOCK_SECTION_ID' => $arElement['~IBLOCK_SECTION_ID'],
+							'NAME' => $arElement['NAME'],
+							'~NAME' => $arElement['~NAME'],
+							'DETAIL_PAGE_URL' => $arElement['DETAIL_PAGE_URL'],
+							'~DETAIL_PAGE_URL' => $arElement['~DETAIL_PAGE_URL'],
+							'SECTIONS_LIST' => $sectionsList,
+							'PARENT_ID' => $productID,
+							'DELETE_URL' => htmlspecialcharsbx($APPLICATION->GetCurPageParam(
+								$arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_RESULT&".$arParams['PRODUCT_ID_VARIABLE']."=".$productID,
+								array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])
+							))
+						);
+						unset($sectionsList, $arElement);
+						$resultCount = count($_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']]['ITEMS']);
 					}
 					else
 					{
@@ -206,13 +252,9 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]))
 				if ($actionByAjax)
 				{
 					if ($successfulAction)
-					{
 						$addResult = array('STATUS' => 'OK', 'MESSAGE' => GetMessage('CP_BCCR_MESS_SUCCESSFUL_ADD_TO_COMPARE'));
-					}
 					else
-					{
 						$addResult = array('STATUS' => 'ERROR', 'MESSAGE' => $errorMessage);
-					}
 					$APPLICATION->RestartBuffer();
 					echo CUtil::PhpToJSObject($addResult);
 					die();
@@ -432,9 +474,8 @@ if(strlen($strError)>0)
 
 $arCompare = array();
 if (isset($_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"]))
-{
 	$arCompare = $_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"];
-}
+
 if (!empty($arCompare) && is_array($arCompare))
 {
 	$fieldsRequired = array(
@@ -460,9 +501,7 @@ if (!empty($arCompare) && is_array($arCompare))
 			!isset($_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']][$fieldName])
 			|| !is_array($_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']][$fieldName])
 		)
-		{
 			$_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']][$fieldName] = array();
-		}
 	}
 	unset($fieldName, $sessionFields);
 
@@ -482,7 +521,7 @@ if (!empty($arCompare) && is_array($arCompare))
 		{
 			$currencyIterator = CurrencyTable::getList(array(
 				'select' => array('CURRENCY'),
-				'filter' => array('CURRENCY' => $arParams['CURRENCY_ID'])
+				'filter' => array('=CURRENCY' => $arParams['CURRENCY_ID'])
 			));
 			if ($currency = $currencyIterator->fetch())
 			{
@@ -503,11 +542,12 @@ if (!empty($arCompare) && is_array($arCompare))
 	$arResult['OFFERS_IBLOCK_ID'] = 0;
 	$arResult['OFFERS_PROPERTY_ID'] = 0;
 	$arOffers = CIBlockPriceTools::GetOffersIBlock($arParams["IBLOCK_ID"]);
-	if ($arOffers)
+	if (!empty($arOffers))
 	{
 		$arResult["OFFERS_IBLOCK_ID"] = $arOffers["OFFERS_IBLOCK_ID"];
 		$arResult["OFFERS_PROPERTY_ID"] = $arOffers["OFFERS_PROPERTY_ID"];
 	}
+	unset($arOffers);
 
 	$arSelect = array(
 		"ID",
@@ -555,13 +595,9 @@ if (!empty($arCompare) && is_array($arCompare))
 			unset($value);
 	}
 	if (!empty($arParams["FIELD_CODE"]))
-	{
 		$arSelect = array_merge($arSelect, $arParams["FIELD_CODE"]);
-	}
 	if (!empty($arParams['OFFERS_FIELD_CODE']))
-	{
 		$arSelect = array_merge($arSelect, $arParams["OFFERS_FIELD_CODE"]);
-	}
 	$arSelect = array_unique($arSelect);
 
 	$arSort = array(
@@ -579,20 +615,24 @@ if (!empty($arCompare) && is_array($arCompare))
 		),
 		array("delete_system_params" => true)
 	);
+
 	$arResult['~COMPARE_URL_TEMPLATE'] = $currentPath.(stripos($currentPath, '?') === false ? '?' : '&');
 	$arResult['COMPARE_URL_TEMPLATE'] = htmlspecialcharsbx($arResult['~COMPARE_URL_TEMPLATE']);
-	$arResult['~DELETE_FROM_COMPARE_URL_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=DELETE_FROM_COMPARE_RESULT&ID=#ID#';
-	$arResult['BUY_URL_TEMPLATE'] = $arResult['COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=COMPARE_BUY&'.$arParams['PRODUCT_ID_VARIABLE'].'=#ID#';
-	$arResult['ADD_URL_TEMPLATE'] = $arResult['COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=COMPARE_ADD2BASKET&'.$arParams['PRODUCT_ID_VARIABLE'].'=#ID#';
-	$arResult['~DELETE_FEATURE_FIELD_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=DELETE_FEATURE&pf_code=#CODE#';
-	$arResult['~ADD_FEATURE_FIELD_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=ADD_FEATURE&pf_code=#CODE#';
-	$arResult['~DELETE_FEATURE_PROPERTY_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=DELETE_FEATURE&pr_code=#CODE#';
-	$arResult['~ADD_FEATURE_PROPERTY_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=ADD_FEATURE&pr_code=#CODE#';
-	$arResult['~DELETE_FEATURE_OF_FIELD_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=DELETE_FEATURE&of_code=#CODE#';
-	$arResult['~ADD_FEATURE_OF_FIELD_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=ADD_FEATURE&of_code=#CODE#';
-	$arResult['~DELETE_FEATURE_OF_PROPERTY_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=DELETE_FEATURE&op_code=#CODE#';
-	$arResult['~ADD_FEATURE_OF_PROPERTY_TEMPLATE'] = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'].'=ADD_FEATURE&op_code=#CODE#';
-	unset($currentPath);
+	$rawCompareTemplateWithAction = $arResult['~COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'];
+	$compareTemplateWithAction = $arResult['COMPARE_URL_TEMPLATE'].$arParams['ACTION_VARIABLE'];
+
+	$arResult['~DELETE_FROM_COMPARE_URL_TEMPLATE'] = $rawCompareTemplateWithAction.'=DELETE_FROM_COMPARE_RESULT&ID=#ID#';
+	$arResult['BUY_URL_TEMPLATE'] = $compareTemplateWithAction.'=COMPARE_BUY&'.$arParams['PRODUCT_ID_VARIABLE'].'=#ID#';
+	$arResult['ADD_URL_TEMPLATE'] = $compareTemplateWithAction.'=COMPARE_ADD2BASKET&'.$arParams['PRODUCT_ID_VARIABLE'].'=#ID#';
+	$arResult['~DELETE_FEATURE_FIELD_TEMPLATE'] = $rawCompareTemplateWithAction.'=DELETE_FEATURE&pf_code=#CODE#';
+	$arResult['~ADD_FEATURE_FIELD_TEMPLATE'] = $rawCompareTemplateWithAction.'=ADD_FEATURE&pf_code=#CODE#';
+	$arResult['~DELETE_FEATURE_PROPERTY_TEMPLATE'] = $rawCompareTemplateWithAction.'=DELETE_FEATURE&pr_code=#CODE#';
+	$arResult['~ADD_FEATURE_PROPERTY_TEMPLATE'] = $rawCompareTemplateWithAction.'=ADD_FEATURE&pr_code=#CODE#';
+	$arResult['~DELETE_FEATURE_OF_FIELD_TEMPLATE'] = $rawCompareTemplateWithAction.'=DELETE_FEATURE&of_code=#CODE#';
+	$arResult['~ADD_FEATURE_OF_FIELD_TEMPLATE'] = $rawCompareTemplateWithAction.'=ADD_FEATURE&of_code=#CODE#';
+	$arResult['~DELETE_FEATURE_OF_PROPERTY_TEMPLATE'] = $rawCompareTemplateWithAction.'=DELETE_FEATURE&op_code=#CODE#';
+	$arResult['~ADD_FEATURE_OF_PROPERTY_TEMPLATE'] = $rawCompareTemplateWithAction.'=ADD_FEATURE&op_code=#CODE#';
+	unset($rawCompareTemplateWithAction, $compareTemplateWithAction, $currentPath);
 
 	$arResult['DELETED_FIELDS'] = array();
 	$arResult['SHOW_FIELDS'] = array();
@@ -1069,11 +1109,8 @@ else
 	if ($actionByAjax)
 	{
 		$APPLICATION->RestartBuffer();
-	}
-	ShowNote(GetMessage("CATALOG_COMPARE_LIST_EMPTY"));
-	if ($actionByAjax)
-	{
+		ShowNote(GetMessage("CATALOG_COMPARE_LIST_EMPTY"));
 		die();
 	}
+	ShowNote(GetMessage("CATALOG_COMPARE_LIST_EMPTY"));
 }
-?>

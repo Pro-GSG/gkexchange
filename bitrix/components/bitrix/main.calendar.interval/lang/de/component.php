@@ -11,4 +11,5 @@ $MESS["inerface_grid_exact"] = "genau";
 $MESS["inerface_grid_later"] = "Nach";
 $MESS["inerface_grid_earlier"] = "vor";
 $MESS["inerface_grid_interval"] = "Zeitraum";
+$MESS["inerface_grid_tomorrow"] = "morgen";
 ?>

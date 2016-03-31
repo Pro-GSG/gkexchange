@@ -10,7 +10,8 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 /** @global CUser $USER */
 /** @global CMain $APPLICATION */
 
-use Bitrix\Main\Loader;
+use Bitrix\Main\Loader,
+	Bitrix\Iblock;
 
 if(!Loader::includeModule("iblock"))
 {
@@ -79,6 +80,7 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]) && isset($_REQUEST[$arParams[
 				$actionMessage = GetMessage('CP_BCCL_MESS_SUCCESSFUL_ADD_TO_COMPARE');
 				if (!isset($_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID]))
 				{
+					$found = true;
 					$arOffers = CIBlockPriceTools::GetOffersIBlock($arParams["IBLOCK_ID"]);
 					$OFFERS_IBLOCK_ID = $arOffers ? $arOffers["OFFERS_IBLOCK_ID"]: 0;
 
@@ -101,42 +103,89 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]) && isset($_REQUEST[$arParams[
 					$arFilter["IBLOCK_ID"] = ($OFFERS_IBLOCK_ID > 0 ? array($arParams["IBLOCK_ID"], $OFFERS_IBLOCK_ID) : $arParams["IBLOCK_ID"]);
 
 					$rsElement = CIBlockElement::GetList(array(), $arFilter, false, false, $arSelect);
-
 					$rsElement->SetUrlTemplates($arParams["DETAIL_URL"]);
-					if ($arElement = $rsElement->GetNext())
+					$arElement = $rsElement->GetNext();
+					unset($rsElement);
+					if (empty($arElement))
+						$found = false;
+
+					if ($found)
 					{
-						$arMaster = false;
-						if ($arElement["IBLOCK_ID"] == $OFFERS_IBLOCK_ID)
+						if ($arElement['IBLOCK_ID'] == $OFFERS_IBLOCK_ID)
 						{
 							$rsMasterProperty = CIBlockElement::GetProperty($arElement["IBLOCK_ID"], $arElement["ID"], array(), array("ID" => $arOffers["OFFERS_PROPERTY_ID"], "EMPTY" => "N"));
-							if ($arMasterProperty = $rsMasterProperty->Fetch())
+							$arMasterProperty = $rsMasterProperty->Fetch();
+							unset($rsMasterProperty);
+							if (empty($arMasterProperty))
+								$found = false;
+							if ($found)
+							{
+								$arMasterProperty['VALUE'] = (int)$arMasterProperty['VALUE'];
+								if ($arMasterProperty['VALUE'] <= 0)
+									$found = false;
+							}
+							if ($found)
 							{
 								$rsMaster = CIBlockElement::GetList(
-									array()
-									,array(
-										"ID" => $arMasterProperty["VALUE"],
-										"IBLOCK_ID" => $arMasterProperty["LINK_IBLOCK_ID"],
-										"ACTIVE" => "Y",
-									)
-									,false, false, $arSelect);
-								$rsMaster->SetUrlTemplates($arParams["DETAIL_URL"]);
+									array(),
+									array(
+										'ID' => $arMasterProperty['VALUE'],
+										'IBLOCK_ID' => $arMasterProperty['LINK_IBLOCK_ID'],
+										'ACTIVE' => 'Y',
+									),
+									false,
+									false,
+									$arSelect
+								);
+								$rsMaster->SetUrlTemplates($arParams['DETAIL_URL']);
 								$arMaster = $rsMaster->GetNext();
+								unset($rsMaster);
+								if (empty($arMaster))
+								{
+									$found = false;
+								}
+								else
+								{
+									$arMaster['NAME'] = $arElement['NAME'];
+									$arElement = $arMaster;
+								}
+								unset($arMaster);
 							}
 						}
-						if ($arMaster)
+					}
+					if ($found)
+					{
+						$sectionsList = array();
+						$sectionsIterator = Iblock\SectionElementTable::getList(array(
+							'select' => array('IBLOCK_SECTION_ID'),
+							'filter' => array('=IBLOCK_ELEMENT_ID' => $arElement['ID'], '=ADDITIONAL_PROPERTY_ID' => null)
+						));
+						while ($section = $sectionsIterator->fetch())
 						{
-							$arMaster['PARENT_ID'] = $productID;
-							$arMaster['NAME'] = $arElement["NAME"];
-							$arMaster['DELETE_URL'] = htmlspecialcharsbx($APPLICATION->GetCurPageParam($arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_LIST&".$arParams['PRODUCT_ID_VARIABLE']."=".$arMaster["ID"], array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])));
-							$_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID] = $arMaster;
+							$sectionId = (int)$section['IBLOCK_SECTION_ID'];
+							$sectionsList[$sectionId] = $sectionId;
 						}
-						else
-						{
-							$arElement['PARENT_ID'] = $productID;
-							$arElement['DELETE_URL'] = htmlspecialcharsbx($APPLICATION->GetCurPageParam($arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_LIST&".$arParams['PRODUCT_ID_VARIABLE']."=".$arElement["ID"], array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])));
-							$_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"][$productID] = $arElement;
-						}
-						$resultCount = count($_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"]);
+						unset($section, $sectionsIterator);
+						$_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']]['ITEMS'][$productID] = array(
+							'ID' => $arElement['ID'],
+							'~ID' => $arElement['~ID'],
+							'IBLOCK_ID' => $arElement['IBLOCK_ID'],
+							'~IBLOCK_ID' => $arElement['~IBLOCK_ID'],
+							'IBLOCK_SECTION_ID' => $arElement['IBLOCK_SECTION_ID'],
+							'~IBLOCK_SECTION_ID' => $arElement['~IBLOCK_SECTION_ID'],
+							'NAME' => $arElement['NAME'],
+							'~NAME' => $arElement['~NAME'],
+							'DETAIL_PAGE_URL' => $arElement['DETAIL_PAGE_URL'],
+							'~DETAIL_PAGE_URL' => $arElement['~DETAIL_PAGE_URL'],
+							'SECTIONS_LIST' => $sectionsList,
+							'PARENT_ID' => $productID,
+							'DELETE_URL' => htmlspecialcharsbx($APPLICATION->GetCurPageParam(
+								$arParams['ACTION_VARIABLE']."=DELETE_FROM_COMPARE_LIST&".$arParams['PRODUCT_ID_VARIABLE']."=".$productID,
+								array($arParams['ACTION_VARIABLE'], $arParams['PRODUCT_ID_VARIABLE'])
+							))
+						);
+						unset($sectionsList, $arElement);
+						$resultCount = count($_SESSION[$arParams['NAME']][$arParams['IBLOCK_ID']]['ITEMS']);
 					}
 					else
 					{
@@ -161,13 +210,10 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]) && isset($_REQUEST[$arParams[
 	if ($actionByAjax)
 	{
 		if ($successfulAction)
-		{
 			$addResult = array('STATUS' => 'OK', 'MESSAGE' => $actionMessage, 'ID' => $productID, 'COUNT' => $resultCount);
-		}
 		else
-		{
 			$addResult = array('STATUS' => 'ERROR', 'MESSAGE' => $actionMessage);
-		}
+
 		$APPLICATION->RestartBuffer();
 		echo CUtil::PhpToJSObject($addResult);
 		die();
@@ -177,4 +223,3 @@ if (isset($_REQUEST[$arParams['ACTION_VARIABLE']]) && isset($_REQUEST[$arParams[
 $arResult = $_SESSION[$arParams["NAME"]][$arParams["IBLOCK_ID"]]["ITEMS"];
 
 $this->IncludeComponentTemplate();
-?>

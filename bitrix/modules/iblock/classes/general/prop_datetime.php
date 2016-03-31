@@ -212,7 +212,7 @@ class CIBlockPropertyDateTime
 	{
 		$arResult = array();
 		if(strlen($value["VALUE"])>0 && !CheckDateTime($value["VALUE"]))
-			$arResult[] = Loc::getMessage("IBLOCK_PROP_DATETIME_ERROR");
+			$arResult[] = Loc::getMessage("IBLOCK_PROP_DATETIME_ERROR_NEW", array("#FIELD_NAME#" => $arProperty["NAME"]));
 		return $arResult;
 	}
 

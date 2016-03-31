@@ -32,7 +32,7 @@ if ($iblockExists)
 			'=IBLOCK_ID' => $arCurrentValues['IBLOCK_ID'],
 			'=ACTIVE' => 'Y',
 			'=PROPERTY_TYPE' => Iblock\PropertyTable::TYPE_STRING,
-			'=USER_TYPE' => 'string'
+			'=USER_TYPE' => 'directory'
 		),
 		'order' => array('SORT' => 'ASC', 'NAME' => 'ASC')
 	));

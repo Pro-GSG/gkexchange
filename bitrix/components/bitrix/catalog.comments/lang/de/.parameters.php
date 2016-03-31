@@ -40,4 +40,8 @@ $MESS["RATING_TYPE_LIKE_TEXT"] = "Gefällt mir (Text)";
 $MESS["RATING_TYPE_LIKE_GRAPHIC"] = "Gefällt mir (Bild)";
 $MESS["CATALOG_SC_IBLOCK_TYPE"] = "Informationsblocktyp";
 $MESS["CATALOG_SC_SHOW_DEACTIVATED"] = "Kommentare für deaktivierte Produkte anzeigen";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD"] = "Bilder in Kommentaren erlauben für";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_A"] = "Alle";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_R"] = "Registrierte Nutzer";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_N"] = "Niemanden";
 ?>

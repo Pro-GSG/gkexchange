@@ -202,11 +202,25 @@ class CAllIBlock
 			return $arButtons;
 
 		$bCatalog = false;
-		if (isset($arOptions["CATALOG"]) && $arOptions["CATALOG"] == true)
+		$useCatalogButtons = (($ELEMENT_ID <= 0 || isset($arOptions['SHOW_CATALOG_BUTTONS'])) && !empty($arOptions['USE_CATALOG_BUTTONS']) && is_array($arOptions['USE_CATALOG_BUTTONS']));
+		$catalogButtons = array();
+		if ($useCatalogButtons || (isset($arOptions["CATALOG"]) && $arOptions["CATALOG"] == true))
 		{
 			if (self::$catalogIncluded === null)
 				self::$catalogIncluded = \Bitrix\Main\Loader::includeModule('catalog');
 			$bCatalog = self::$catalogIncluded;
+			if (!self::$catalogIncluded)
+				$useCatalogButtons = false;
+		}
+
+		if ($useCatalogButtons)
+		{
+			if (isset($arOptions['USE_CATALOG_BUTTONS']['add_product']) && $arOptions['USE_CATALOG_BUTTONS']['add_product'] == true)
+				$catalogButtons['add_product'] = true;
+			if (isset($arOptions['USE_CATALOG_BUTTONS']['add_sku']) && $arOptions['USE_CATALOG_BUTTONS']['add_sku'] == true)
+				$catalogButtons['add_sku'] = true;
+			if (empty($catalogButtons))
+				$useCatalogButtons = false;
 		}
 
 		$return_url = array(
@@ -312,44 +326,53 @@ class CAllIBlock
 
 		if(CIBlockSectionRights::UserHasRightTo($IBLOCK_ID, $SECTION_ID, "section_element_bind"))
 		{
-			$url = "/bitrix/admin/".CIBlock::GetAdminElementEditLink($IBLOCK_ID, null, array(
+			$params = array(
 				"force_catalog" => $bCatalog,
 				"filter_section" => $SECTION_ID,
 				"IBLOCK_SECTION_ID" => $SECTION_ID,
 				"bxpublic" => "Y",
 				"from_module" => "iblock",
 				"return_url" => $return_url["add_element"],
-			));
-
-			$action = $APPLICATION->GetPopupLink(
-				array(
-					"URL" => $url,
-					"PARAMS" => $windowParams,
-				)
-			);
-			$arButton = array(
-				"TEXT" => (strlen($arLabels["ELEMENT_ADD_TEXT"])? $arLabels["ELEMENT_ADD_TEXT"]: $arIBlock["ELEMENT_ADD"]),
-				"TITLE" => (strlen($arLabels["ELEMENT_ADD_TITLE"])? $arLabels["ELEMENT_ADD_TITLE"]: $arIBlock["ELEMENT_ADD"]),
-				"ACTION" => 'javascript:'.$action,
-				"ACTION_URL" => $url,
-				"ONCLICK" => $action,
-				"ICON" => "bx-context-toolbar-create-icon",
-				"ID" => "bx-context-toolbar-add-element",
-			);
-			$arButtons["edit"]["add_element"] = $arButton;
-			$arButtons["configure"]["add_element"] = $arButton;
-			$arButtons["intranet"][] = array(
-				'TEXT' => $arButton["TEXT"],
-				'TITLE' => $arButton["TITLE"],
-				'ICON'	=> 'add',
-				'ONCLICK' => $arButton["ACTION"],
-				'SORT' => 1000,
 			);
 
-			$url = str_replace("&bxpublic=Y&from_module=iblock", "", $url);
-			$arButton["ACTION"] = "javascript:jsUtils.Redirect([], '".CUtil::JSEscape($url)."')";
-			unset($arButton["ONCLICK"]);
-			$arButtons["submenu"]["add_element"] = $arButton;
+			if ($useCatalogButtons)
+			{
+				CCatalogAdminTools::setProductFormParams();
+				CCatalogAdminTools::setCatalogPanelButtons($arButtons, $IBLOCK_ID, $catalogButtons, $params, $windowParams);
+			}
+			else
+			{
+				$url = "/bitrix/admin/".CIBlock::GetAdminElementEditLink($IBLOCK_ID, null, $params);
+				$action = $APPLICATION->GetPopupLink(
+					array(
+						"URL" => $url,
+						"PARAMS" => $windowParams,
+					)
+				);
+				$arButton = array(
+					"TEXT" => (strlen($arLabels["ELEMENT_ADD_TEXT"]) ? $arLabels["ELEMENT_ADD_TEXT"] : $arIBlock["ELEMENT_ADD"]),
+					"TITLE" => (strlen($arLabels["ELEMENT_ADD_TITLE"]) ? $arLabels["ELEMENT_ADD_TITLE"] : $arIBlock["ELEMENT_ADD"]),
+					"ACTION" => 'javascript:'.$action,
+					"ACTION_URL" => $url,
+					"ONCLICK" => $action,
+					"ICON" => "bx-context-toolbar-create-icon",
+					"ID" => "bx-context-toolbar-add-element",
+				);
+				$arButtons["edit"]["add_element"] = $arButton;
+				$arButtons["configure"]["add_element"] = $arButton;
+				$arButtons["intranet"][] = array(
+					'TEXT' => $arButton["TEXT"],
+					'TITLE' => $arButton["TITLE"],
+					'ICON' => 'add',
+					'ONCLICK' => $arButton["ACTION"],
+					'SORT' => 1000,
+				);
+
+				$url = str_replace("&bxpublic=Y&from_module=iblock", "", $url);
+				$arButton["ACTION"] = "javascript:jsUtils.Redirect([], '".CUtil::JSEscape($url)."')";
+				unset($arButton["ONCLICK"]);
+				$arButtons["submenu"]["add_element"] = $arButton;
+			}
 		}
 
 		if($ELEMENT_ID > 0 && CIBlockElementRights::UserHasRightTo($IBLOCK_ID, $ELEMENT_ID, "element_delete"))
@@ -564,7 +587,7 @@ class CAllIBlock
 	///////////////////////////////////////////////////////////////////
 	// Block by ID
 	///////////////////////////////////////////////////////////////////
-	function GetByID($ID)
+	public static function GetByID($ID)
 	{
 		return CIBlock::GetList(Array(), Array("ID"=>$ID));
 	}
@@ -2066,26 +2089,31 @@ REQ
 		return $arDefFields;
 	}
 
-	function GetProperties($ID, $arOrder=Array(), $arFilter=Array())
+	public static function GetProperties($ID, $arOrder = array(), $arFilter = array())
 	{
 		$props = new CIBlockProperty();
 		$arFilter["IBLOCK_ID"] = $ID;
 		return $props->GetList($arOrder, $arFilter);
 	}
 
-	function GetGroupPermissions($ID)
+	public static function GetGroupPermissions($ID)
 	{
 		/** @global CDatabase $DB */
 		global $DB;
 		$arRes = array();
+		$ID = (int)$ID;
+		if ($ID <= 0)
+			return $arRes;
 
 		$dbres = $DB->Query("
 			SELECT GROUP_ID, PERMISSION
 			FROM b_iblock_group
-			WHERE IBLOCK_ID = ".intval($ID)."
+			WHERE IBLOCK_ID = ".$ID."
 		");
 		while($res = $dbres->Fetch())
 			$arRes[$res["GROUP_ID"]] = $res["PERMISSION"];
+		unset($res);
+		unset($dbres);
 
 		return $arRes;
 	}
@@ -2827,14 +2855,14 @@ REQ
 				while($arIBlockElement = $dbrIBlockElement->Fetch())
 				{
 					$DETAIL_URL =
-							"=ID=".$arIBlockElement["ID"].
-							"&EXTERNAL_ID=".$arIBlockElement["EXTERNAL_ID"].
-							"&CODE=".$arIBlockElement["CODE"].
-							"&IBLOCK_SECTION_ID=".$arIBlockElement["IBLOCK_SECTION_ID"].
-							"&IBLOCK_TYPE_ID=".$arIBlock["IBLOCK_TYPE_ID"].
-							"&IBLOCK_ID=".$IBLOCK_ID.
-							"&IBLOCK_CODE=".$arIBlock["IBLOCK_CODE"].
-							"&IBLOCK_EXTERNAL_ID=".$arIBlock["IBLOCK_EXTERNAL_ID"];
+							"=ID=".urlencode($arIBlockElement["ID"]).
+							"&EXTERNAL_ID=".urlencode($arIBlockElement["EXTERNAL_ID"]).
+							"&CODE=".urlencode($arIBlockElement["CODE"]).
+							"&IBLOCK_SECTION_ID=".urlencode($arIBlockElement["IBLOCK_SECTION_ID"]).
+							"&IBLOCK_TYPE_ID=".urlencode($arIBlock["IBLOCK_TYPE_ID"]).
+							"&IBLOCK_ID=".urlencode($IBLOCK_ID).
+							"&IBLOCK_CODE=".urlencode($arIBlock["IBLOCK_CODE"]).
+							"&IBLOCK_EXTERNAL_ID=".urlencode($arIBlock["IBLOCK_EXTERNAL_ID"]);
 
 					$BODY =
 						($arIBlockElement["PREVIEW_TEXT_TYPE"]=="html" ?
@@ -3715,6 +3743,23 @@ REQ
 			$result = $file_array;
 			if (!is_null($description))
 				$result["description"] = $description;
+		}
+		elseif (
+			strlen($file_array["tmp_name"]) > 0
+			&& strpos($file_array["tmp_name"], CTempFile::GetAbsoluteRoot()) === 0
+		)
+		{
+			$io = CBXVirtualIo::GetInstance();
+			$absPath = $io->CombinePath("/", $file_array["tmp_name"]);
+			$tmpPath = CTempFile::GetAbsoluteRoot()."/";
+			if (strpos($absPath, $tmpPath) === 0)
+			{
+				$result = $file_array;
+				$result["tmp_name"] = $absPath;
+				$result["error"] = intval($result["error"]);
+				if (!is_null($description))
+					$result["description"] = $description;
+			}
 		}
 		elseif (strlen($file_array["tmp_name"]) > 0)
 		{

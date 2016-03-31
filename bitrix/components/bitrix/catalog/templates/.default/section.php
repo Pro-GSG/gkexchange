@@ -32,13 +32,9 @@ if ($isFilter)
 		"GLOBAL_ACTIVE" => "Y",
 	);
 	if (0 < intval($arResult["VARIABLES"]["SECTION_ID"]))
-	{
 		$arFilter["ID"] = $arResult["VARIABLES"]["SECTION_ID"];
-	}
 	elseif ('' != $arResult["VARIABLES"]["SECTION_CODE"])
-	{
 		$arFilter["=CODE"] = $arResult["VARIABLES"]["SECTION_CODE"];
-	}
 
 	$obCache = new CPHPCache();
 	if ($obCache->InitCache(36000, serialize($arFilter), "/iblock/catalog"))
@@ -58,9 +54,8 @@ if ($isFilter)
 				$CACHE_MANAGER->StartTagCache("/iblock/catalog");
 
 				if ($arCurSection = $dbRes->Fetch())
-				{
 					$CACHE_MANAGER->RegisterTag("iblock_id_".$arParams["IBLOCK_ID"]);
-				}
+
 				$CACHE_MANAGER->EndTagCache();
 			}
 			else
@@ -72,9 +67,7 @@ if ($isFilter)
 		$obCache->EndDataCache($arCurSection);
 	}
 	if (!isset($arCurSection))
-	{
 		$arCurSection = array();
-	}
 }
 ?>
 <div class="row">

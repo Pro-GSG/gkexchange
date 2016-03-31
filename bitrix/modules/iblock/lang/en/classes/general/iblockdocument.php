@@ -44,4 +44,5 @@ $MESS["IBD_DOCUMENT_XFORMOPTIONS2"] = "Click \"Set\" when finished.";
 $MESS["IBD_DOCUMENT_XFORMOPTIONS3"] = "Set";
 $MESS["IBD_DOCUMENT_MOPROMT"] = "Information block";
 $MESS["BPCGHLP_PROP_SELECT_INTERNAL"] = "Bind to document lists";
+$MESS["IBD_DOCUMENT_ENTITY_NAME"] = "Information blocks";
 ?>

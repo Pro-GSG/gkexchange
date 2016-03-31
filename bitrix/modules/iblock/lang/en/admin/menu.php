@@ -14,4 +14,8 @@ $MESS["IBLOCK_MENU_ELEMENTS"] = "Elements";
 $MESS["IBLOCK_MENU_SEPARATOR"] = "Information blocks";
 $MESS["IBLOCK_MENU_REINDEX"] = "Faceted indexes";
 $MESS["IBLOCK_MENU_REINDEX_TITLE"] = "Create faceted indexes for property values";
+$MESS["IBLOCK_MENU_ADMIN_TOOLS"] = "Tools";
+$MESS["IBLOCK_MENU_ADMIN_TOOLS_TITLE"] = "Tools";
+$MESS["IBLOCK_MENU_ADMIN_TOOLS_REDIRECT_IBLOCK"] = "View information block or element";
+$MESS["IBLOCK_MENU_ADMIN_TOOLS_REDIRECT_IBLOCK_TITLE"] = "Opens information block elements page or element edit form";
 ?>

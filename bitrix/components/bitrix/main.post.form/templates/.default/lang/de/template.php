@@ -24,4 +24,6 @@ $MESS["MPF_SELECT_ATTACHMENTS"] = "Dateien oder Bilder hochladen";
 $MESS["MPF_DROP_ATTACHMENTS"] = "Anhang hierher verschieben";
 $MESS["MPF_DRAG_ATTACHMENTS"] = "Dateien hierher verschieben";
 $MESS["MPF_DRAG_ATTACHMENTS2"] = "Dateien hochladen?";
+$MESS["MPF_PIN_EDITOR_PANNEL"] = "Leiste mit Schaltflächen fixieren";
+$MESS["MPF_PIN_EDITOR_PANNEL_OFF"] = "Leiste mit Schaltflächen lösen";
 ?>

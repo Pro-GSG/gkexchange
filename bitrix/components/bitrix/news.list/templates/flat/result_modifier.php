@@ -183,7 +183,7 @@ if ($sliderProperty)
 $arParams["TEMPLATE_THEME"] = trim($arParams["TEMPLATE_THEME"]);
 if ($arParams["TEMPLATE_THEME"] != "")
 {
-	$arParams["TEMPLATE_THEME"] = preg_replace("/[^a-zA-Z0-9_\-\(\)\!]/", "", $arParams["TEMPLATE_THEME"]);
+	$arParams["TEMPLATE_THEME"] = preg_replace("/[^a-zA-Z0-9_\\-\\(\\)\\!]/", "", $arParams["TEMPLATE_THEME"]);
 	if ($arParams["TEMPLATE_THEME"] == "site")
 	{
 		$templateId = COption::GetOptionString("main", "wizard_template_id", "eshop_bootstrap", SITE_ID);
@@ -196,5 +196,17 @@ if ($arParams["TEMPLATE_THEME"] != "")
 			$arParams["TEMPLATE_THEME"] = "";
 	}
 }
+
 if ($arParams["TEMPLATE_THEME"] == "")
 	$arParams["TEMPLATE_THEME"] = "blue";
+
+$arResult["NAV_PARAM"]["TEMPLATE_THEME"] = $arParams["TEMPLATE_THEME"];
+
+$arResult["NAV_STRING"] = $arResult["NAV_RESULT"]->GetPageNavStringEx(
+	$navComponentObject,
+	$arParams["PAGER_TITLE"],
+	$arParams["PAGER_TEMPLATE"],
+	$arParams["PAGER_SHOW_ALWAYS"],
+	$this->__component,
+	$arResult["NAV_PARAM"]
+);

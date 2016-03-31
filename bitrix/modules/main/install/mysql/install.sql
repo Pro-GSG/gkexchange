@@ -376,7 +376,7 @@ CREATE TABLE b_user_option
 	USER_ID int null,
 	CATEGORY varchar(50) not null,
 	NAME varchar(255) not null,
-	VALUE text null,
+	VALUE mediumtext null,
 	COMMON char(1) not null default 'N',
 	PRIMARY KEY (ID),
 	INDEX ix_user_option_user(USER_ID, CATEGORY)
@@ -779,8 +779,8 @@ CREATE TABLE b_short_uri
 	SHORT_URI varbinary(250) not null,
 	SHORT_URI_CRC int(18) not null,
 	STATUS int(18) not null default 301,
-	MODIFIED timestamp not null,
-	LAST_USED timestamp,
+	MODIFIED datetime not null,
+	LAST_USED datetime null,
 	NUMBER_USED int(18) not null default 0,
 	PRIMARY KEY (ID),
 	INDEX ux_b_short_uri_1 (SHORT_URI_CRC),
@@ -793,7 +793,8 @@ CREATE TABLE b_user_access
 	PROVIDER_ID varchar(50),
 	ACCESS_CODE varchar(100),
 	INDEX ix_ua_user_provider (USER_ID, PROVIDER_ID),
-	INDEX ix_ua_user_access (USER_ID, ACCESS_CODE)
+	INDEX ix_ua_user_access (USER_ID, ACCESS_CODE),
+	INDEX ix_ua_access (ACCESS_CODE)
 );
 
 insert into b_user_access (USER_ID, PROVIDER_ID, ACCESS_CODE) values (0, 'group', 'G2');
@@ -812,13 +813,15 @@ CREATE TABLE b_user_counter
 	CODE varchar(50) not null,
 	CNT int(18) not null default 0,
 	LAST_DATE datetime,
+	TIMESTAMP_X datetime not null default '3000-01-01 00:00:00',
 	TAG varchar(255),
 	PARAMS text,
 	SENT char(1) null,
 	PRIMARY KEY (USER_ID, SITE_ID, CODE),
 	INDEX ix_buc_tag (TAG),
-	INDEX ix_buc_sent (SENT),
-	INDEX ix_buc_code (CODE)
+	INDEX ix_buc_code (CODE),
+	INDEX ix_buc_ts (TIMESTAMP_X),
+	INDEX ix_buc_sent_userid (SENT, USER_ID)
 );
 
 CREATE TABLE b_hot_keys_code
@@ -1068,4 +1071,32 @@ CREATE TABLE b_finder_dest
 	`LAST_USE_DATE` DATETIME NULL,
 	PRIMARY KEY (`USER_ID`, `CODE`, `CONTEXT`),
 	INDEX IX_FINDER_DEST (`CODE_TYPE`)
+);
+
+CREATE TABLE b_urlpreview_metadata
+(
+	ID int(11) NOT NULL AUTO_INCREMENT,
+	URL varchar(200) NOT NULL,
+	TYPE char(1) NOT NULL DEFAULT 'S',
+	DATE_INSERT datetime NOT NULL,
+	DATE_EXPIRE datetime NULL,
+	TITLE varchar(200) NULL,
+	DESCRIPTION text,
+	IMAGE_ID int(11) NULL,
+	IMAGE varchar(255) NULL,
+	EMBED mediumtext,
+	EXTRA text,
+	PRIMARY KEY (ID),
+	INDEX IX_URLPREVIEW_METADATA_URL (URL)
+);
+
+CREATE TABLE b_urlpreview_route
+(
+	ID int(11) NOT NULL AUTO_INCREMENT,
+	ROUTE varchar(200) NOT NULL,
+	MODULE varchar(50) NOT NULL,
+	CLASS varchar(150) NOT NULL,
+	PARAMETERS mediumtext,
+	PRIMARY KEY (ID),
+	UNIQUE KEY UX_URLPREVIEW_ROUTE_ROUTE (ROUTE)
 );

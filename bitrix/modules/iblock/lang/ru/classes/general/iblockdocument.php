@@ -44,4 +44,5 @@ $MESS["IBD_DOCUMENT_XFORMOPTIONS1"] = "Каждый вариант значения в новой строке. Е
 $MESS["IBD_DOCUMENT_XFORMOPTIONS2"] = "По окончании заполнения нажмите кнопку \"Установить\"";
 $MESS["IBD_DOCUMENT_XFORMOPTIONS3"] = "Установить";
 $MESS["IBD_DOCUMENT_MOPROMT"] = "Инфоблок";
+$MESS["IBD_DOCUMENT_ENTITY_NAME"] = "Инфоблоки";
 ?>

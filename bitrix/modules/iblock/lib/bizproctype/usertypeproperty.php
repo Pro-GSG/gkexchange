@@ -24,8 +24,8 @@ class UserTypeProperty extends BaseType\Base
 	protected static function formatValuePrintable(FieldType $fieldType, $value)
 	{
 		$userType = static::getUserType($fieldType);
-		if (!isset($value['VALUE']))
-			$value = array('VALUE' => $value);
+		if (is_array($value) && isset($value['VALUE']))
+			$value = $value['VALUE'];
 
 		if (!empty($userType['GetPublicViewHTML']))
 		{
@@ -33,7 +33,7 @@ class UserTypeProperty extends BaseType\Base
 				$userType['GetPublicViewHTML'],
 				array(
 					array('LINK_IBLOCK_ID' => $fieldType->getOptions()),
-					$value,
+					array('VALUE' => $value),
 					''
 				)
 			);
@@ -51,15 +51,13 @@ class UserTypeProperty extends BaseType\Base
 	 */
 	public static function convertTo(FieldType $fieldType, $value, $toTypeClass)
 	{
-		if (is_subclass_of($toTypeClass, '\Bitrix\Iblock\BizprocType\UserTypeProperty'))
-		{
-			return $value;
-		}
-
 		if (is_array($value) && isset($value['VALUE']))
 			$value = $value['VALUE'];
 
 		$value = (string) $value;
+		//BaseType\String was removed for PHP7 compatibility
+		if (class_exists('\Bitrix\Bizproc\BaseType\StringType'))
+			return BaseType\StringType::convertTo($fieldType, $value, $toTypeClass);
 		return BaseType\String::convertTo($fieldType, $value, $toTypeClass);
 	}
 
@@ -84,14 +82,14 @@ class UserTypeProperty extends BaseType\Base
 
 		if (!empty($userType['GetPublicEditHTML']))
 		{
-			if (!isset($value['VALUE']))
-				$value = array('VALUE' => $value);
+			if (is_array($value) && isset($value['VALUE']))
+				$value = $value['VALUE'];
 
 			$renderResult = call_user_func_array(
 				$userType['GetPublicEditHTML'],
 				array(
 					array('LINK_IBLOCK_ID' => $fieldType->getOptions()),
-					$value,
+					array('VALUE' => $value),
 					array(
 						'FORM_NAME' => $field['Form'],
 						'VALUE' => static::generateControlName($field)
@@ -105,7 +103,7 @@ class UserTypeProperty extends BaseType\Base
 
 		if ($allowSelection)
 		{
-			$renderResult .= static::renderControlSelector($field, $selectorValue, true);
+			$renderResult .= static::renderControlSelector($field, $selectorValue, true, '', $fieldType);
 		}
 
 		return $renderResult;
@@ -140,7 +138,7 @@ class UserTypeProperty extends BaseType\Base
 		{
 			foreach ($typeValue as $k => &$fld)
 			{
-				if (!isset($fld['VALUE']))
+				if (!is_array($fld) || !isset($fld['VALUE']))
 					$fld = array('VALUE' => $fld);
 				if ($fld['VALUE'] === null)
 					unset($typeValue[$k]);
@@ -185,7 +183,7 @@ class UserTypeProperty extends BaseType\Base
 
 		if ($allowSelection)
 		{
-			$renderResult .= static::renderControlSelector($field, $selectorValue, true);
+			$renderResult .= static::renderControlSelector($field, $selectorValue, true, '', $fieldType);
 		}
 
 		return $renderResult;
@@ -200,7 +198,7 @@ class UserTypeProperty extends BaseType\Base
 	protected static function extractValue(FieldType $fieldType, array $field, array $request)
 	{
 		$value = parent::extractValue($fieldType, $field, $request);
-		if (isset($value['VALUE']))
+		if (is_array($value) && isset($value['VALUE']))
 			$value = $value['VALUE'];
 
 		$userType = static::getUserType($fieldType);

@@ -2,11 +2,37 @@
 
 namespace Bitrix\Iblock\BizprocType;
 
+use Bitrix\Bizproc\BaseType\Base;
 use Bitrix\Bizproc\FieldType;
-use Bitrix\Main\Loader;
+use Bitrix\Disk\File;
 
 class UserTypePropertyDiskFile extends UserTypeProperty
 {
+	/**
+	 * @return string
+	 */
+	public static function getType()
+	{
+		return FieldType::INT;
+	}
+
+	public static function formatValueMultiple(FieldType $fieldType, $value, $format = 'printable')
+	{
+		if (!is_array($value) || is_array($value) && \CBPHelper::isAssociativeArray($value))
+			$value = array($value);
+
+		foreach ($value as $k => $v)
+		{
+			$value[$k] = static::formatValuePrintable($fieldType, $v);
+		}
+
+		return implode(static::getFormatSeparator($format), $value);
+	}
+
+	public static function formatValueSingle(FieldType $fieldType, $value, $format = 'printable')
+	{
+		return static::formatValueMultiple($fieldType, $value, $format);
+	}
 
 	/**
 	 * @param FieldType $fieldType
@@ -15,39 +41,45 @@ class UserTypePropertyDiskFile extends UserTypeProperty
 	 */
 	protected static function formatValuePrintable(FieldType $fieldType, $value)
 	{
-		if(!Loader::includeModule('disk'))
+		$iblockId = self::getIblockId($fieldType);
+
+		$property = static::getUserType($fieldType);
+		if (array_key_exists('GetUrlAttachedFileWorkflow', $property))
+		{
+			return call_user_func_array($property['GetUrlAttachedFileWorkflow'], array($iblockId, $value));
+		}
+		else
 		{
 			return '';
 		}
+	}
 
-		$attachedId = (int)$value;
-		$attachedModel = \Bitrix\Disk\AttachedObject::loadById($attachedId, array('OBJECT'));
-		if(!$attachedModel)
+	/**
+	 * @param FieldType $fieldType Document field object.
+	 * @param mixed $value Field value.
+	 * @param string $toTypeClass Type class manager name.
+	 * @return null|mixed
+	 */
+	public static function convertTo(FieldType $fieldType, $value, $toTypeClass)
+	{
+		if (is_array($value) && isset($value['VALUE']))
+			$value = $value['VALUE'];
+
+		$value = (int) $value;
+
+		/** @var Base $toTypeClass */
+		$type = $toTypeClass::getType();
+		switch ($type)
 		{
-			return '';
+			case FieldType::FILE:
+				$diskFile = File::getById($value);
+				$value = $diskFile? $diskFile->getFileId() : null;
+				break;
+			default:
+				$value = null;
 		}
 
-		global $USER;
-		$userId = $USER->getID();
-		if($userId)
-		{
-			if(!$attachedModel->canRead($userId))
-			{
-				return '';
-			}
-		}
-
-		$file = $attachedModel->getFile();
-		if(!$file)
-		{
-			return '';
-		}
-
-		$driver = \Bitrix\Disk\Driver::getInstance();
-		$urlManager = $driver->getUrlManager();
-
-		return '[url='.$urlManager->getUrlUfController('download', array('attachedId' => $attachedModel->getId())
-			).']'.htmlspecialcharsbx($file->getName()).'[/url]';
+		return $value;
 	}
 
 	/**
@@ -73,25 +105,33 @@ class UserTypePropertyDiskFile extends UserTypeProperty
 	 */
 	public static function renderControlMultiple(FieldType $fieldType, array $field, $value, $allowSelection, $renderMode)
 	{
+		if ($allowSelection)
+		{
+			$selectorValue = null;
+			if(is_array($value))
+			{
+				$value = current($value);
+			}
+			if (\CBPActivity::isExpression($value))
+			{
+				$selectorValue = $value;
+				$value = null;
+			}
+			return static::renderControlSelector($field, $selectorValue, true, '', $fieldType);
+		}
+
 		if ($renderMode & FieldType::RENDER_MODE_DESIGNER)
 			return '';
 
 		$userType = static::getUserType($fieldType);
-
-
-
-		$documentType = $fieldType->getDocumentType();
-
-		$iblockId = $documentType[2];
-		$iblockId = str_replace('iblock_', '', $iblockId);
+		$iblockId = self::getIblockId($fieldType);
 
 		if (!empty($userType['GetPublicEditHTML']))
 		{
-			if (!isset($value['VALUE']))
-				$value = array('VALUE' => $value);
+			if (is_array($value) && isset($value['VALUE']))
+				$value = $value['VALUE'];
 
 			$fieldName = static::generateControlName($field);
-			$fieldName .= $fieldType->isMultiple() ? '' : '[]';
 			$renderResult = call_user_func_array(
 				$userType['GetPublicEditHTML'],
 				array(
@@ -100,7 +140,7 @@ class UserTypePropertyDiskFile extends UserTypeProperty
 						'IS_REQUIRED' => $fieldType->isRequired()? 'Y' : 'N',
 						'PROPERTY_USER_TYPE' => $userType
 					),
-					$value,
+					array('VALUE' => $value),
 					array(
 						'FORM_NAME' => $field['Form'],
 						'VALUE' => $fieldName,
@@ -116,82 +156,60 @@ class UserTypePropertyDiskFile extends UserTypeProperty
 		return $renderResult;
 	}
 
+	public static function extractValueSingle(FieldType $fieldType, array $field, array $request)
+	{
+		return static::extractValueMultiple($fieldType, $field, $request);
+	}
+
+	private static function getIblockId(FieldType $fieldType)
+	{
+		$documentType = $fieldType->getDocumentType();
+		$type = explode('_', $documentType[2]);
+		return intval($type[1]);
+	}
+
 	public static function extractValue(FieldType $fieldType, array $field, array $request)
 	{
-		if(!Loader::includeModule('disk'))
-			return null;
-
 		$value = parent::extractValue($fieldType, $field, $request);
-		if (isset($value['VALUE']))
+		if (is_array($value) && isset($value['VALUE']))
+		{
 			$value = $value['VALUE'];
+		}
 
 		if(!$value)
+		{
 			return null;
+		}
 
-		// Attach file disk
-		$userFieldManager = \Bitrix\Disk\Driver::getInstance()->getUserFieldManager();
-		list($connectorClass, $moduleId) = $userFieldManager->getConnectorDataByEntityType('iblock_workflow');
-		list($type, $realId) = \Bitrix\Disk\Uf\FileUserType::detectType($value);
+		$property = static::getUserType($fieldType);
+		$iblockId = self::getIblockId($fieldType);
 
-		if($type != \Bitrix\Disk\Uf\FileUserType::TYPE_NEW_OBJECT)
-			return null;
+		if (array_key_exists('AttachFilesWorkflow', $property))
+		{
+			return call_user_func_array($property['AttachFilesWorkflow'], array($iblockId, $value));
+		}
 
-		$errorCollection = new \Bitrix\Disk\Internals\Error\ErrorCollection();
-		$fileModel = \Bitrix\Disk\File::loadById($realId, array('STORAGE'));
-		if(!$fileModel)
-			return null;
-
-		$securityContext = $fileModel->getStorage()->getCurrentUserSecurityContext();
-
-		if(!$fileModel->canRead($securityContext))
-			return null;
-
-		$documentType = $fieldType->getDocumentType();
-		$iblockId = intval(substr($documentType[2], strlen("iblock_")));
-
-		$canUpdate = $fileModel->canUpdate($securityContext);
-
-		global $USER;
-
-		$attachedModel = \Bitrix\Disk\AttachedObject::add(array(
-			'MODULE_ID' => $moduleId,
-			'OBJECT_ID' => $fileModel->getId(),
-			'ENTITY_ID' => $iblockId,
-			'ENTITY_TYPE' => $connectorClass,
-			'IS_EDITABLE' => (int)$canUpdate,
-			'ALLOW_EDIT' => (int) ($canUpdate && (int)\Bitrix\Main\Application::getInstance()->getContext()->getRequest()->getPost('DISK_FILE_'.$iblockId.'_DISK_ATTACHED_OBJECT_ALLOW_EDIT')),
-			'CREATED_BY' => $USER->getId(),
-		), $errorCollection);
-		if(!$attachedModel || $errorCollection->hasErrors())
-			return null;
-
-		return $attachedModel->getId();
+		return null;
 	}
 
 	public static function clearValueSingle(FieldType $fieldType, $value)
 	{
-		if(!Loader::includeModule('disk'))
-			return;
+		static::clearValueMultiple($fieldType, $value);
+	}
 
-		$value = (int)$value;
-		if(!$value)
-			return;
-
-		$documentType = $fieldType->getDocumentType();
-		$iblockId = intval(substr($documentType[2], strlen("iblock_")));
-		if(!$iblockId)
-			return;
-
-		$userFieldManager = \Bitrix\Disk\Driver::getInstance()->getUserFieldManager();
-		list($type, $realId) = \Bitrix\Disk\Uf\FileUserType::detectType($value);
-		if($type == \Bitrix\Disk\Uf\FileUserType::TYPE_ALREADY_ATTACHED)
+	public static function clearValueMultiple(FieldType $fieldType, $values)
+	{
+		if(!is_array($values))
 		{
-			$attachedModel = \Bitrix\Disk\AttachedObject::loadById($realId);
-			if(!$attachedModel)
-				return;
+			$values = array($values);
+		}
 
-			if($userFieldManager->belongsToEntity($attachedModel, "iblock_workflow", $iblockId))
-				\Bitrix\Disk\AttachedObject::detachByFilter(array('ID' => $realId));
+		$property = static::getUserType($fieldType);
+		$iblockId = self::getIblockId($fieldType);
+
+		if (array_key_exists('DeleteAttachedFiles', $property))
+		{
+			call_user_func_array($property['DeleteAttachedFiles'], array($iblockId, $values));
 		}
 	}
 }

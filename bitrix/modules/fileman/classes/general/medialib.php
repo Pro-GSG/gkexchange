@@ -1555,7 +1555,7 @@ window.MLSearchResult = [
 			if ($arFields['NEW']) // Add
 			{
 				unset($arFields['NEW']);
-				CDatabase::Add("b_medialib_type", $arFields, array("DESCRIPTION"));
+				$DB->Add("b_medialib_type", $arFields, array("DESCRIPTION"));
 			}
 			else // Update
 			{
@@ -1880,7 +1880,7 @@ class CMedialibCollection
 		if ($bNew) // Add
 		{
 			unset($arFields['ID']);
-			$ID = CDatabase::Add("b_medialib_collection", $arFields, array("DESCRIPTION"));
+			$ID = $DB->Add("b_medialib_collection", $arFields, array("DESCRIPTION"));
 		}
 		else // Update
 		{
@@ -2152,7 +2152,7 @@ class CMedialibItem
 			$arFields['SOURCE_ID'] = $source_id;
 			$arFields['~DATE_CREATE'] = $arFields['~DATE_UPDATE'];
 			$arFields['ITEM_TYPE'] = '';
-			$ID = CDatabase::Add("b_medialib_item", $arFields, array("DESCRIPTION","SEARCHABLE_CONTENT"));
+			$ID = $DB->Add("b_medialib_item", $arFields, array("DESCRIPTION","SEARCHABLE_CONTENT"));
 		}
 		else // Update
 		{

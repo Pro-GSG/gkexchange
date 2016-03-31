@@ -40,4 +40,8 @@ $MESS["RATING_TYPE_LIKE_TEXT"] = "I like it (text)";
 $MESS["RATING_TYPE_LIKE_GRAPHIC"] = "I like it (image)";
 $MESS["CATALOG_SC_IBLOCK_TYPE"] = "Information block type";
 $MESS["CATALOG_SC_SHOW_DEACTIVATED"] = "Show comments for deactivated products";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD"] = "Allow to upload images for";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_A"] = "All";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_R"] = "Registered users";
+$MESS["CP_CC_ALLOW_IMAGE_UPLOAD_VALUE_N"] = "Nobody";
 ?>

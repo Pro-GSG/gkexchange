@@ -1,6 +1,12 @@
 <?
+/** @global CMain $APPLICATION */
+/** @global CDatabase $DB */
+use Bitrix\Main\Loader,
+	Bitrix\Main,
+	Bitrix\Iblock;
+
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_before.php");
-CModule::IncludeModule("iblock");
+Loader::includeModule('iblock');
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/iblock/prolog.php");
 IncludeModuleLangFile(__FILE__);
 
@@ -11,9 +17,17 @@ if(!is_array($arIBlock))
 if(!CIBlockRights::UserHasRightTo($arIBlock["ID"], $arIBlock["ID"], "iblock_edit"))
 	$APPLICATION->AuthForm(GetMessage("ACCESS_DENIED"));
 
+$simpleTypeList = array(
+	Iblock\PropertyTable::TYPE_STRING => true,
+	Iblock\PropertyTable::TYPE_NUMBER => true,
+	Iblock\PropertyTable::TYPE_LIST => true,
+	Iblock\PropertyTable::TYPE_FILE => true,
+	Iblock\PropertyTable::TYPE_SECTION => true,
+	Iblock\PropertyTable::TYPE_ELEMENT => true,
+);
+
 $sTableID = "tbl_iblock_property_admin_".$arIBlock["ID"];
-$oSort = new CAdminSorting($sTableID, "SORT", "ASC");
-$arOrder = (strtoupper($by) === "ID"? array($by => $order): array($by => $order, "ID" => "ASC"));
+$oSort = new CAdminSorting($sTableID, 'SORT', 'ASC');
 $lAdmin = new CAdminList($sTableID, $oSort);
 
 $arFilterFields = array(
@@ -31,20 +45,27 @@ $arFilterFields = array(
 $lAdmin->InitFilter($arFilterFields);
 
 $arFilter = array(
-	"IBLOCK_ID" => $arIBlock["ID"],
+	"=IBLOCK_ID" => $arIBlock["ID"],
 	"?NAME" => $find_name,
 	"?CODE" => $find_code,
-	"ACTIVE" => $find_active,
-	"SEARCHABLE" => $find_searchable,
-	"FILTRABLE" => $find_filtrable,
-	"XML_ID" => $find_xml_id,
-	"PROPERTY_TYPE" => $find_property_type,
-	"IS_REQUIRED" => $find_is_required,
-	"MULTIPLE" => $find_multiple,
+	"=ACTIVE" => $find_active,
+	"=SEARCHABLE" => $find_searchable,
+	"=FILTRABLE" => $find_filtrable,
+	"=XML_ID" => $find_xml_id,
+	"=PROPERTY_TYPE" => $find_property_type,
+	"=IS_REQUIRED" => $find_is_required,
+	"=MULTIPLE" => $find_multiple,
 );
 foreach($arFilter as $key => $value)
 	if(!strlen(trim($value)))
 		unset($arFilter[$key]);
+if (isset($arFilter['=PROPERTY_TYPE']))
+{
+	if (!isset($simpleTypeList[$arFilter['=PROPERTY_TYPE']]))
+		list($arFilter['=PROPERTY_TYPE'], $arFilter['=USER_TYPE']) = explode(':', $arFilter['=PROPERTY_TYPE'], 2);
+	else
+		$arFilter['=USER_TYPE'] = null;
+}
 
 if($lAdmin->EditAction())
 {
@@ -56,11 +77,9 @@ if($lAdmin->EditAction())
 		if(!$lAdmin->IsUpdated($ID))
 			continue;
 
-		$arFields["USER_TYPE"] = "";
-		if (strpos($arFields["PROPERTY_TYPE"], ":"))
-		{
+		$arFields["USER_TYPE"] = false;
+		if (!isset($simpleTypeList[$arFields['PROPERTY_TYPE']]))
 			list($arFields["PROPERTY_TYPE"], $arFields["USER_TYPE"]) = explode(':', $arFields["PROPERTY_TYPE"], 2);
-		}
 
 		$ibp = new CIBlockProperty;
 		if(!$ibp->Update($ID, $arFields))
@@ -76,9 +95,13 @@ if($arID = $lAdmin->GroupAction())
 {
 	if($_REQUEST['action_target']=='selected')
 	{
-		$rsIBlockProps = CIBlockProperty::GetList($arOrder, $arFilter);
-		while($arRes = $rsIBlockProps->Fetch())
-			$arID[] = $arRes['ID'];
+		$propertyIterator = Iblock\PropertyTable::getList(array(
+			'select' => array('ID'),
+			'filter' => $arFilter
+		));
+		while ($property = $propertyIterator->fetch())
+			$arID[] = $property['ID'];
+		unset($property, $propertyIterator);
 	}
 
 	foreach($arID as $ID)
@@ -109,72 +132,78 @@ $arHeader = array(
 	array(
 		"id"=>"ID",
 		"content"=>GetMessage("IBP_ADM_ID"),
-		"sort"=>"id",
+		"sort"=>"ID",
 		"align"=>"right",
 		"default"=>true,
 	),
 	array(
 		"id"=>"NAME",
 		"content"=>GetMessage("IBP_ADM_NAME"),
-		"sort"=>"name",
+		"sort"=>"NAME",
 		"default"=>true,
 	),
 	array(
 		"id"=>"CODE",
 		"content"=>GetMessage("IBP_ADM_CODE"),
+		"sort" => "CODE",
 		"default"=>true,
 	),
 	array(
 		"id"=>"PROPERTY_TYPE",
 		"content"=>GetMessage("IBP_ADM_PROPERTY_TYPE"),
+		"sort" => "PROPERTY_TYPE",
 		"default"=>true,
 	),
 	array(
 		"id"=>"SORT",
 		"content"=>GetMessage("IBP_ADM_SORT"),
-		"sort"=>"sort",
+		"sort"=>"SORT",
 		"align"=>"right",
 		"default"=>true,
 	),
 	array(
 		"id"=>"ACTIVE",
 		"content"=>GetMessage("IBP_ADM_ACTIVE"),
-		"sort"=>"active",
+		"sort"=>"ACTIVE",
 		"align"=>"center",
 		"default"=>true,
 	),
 	array(
 		"id"=>"IS_REQUIRED",
 		"content"=>GetMessage("IBP_ADM_IS_REQUIRED"),
+		"sort" => "IS_REQUIRED",
 		"align"=>"center",
 		"default"=>true,
 	),
 	array(
 		"id"=>"MULTIPLE",
 		"content"=>GetMessage("IBP_ADM_MULTIPLE"),
+		"sort" => "MULTIPLE",
 		"align"=>"center",
 		"default"=>true,
 	),
 	array(
 		"id"=>"SEARCHABLE",
 		"content"=>GetMessage("IBP_ADM_SEARCHABLE"),
-		"sort"=>"searchable",
+		"sort"=>"SEARCHABLE",
 		"align"=>"center",
 		"default"=>true,
 	),
 	array(
 		"id"=>"FILTRABLE",
 		"content"=>GetMessage("IBP_ADM_FILTRABLE"),
-		"sort"=>"filtrable",
+		"sort"=>"FILTRABLE",
 		"align"=>"center",
 	),
 	array(
 		"id"=>"XML_ID",
 		"content"=>GetMessage("IBP_ADM_XML_ID"),
+		"sort" => "XML_ID"
 	),
 	array(
 		"id"=>"WITH_DESCRIPTION",
 		"content"=>GetMessage("IBP_ADM_WITH_DESCRIPTION"),
+		"sort" => "WITH_DESCRIPTION",
 		"align"=>"center",
 	),
 	array(
@@ -184,66 +213,173 @@ $arHeader = array(
 );
 
 $arPropType = array(
-	"S" => GetMessage("IBLOCK_PROP_S"),
-	"N" => GetMessage("IBLOCK_PROP_N"),
-	"L" => GetMessage("IBLOCK_PROP_L"),
-	"F" => GetMessage("IBLOCK_PROP_F"),
-	"G" => GetMessage("IBLOCK_PROP_G"),
-	"E" => GetMessage("IBLOCK_PROP_E"),
+	Iblock\PropertyTable::TYPE_STRING => GetMessage("IBLOCK_PROP_S"),
+	Iblock\PropertyTable::TYPE_NUMBER => GetMessage("IBLOCK_PROP_N"),
+	Iblock\PropertyTable::TYPE_LIST => GetMessage("IBLOCK_PROP_L"),
+	Iblock\PropertyTable::TYPE_FILE => GetMessage("IBLOCK_PROP_F"),
+	Iblock\PropertyTable::TYPE_SECTION => GetMessage("IBLOCK_PROP_G"),
+	Iblock\PropertyTable::TYPE_ELEMENT => GetMessage("IBLOCK_PROP_E"),
 );
 $arUserTypeList = CIBlockProperty::GetUserType();
-\Bitrix\Main\Type\Collection::sortByColumn($arUserTypeList, array('DESCRIPTION' => SORT_STRING));
+Main\Type\Collection::sortByColumn($arUserTypeList, array('DESCRIPTION' => SORT_STRING));
 foreach($arUserTypeList as $arUserType)
 	$arPropType[$arUserType["PROPERTY_TYPE"].":".$arUserType["USER_TYPE"]] = $arUserType["DESCRIPTION"];
 
 $lAdmin->AddHeaders($arHeader);
 
-$rsIBlockProps = CIBlockProperty::GetList($arOrder, $arFilter);
-$rsIBlockProps = new CAdminResult($rsIBlockProps, $sTableID);
-$rsIBlockProps->NavStart();
+$selectFields = array_fill_keys($lAdmin->GetVisibleHeaderColumns(), true);
+$selectFields['ID'] = true;
+$selectFieldsMap = array_fill_keys(array_keys($arHeader), false);
+$selectFieldsMap = array_merge($selectFieldsMap, $selectFields);
 
-$lAdmin->NavText($rsIBlockProps->GetNavPrint(GetMessage("IBP_ADM_PAGER")));
+if (!isset($by))
+	$by = 'SORT';
+if (!isset($order))
+	$order = 'ASC';
 
-while($dbrs = $rsIBlockProps->NavNext(true, "f_"))
+$propertyOrder = array();
+if ($by == 'PROPERTY_TYPE')
+	$propertyOrder = array('PROPERTY_TYPE' => $order, 'USER_TYPE' => $order);
+else
+	$propertyOrder = array(strtoupper($by) => strtoupper($order));
+if (!isset($propertyOrder['ID']))
+	$propertyOrder['ID'] = 'ASC';
+
+$usePageNavigation = true;
+$navyParams = array();
+if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'excel')
 {
-	if($dbrs["USER_TYPE"])
-		$dbrs["PROPERTY_TYPE"] .= ":".$dbrs["USER_TYPE"];
-	$row =& $lAdmin->AddRow($f_ID, $dbrs, 'iblock_edit_property.php?ID='.$f_ID.'&lang='.LANGUAGE_ID."&IBLOCK_ID=".urlencode($arIBlock["ID"]).($_REQUEST["admin"]=="Y"? "&admin=Y": "&admin=N"));
+	$usePageNavigation = false;
+}
+else
+{
+	$navyParams = CDBResult::GetNavParams(CAdminResult::GetNavSize($sTableID));
+	if ($navyParams['SHOW_ALL'])
+	{
+		$usePageNavigation = false;
+	}
+	else
+	{
+		$navyParams['PAGEN'] = (int)$navyParams['PAGEN'];
+		$navyParams['SIZEN'] = (int)$navyParams['SIZEN'];
+	}
+}
+if ($selectFields['PROPERTY_TYPE'])
+	$selectFields['USER_TYPE'] = true;
+$selectFields = array_keys($selectFields);
+$getListParams = array(
+	'select' => $selectFields,
+	'filter' => $arFilter,
+	'order' => $propertyOrder
+);
+if ($usePageNavigation)
+{
+	$getListParams['limit'] = $navyParams['SIZEN'];
+	$getListParams['offset'] = $navyParams['SIZEN']*($navyParams['PAGEN']-1);
+}
+$totalPages = 0;
+if ($usePageNavigation)
+{
+	$countQuery = new Main\Entity\Query(Iblock\PropertyTable::getEntity());
+	$countQuery->addSelect(new Main\Entity\ExpressionField('CNT', 'COUNT(1)'));
+	$countQuery->setFilter($getListParams['filter']);
+	$totalCount = $countQuery->setLimit(null)->setOffset(null)->exec()->fetch();
+	unset($countQuery);
+	$totalCount = (int)$totalCount['CNT'];
+	if ($totalCount > 0)
+	{
+		$totalPages = ceil($totalCount/$navyParams['SIZEN']);
+		if ($navyParams['PAGEN'] > $totalPages)
+			$navyParams['PAGEN'] = $totalPages;
+		$getListParams['limit'] = $navyParams['SIZEN'];
+		$getListParams['offset'] = $navyParams['SIZEN']*($navyParams['PAGEN']-1);
+	}
+	else
+	{
+		$navyParams['PAGEN'] = 1;
+		$getListParams['limit'] = $navyParams['SIZEN'];
+		$getListParams['offset'] = 0;
+	}
+}
 
-	$row->AddViewField("ID", $f_ID);
-	$row->AddInputField("NAME", Array("size"=>"35"));
-	$row->AddViewField("NAME", '<a href="iblock_edit_property.php?ID='.$f_ID.'&lang='.LANGUAGE_ID."&IBLOCK_ID=".urlencode($arIBlock["ID"]).($_REQUEST["admin"]=="Y"? "&admin=Y": "&admin=N").'">'.$f_NAME.'</a>');
-	$row->AddInputField("CODE");
-	$row->AddInputField("SORT", Array("size"=>"5"));
-	$row->AddCheckField("ACTIVE");
-	$row->AddCheckField("MULTIPLE");
-	$row->AddInputField("XML_ID");
-	$row->AddCheckField("WITH_DESCRIPTION");
-	$row->AddCheckField("SEARCHABLE");
-	$row->AddCheckField("FILTRABLE");
-	$row->AddCheckField("IS_REQUIRED");
-	$row->AddInputField("HINT");
-	$row->AddSelectField("PROPERTY_TYPE", $arPropType);
+$propertyIterator = new CAdminResult(Iblock\PropertyTable::getList($getListParams), $sTableID);
+if ($usePageNavigation)
+{
+	$propertyIterator->NavStart($getListParams['limit'], $navyParams['SHOW_ALL'], $navyParams['PAGEN']);
+	$propertyIterator->NavRecordCount = $totalCount;
+	$propertyIterator->NavPageCount = $totalPages;
+	$propertyIterator->NavPageNomer = $navyParams['PAGEN'];
+}
+else
+{
+	$propertyIterator->NavStart();
+}
+
+$lAdmin->NavText($propertyIterator->GetNavPrint(GetMessage("IBP_ADM_PAGER")));
+
+while ($property = $propertyIterator->Fetch())
+{
+	$property['ID'] = (int)$property['ID'];
+	$property['USER_TYPE'] = (string)$property['USER_TYPE'];
+	if ($property['USER_TYPE'] != '')
+		$property['PROPERTY_TYPE'] .= ':'.$property['USER_TYPE'];
+
+	$urlEdit = 'iblock_edit_property.php?ID='.$property['ID'].'&lang='.LANGUAGE_ID."&IBLOCK_ID=".$arIBlock['ID'].($_REQUEST['admin']=="Y"? "&admin=Y": "&admin=N");
+
+	$row = &$lAdmin->AddRow($property['ID'], $property, $urlEdit);
+	$row->AddViewField('ID', $property['ID']);
+	if ($selectFieldsMap['NAME'])
+	{
+		$row->AddInputField('NAME', array('size' => 50, 'maxlength' => 255));
+		$row->AddViewField('NAME', '<a href="'.$urlEdit.'">'.$property['NAME'].'</a>');
+	}
+	if ($selectFieldsMap['CODE'])
+		$row->AddInputField('CODE', array('size' => 20, 'maxlength' => 50));
+	if ($selectFieldsMap['SORT'])
+		$row->AddInputField('SORT', array('size' => 5));
+	if ($selectFieldsMap['ACTIVE'])
+		$row->AddCheckField('ACTIVE');
+	if ($selectFieldsMap['MULTIPLE'])
+		$row->AddCheckField('MULTIPLE');
+	if ($selectFieldsMap['XML_ID'])
+		$row->AddInputField('XML_ID');
+	if ($selectFieldsMap['WITH_DESCRIPTION'])
+		$row->AddCheckField('WITH_DESCRIPTION');
+	if ($selectFieldsMap['SEARCHABLE'])
+		$row->AddCheckField('SEARCHABLE');
+	if ($selectFieldsMap['FILTRABLE'])
+		$row->AddCheckField('FILTRABLE');
+	if ($selectFieldsMap['FILTRABLE'])
+		$row->AddCheckField('FILTRABLE');
+	if ($selectFieldsMap['IS_REQUIRED'])
+		$row->AddCheckField('IS_REQUIRED');
+	if ($selectFieldsMap['HINT'])
+		$row->AddInputField('HINT');
+	if ($selectFieldsMap['PROPERTY_TYPE'])
+		$row->AddSelectField('PROPERTY_TYPE', $arPropType);
 
 	$arActions = array(
 		array(
-			"ICON"=>"edit",
-			"TEXT"=>GetMessage("MAIN_ADMIN_MENU_EDIT"),
-			"DEFAULT"=>true,
-			"ACTION" => $lAdmin->ActionRedirect("iblock_edit_property.php?ID=".$f_ID."&lang=".LANGUAGE_ID."&IBLOCK_ID=".urlencode($arIBlock["ID"]).($_REQUEST["admin"]=="Y"? "&admin=Y": "&admin=N")),
+			'ICON' => 'edit',
+			'TEXT' => GetMessage('MAIN_ADMIN_MENU_EDIT'),
+			'DEFAULT' => true,
+			'ACTION' => $lAdmin->ActionRedirect($urlEdit),
 		),
 		array(
-			"ICON"=>"delete",
-			"TEXT"=>GetMessage("MAIN_ADMIN_MENU_DELETE"),
-			"ACTION"=>"if(confirm('".GetMessageJS("IBP_ADM_CONFIRM_DEL_MESSAGE")."')) ".$lAdmin->ActionDoGroup($f_ID, "delete", "&IBLOCK_ID=".urlencode($arIBlock["ID"])."&lang=".LANGUAGE_ID),
+			'ICON' => 'delete',
+			'TEXT' => GetMessage('MAIN_ADMIN_MENU_DELETE'),
+			'ACTION' => "if(confirm('".GetMessageJS("IBP_ADM_CONFIRM_DEL_MESSAGE")."')) ".$lAdmin->ActionDoGroup($property['ID'], "delete", "&IBLOCK_ID=".$arIBlock['ID']."&lang=".LANGUAGE_ID),
 		),
 	);
 	$row->AddActions($arActions);
+
+	unset($row, $urlEdit);
 }
+unset($property);
 
 $lAdmin->AddFooter(
 	array(
-		array("title"=>GetMessage("MAIN_ADMIN_LIST_SELECTED"), "value"=>$rsIBlockProps->SelectedRowsCount()),
+		array("title"=>GetMessage("MAIN_ADMIN_LIST_SELECTED"), "value"=>$propertyIterator->SelectedRowsCount()),
 		array("counter"=>true, "title"=>GetMessage("MAIN_ADMIN_LIST_CHECKED"), "value"=>"0"),
 	)
 );
@@ -258,7 +394,7 @@ $aContext = array(
 );
 $lAdmin->AddAdminContextMenu($aContext);
 
-$lAdmin->AddGroupActionTable(Array(
+$lAdmin->AddGroupActionTable(array(
 	"delete"=>GetMessage("MAIN_ADMIN_LIST_DELETE"),
 	"activate"=>GetMessage("MAIN_ADMIN_LIST_ACTIVATE"),
 	"deactivate"=>GetMessage("MAIN_ADMIN_LIST_DEACTIVATE"),
@@ -345,4 +481,3 @@ $oFilter->End();
 $lAdmin->DisplayList();
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin.php");
-?>

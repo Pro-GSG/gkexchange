@@ -203,4 +203,8 @@ $MESS["MAIN_OPTION_ATTACH_IMAGES"] = "Отправлять картинки в виде вложений в пись
 $MESS["MAIN_OPTION_MAX_FILE_SIZE"] = "Максимальный размер файлов вложения в байтах (0 - без ограничений):";
 $MESS["MAIN_OPTION_SESS_AUTH"] = "Продлевать сессию только для авторизованных посетителей:";
 $MESS["MAIN_OPTIONS_AUTH_TEMPLATE"] = "Шаблон системных компонентов авторизации (system.auth.*):";
+$MESS["MAIN_OPTIONS_URL_PREVIEW"] = "Богатые ссылки";
+$MESS["MAIN_OPTION_URL_PREVIEW_ENABLE"] = "Включить богатые ссылки:";
+$MESS["MAIN_OPTION_URL_PREVIEW_SAVE_IMAGES"] = "Сохранять изображения локально:";
+$MESS["main_sett_public_panel_hide"] = "Никогда не показывать панель для пользователей:";
 ?>

@@ -36,6 +36,10 @@ $bAutocomplete = defined('BT_UT_AUTOCOMPLETE') && (BT_UT_AUTOCOMPLETE == 1);
 
 /* property ajax */
 $bPropertyAjax = (isset($_REQUEST["ajax_action"]) && $_REQUEST["ajax_action"] === "section_property");
+if ($bPropertyAjax)
+{
+	CUtil::JSPostUnescape();
+}
 
 $strWarning = '';
 $bVarsFromForm = false;
@@ -104,7 +108,7 @@ if ($bCatalog)
 $str_TMP_ID = 0;
 if ($bOffers && (0 == $ID || $bCopy))
 {
-	if ('GET' == $_SERVER['REQUEST_METHOD'] && 0 >= $ID)
+	if ('GET' == $_SERVER['REQUEST_METHOD'] && (0 >= $ID || $bCopy))
 	{
 		$str_TMP_ID = CIBlockOffersTmp::Add($IBLOCK_ID, $arMainCatalog['IBLOCK_ID']);
 	}
@@ -1051,18 +1055,7 @@ do{ //one iteration loop
 						}
 						elseif ($arShowTabs['sku'])
 						{
-							if (!CCatalogProduct::IsExistProduct($arCatalogItem['PRODUCT_ID']))
-							{
-								$arEmptyProduct = array(
-									'ID' => $arCatalogItem['PRODUCT_ID'],
-									'QUANTITY' => 0,
-									'QUANTITY_TRACE' => 'N',
-									'CAN_BUY_ZERO' => 'N',
-									'NEGATIVE_AMOUNT_TRACE' => 'N',
-									'TYPE' => CCatalogProduct::TYPE_SKU
-								);
-								CCatalogProduct::Add($arEmptyProduct, false);
-							}
+							CPrice::DeleteByProduct($arCatalogItem['PRODUCT_ID']);
 						}
 						if ($arShowTabs['product_set'])
 						{
@@ -1251,6 +1244,8 @@ do{ //one iteration loop
 						foreach($arFields["IBLOCK_SECTION"] as $i => $id)
 						$params["IBLOCK_SECTION_ID[".$i."]"] = $id;
 					}
+					if (!empty($arMainCatalog))
+						$params = CCatalogAdminTools::getFormParams($params);
 
 					if (defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1)
 					{
@@ -1389,13 +1384,18 @@ else
 	$str_IBLOCK_ELEMENT_SECTION = Array();
 	$str_ACTIVE = $arIBlock["FIELDS"]["ACTIVE"]["DEFAULT_VALUE"] === "N"? "N": "Y";
 	$str_NAME = htmlspecialcharsbx($arIBlock["FIELDS"]["NAME"]["DEFAULT_VALUE"]);
-	if($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=now")
-		$str_ACTIVE_FROM = ConvertTimeStamp(time() + CTimeZone::GetOffset(), "FULL");
-	elseif($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=today")
-		$str_ACTIVE_FROM = ConvertTimeStamp(time() + CTimeZone::GetOffset(), "SHORT");
 
-	if(intval($arIBlock["FIELDS"]["ACTIVE_TO"]["DEFAULT_VALUE"]) > 0)
-		$str_ACTIVE_TO = ConvertTimeStamp(time() + intval($arIBlock["FIELDS"]["ACTIVE_TO"]["DEFAULT_VALUE"])*24*60*60 + CTimeZone::GetOffset(), "FULL");
+	$currentTime = time() + CTimeZone::GetOffset();
+	if ($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=now")
+		$str_ACTIVE_FROM = ConvertTimeStamp($currentTime, "FULL");
+	elseif ($arIBlock["FIELDS"]["ACTIVE_FROM"]["DEFAULT_VALUE"] === "=today")
+		$str_ACTIVE_FROM = ConvertTimeStamp($currentTime, "SHORT");
+
+	$dayOffset = (int)$arIBlock["FIELDS"]["ACTIVE_TO"]["DEFAULT_VALUE"];
+	if ($dayOffset > 0)
+		$str_ACTIVE_TO = ConvertTimeStamp($currentTime + $dayOffset*86400, "FULL");
+	unset($dayOffset);
+	unset($currentTime);
 
 	$str_PREVIEW_TEXT_TYPE = $arIBlock["FIELDS"]["PREVIEW_TEXT_TYPE"]["DEFAULT_VALUE"] !== "html"? "text": "html";
 	$str_PREVIEW_TEXT = htmlspecialcharsbx($arIBlock["FIELDS"]["PREVIEW_TEXT"]["DEFAULT_VALUE"]);
@@ -1512,10 +1512,6 @@ else
 		$DB->InitTableVarsForEdit("b_iblock_element", "", "str_");
 		$str_IBLOCK_ELEMENT_SECTION = $IBLOCK_SECTION;
 		$str_IPROPERTY_TEMPLATES = $_POST["IPROPERTY_TEMPLATES"];
-	}
-	elseif ($bPropertyAjax)
-	{
-		CUtil::JSPostUnescape();
 	}
 
 	if ($bPropertyAjax)
@@ -1850,6 +1846,11 @@ if ($bCopy)
 {
 	?><input type="hidden" name="copyID" value="<? echo $ID; ?>"><?
 }
+elseif ($copyID > 0)
+{
+	?><input type="hidden" name="copyID" value="<? echo $copyID; ?>"><?
+}
+
 if ($bCatalog)
 	CCatalogAdminTools::showFormParams();
 ?>
@@ -1908,7 +1909,7 @@ if($arTranslit["TRANSLITERATION"] == "Y")
 		<tr id="tr_NAME">
 			<td><?echo $tabControl->GetCustomLabelHTML()?></td>
 			<td style="white-space: nowrap;">
-				<input type="text" size="50" name="NAME" id="NAME" maxlength="255" value="<?echo $str_NAME?>"><image id="name_link" title="<?echo GetMessage("IBEL_E_LINK_TIP")?>" class="linked" src="/bitrix/themes/.default/icons/iblock/<?if($bLinked) echo 'link.gif'; else echo 'unlink.gif';?>" onclick="set_linked()" />
+				<input type="text" size="50" name="NAME" id="NAME" maxlength="255" value="<?echo $str_NAME?>"><img id="name_link" title="<?echo GetMessage("IBEL_E_LINK_TIP")?>" class="linked" src="/bitrix/themes/.default/icons/iblock/<?if($bLinked) echo 'link.gif'; else echo 'unlink.gif';?>" onclick="set_linked()" />
 			</td>
 		</tr>
 	<?
@@ -1921,7 +1922,7 @@ if($arTranslit["TRANSLITERATION"] == "Y")
 		<tr id="tr_CODE">
 			<td><?echo $tabControl->GetCustomLabelHTML()?></td>
 			<td style="white-space: nowrap;">
-				<input type="text" size="50" name="CODE" id="CODE" maxlength="255" value="<?echo $str_CODE?>"><image id="code_link" title="<?echo GetMessage("IBEL_E_LINK_TIP")?>" class="linked" src="/bitrix/themes/.default/icons/iblock/<?if($bLinked) echo 'link.gif'; else echo 'unlink.gif';?>" onclick="set_linked()" />
+				<input type="text" size="50" name="CODE" id="CODE" maxlength="255" value="<?echo $str_CODE?>"><img id="code_link" title="<?echo GetMessage("IBEL_E_LINK_TIP")?>" class="linked" src="/bitrix/themes/.default/icons/iblock/<?if($bLinked) echo 'link.gif'; else echo 'unlink.gif';?>" onclick="set_linked()" />
 			</td>
 		</tr>
 	<?
@@ -2032,7 +2033,7 @@ if(!empty($PROP)):
 		?>
 		<tr id="tr_PROPERTY_<?echo $prop_fields["ID"];?>"<?if ($prop_fields["PROPERTY_TYPE"]=="F"):?> class="adm-detail-file-row"<?endif?>>
 			<td class="adm-detail-valign-top" width="40%"><?if($prop_fields["HINT"]!=""):
-				?><span id="hint_<?echo $prop_fields["ID"];?>"></span><script type="text/javascript">BX.hint_replace(BX('hint_<?echo $prop_fields["ID"];?>'), '<?echo CUtil::JSEscape($prop_fields["HINT"])?>');</script>&nbsp;<?
+				?><span id="hint_<?echo $prop_fields["ID"];?>"></span><script type="text/javascript">BX.hint_replace(BX('hint_<?echo $prop_fields["ID"];?>'), '<?echo CUtil::JSEscape(htmlspecialcharsbx($prop_fields["HINT"]))?>');</script>&nbsp;<?
 			endif;?><?echo $tabControl->GetCustomLabelHTML();?>:</td>
 			<td width="60%"><?_ShowPropertyField('PROP['.$prop_fields["ID"].']', $prop_fields, $prop_fields["VALUE"], (($historyId <= 0) && (!$bVarsFromForm) && ($ID<=0) && (!$bPropertyAjax)), $bVarsFromForm||$bPropertyAjax, 50000, $tabControl->GetFormName(), $bCopy);?></td>
 		</tr>
@@ -2066,7 +2067,7 @@ if(!empty($PROP)):
 	endforeach;?>
 <?endif;
 
-	if (!$bAutocomplete)
+	if (!$bAutocomplete && ($ID > 0 && !$bCopy))
 	{
 		$rsLinkedProps = CIBlockProperty::GetList(array(), array(
 			"PROPERTY_TYPE" => "E",
@@ -2075,24 +2076,28 @@ if(!empty($PROP)):
 			"FILTRABLE" => "Y",
 		));
 		$arLinkedProp = $rsLinkedProps->GetNext();
-		if($arLinkedProp)
+		if ($arLinkedProp)
 		{
+			$linkedTitle = '';
 			$tabControl->BeginCustomField("LINKED_PROP", GetMessage("IBLOCK_ELEMENT_EDIT_LINKED"));
 			?>
 			<tr class="heading" id="tr_LINKED_PROP">
 				<td colspan="2"><?echo $tabControl->GetCustomLabelHTML();?></td>
 			</tr>
 			<?
+			if (defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1)
+				$linkedTitle = htmlspecialcharsbx(GetMessage('IBLOCK_LINKED_ELEMENT_TITLE'));
 			do {
 				$elements_name = CIBlock::GetArrayByID($arLinkedProp["IBLOCK_ID"], "ELEMENTS_NAME");
 				if(strlen($elements_name) <= 0)
 					$elements_name = GetMessage("IBLOCK_ELEMENT_EDIT_ELEMENTS");
 			?>
 			<tr id="tr_LINKED_PROP<?echo $arLinkedProp["ID"]?>">
-				<td colspan="2"><a href="<?echo htmlspecialcharsbx(CIBlock::GetAdminElementListLink($arLinkedProp["IBLOCK_ID"], array('set_filter'=>'Y', 'find_el_property_'.$arLinkedProp["ID"]=>$ID, 'find_section_section' => -1)))?>"><?echo CIBlock::GetArrayByID($arLinkedProp["IBLOCK_ID"], "NAME").": ".$elements_name?></a></td>
+				<td colspan="2"><a title="<? echo $linkedTitle; ?>" href="/bitrix/admin/<?echo htmlspecialcharsbx(CIBlock::GetAdminElementListLink($arLinkedProp["IBLOCK_ID"], array('set_filter'=>'Y', 'find_el_property_'.$arLinkedProp["ID"]=>$ID, 'find_section_section' => -1)))?>"><?echo CIBlock::GetArrayByID($arLinkedProp["IBLOCK_ID"], "NAME").": ".$elements_name?></a></td>
 			</tr>
 			<?
 			} while ($arLinkedProp = $rsLinkedProps->GetNext());
+			unset($linkedTitle);
 			$tabControl->EndCustomField("LINKED_PROP", "");
 		}
 	}
@@ -3305,6 +3310,13 @@ elseif(!$bPropertyAjax && $nobuttons !== "Y"):
 				top.BX.reload(true);
 		}
 	}";
+	$editInPanelParams = array(
+		'WF' => ($WF == 'Y' ? 'Y': null),
+		'find_section_section' => (int)$find_section_section,
+		'menu' => null
+	);
+	if (!empty($arMainCatalog))
+		$editInPanelParams = CCatalogAdminTools::getFormParams($editInPanelParams);
 	$edit_in_panel = "{
 		title: '".CUtil::JSEscape(GetMessage('IBLOCK_EL_EDIT_IN_PANEL'))."',
 		name: 'edit_in_panel',
@@ -3314,14 +3326,11 @@ elseif(!$bPropertyAjax && $nobuttons !== "Y"):
 			location.href = '/bitrix/admin/".CIBlock::GetAdminElementEditLink(
 			$IBLOCK_ID,
 			$ID,
-			array(
-				'WF' => ($WF == 'Y' ? 'Y': null),
-				'find_section_section' => (int)$find_section_section,
-				'menu' => null
-			)
+			$editInPanelParams
 		)."';
 		}
 	}";
+	unset($editInPanelParams);
 	$tabControl->ButtonsPublic(array(
 		'.btnSave',
 		($ID > 0 && $bWorkflow? $wfClose: $cancel),
@@ -3359,4 +3368,3 @@ elseif ($bPropertyAjax)
 	require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin_js.php");
 else
 	require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin.php");
-?>

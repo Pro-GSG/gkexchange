@@ -189,7 +189,14 @@ class Google extends Engine implements IEngine
 					$siteUrlInfo = parse_url($siteInfo['siteUrl']);
 					if($siteUrlInfo)
 					{
-						$response[$siteUrlInfo["host"]] = array(
+						$errors = array();
+						$hostKey = \CBXPunycode::toASCII($siteUrlInfo["host"], $errors);
+						if(count($errors) > 0)
+						{
+							$hostKey = $siteUrlInfo["host"];
+						}
+
+						$response[$hostKey] = array(
 							'binded' => $siteInfo["permissionLevel"] !== "siteRestrictedUser",
 							'verified' => $siteInfo["permissionLevel"] !== "siteRestrictedUser"
 								&& $siteInfo["permissionLevel"] !== "siteUnverifiedUser",

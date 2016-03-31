@@ -32,6 +32,8 @@ $arSKUInfo = CCatalogSKU::GetInfoByOfferIBlock($subIBlockId);
 CUtil::decodeURIComponent($_POST['PRODUCT_NAME']);
 $parentProductName = trim($_POST['PRODUCT_NAME']);
 
+$useStoreControl = ((string)Main\Config\Option::get('catalog', 'default_use_store_control') == 'Y');
+
 if($arSKUInfo == false)
 {
 	ShowError("SKU error!");
@@ -99,13 +101,13 @@ CURRENCYCELL;
 function __showPopup($element_id, $items)
 {
 	echo
-		"<script type=\"text/javascript\">
+		'<script type="text/javascript">
 			top.BX.ready(function(){
-				top.BX.bind(top.BX('".$element_id."'), 'click', function() {
-					top.BX.adminShowMenu(this, ".CAdminPopup::PhpToJavaScript($items).");
+				top.BX.bind(top.BX("'.$element_id.'"), "click", function() {
+					top.BX.adminShowMenu(this, '.CAdminPopup::PhpToJavaScript($items).');
 				});
 			});
-		</script>";
+		</script>';
 }
 /**
  * @param $intRangeID
@@ -159,7 +161,7 @@ $arAllProperties = $arAllParentProperties = array();
 $arFileProperties = array();
 $arFilePropertiesExt = array();
 $arDirProperties = array();
-$dbIBlockProperty = CIBlockProperty::GetList(array("ID" => "ASC"), array("IBLOCK_ID" => $subIBlockId, "ACTIVE" => 'Y'));
+$dbIBlockProperty = CIBlockProperty::GetList(array("SORT" => "ASC", "NAME" => "ASC"), array("IBLOCK_ID" => $subIBlockId, "ACTIVE" => 'Y'));
 while($arIBlockProperty = $dbIBlockProperty->Fetch())
 {
 	$arIBlockProperty['ID'] = (int)$arIBlockProperty['ID'];
@@ -236,50 +238,12 @@ while($arIBlockProperty = $dbIBlockProperty->Fetch())
 	}
 }
 
-$dbParentIBlockProperty = CIBlockProperty::GetList(array("ID" => "ASC"), array("IBLOCK_ID" => $iBlockId, "ACTIVE" => 'Y'));
+$dbParentIBlockProperty = CIBlockProperty::GetList(array("SORT" => "ASC", "NAME" => "ASC"), array("IBLOCK_ID" => $iBlockId, "ACTIVE" => 'Y'));
 while($arParentIBlockProperty = $dbParentIBlockProperty->Fetch())
 {
 	if($arParentIBlockProperty['PROPERTY_TYPE'] == 'L' || $arParentIBlockProperty['PROPERTY_TYPE'] == 'S')
 		$arAllParentProperties[] = $arParentIBlockProperty;
 }
-$arPropertyPopup = array();
-foreach($arResult as $key => $property)
-{
-	$arPropertyPopup[] = array(
-		"TEXT" => htmlspecialcharsbx($property["NAME"]),
-		"ONCLICK" => "obPropertyTable.addPropertyTable('".$key."')",
-	);
-}
-if(count($arPropertyPopup) > 0)
-	__showPopup("mnu_ADD_PROPERTY",	$arPropertyPopup);
-
-$arPropertyPopupIB1 = array();
-foreach($arResult as $key => $property)
-{
-	$arPropertyPopupIB1[$property["CODE"]] = array(
-		"TEXT" => htmlspecialcharsbx($property["NAME"]),
-		"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.".$property["ID"]."}')",
-		"CODE" => $property["CODE"],
-	);
-}
-if(!empty($arPropertyPopupIB1))
-	__showPopup("IB_SEG_ADD_PROP_IN_TITLE",	$arPropertyPopupIB1);
-
-$arPropertyPopupIB2 = array("NAME" => array(
-	"TEXT" => GetMessage("IB_SEG_TITLE"),
-	"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.CML2_LINK.NAME}')",
-	"CODE" => 'NAME',
-));
-foreach($arAllParentProperties as $key => $property)
-{
-	$arPropertyPopupIB2[$property["CODE"]] = array(
-		"TEXT" => htmlspecialcharsbx($property["NAME"]),
-		"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.CML2_LINK.property.".$property["CODE"]."}')",
-		"CODE" => $property["CODE"],
-	);
-}
-if(!empty($arPropertyPopupIB2))
-	__showPopup("IB_SEG_ADD_PROP_IN_TITLE2", $arPropertyPopupIB2);
 
 $errorMessage = '';
 
@@ -353,6 +317,18 @@ if(!$bReadOnly && check_bitrix_sessid())
 			$parentElement->setFields($arFields);
 		}
 
+		$productData = array(
+			'WEIGHT' => $_POST['IB_SEG_WEIGHT'],
+			'LENGTH' => $_POST['IB_SEG_BASE_LENGTH'],
+			'WIDTH' => $_POST['IB_SEG_BASE_WIDTH'],
+			'HEIGHT' => $_POST['IB_SEG_BASE_HEIGHT'],
+			'VAT_ID' => $_POST['IB_SEG_VAT_ID'],
+			'VAT_INCLUDED' => $_POST['IB_SEG_VAT_INCLUDED'],
+			'MEASURE' => $_POST['IB_SEG_MEASURE']
+		);
+		if (!$useStoreControl)
+			$productData['QUANTITY'] = $_POST['IB_SEG_QUANTITY'];
+
 		foreach($arCombinationResult as $arPropertySaveValues)
 		{
 			$imageRowId = null;
@@ -377,18 +353,21 @@ if(!$bReadOnly && check_bitrix_sessid())
 
 			$arPropertySaveValues[$arSKUInfo['SKU_PROPERTY_ID']] = $parentElementId;
 
-			foreach($arPropertyPopup as $action => $acValue)
+			if (!empty($arPropertyPopup) && is_array($arPropertyPopup))
 			{
-				if($action == 'CODE')
+				foreach ($arPropertyPopup as $action => $acValue)
 				{
-					foreach($arAllProperties as $key => $value)
+					if ($action != 'CODE')
+						continue;
+					foreach ($arAllProperties as $key => $value)
 					{
-						if($value["CODE"] == $acValue["CODE"])
-						{
-							$arReplace['#'.$acValue["CODE"].'#'] = $arPropertySaveValues[$arAllProperties[$key]['ID']];
-						}
+						if ($value["CODE"] != $acValue["CODE"])
+							continue;
+						$arReplace['#'.$acValue["CODE"].'#'] = $arPropertySaveValues[$arAllProperties[$key]['ID']];
 					}
+					unset($key, $value);
 				}
+				unset($action, $acValue);
 			}
 
 			$arIBlockElementAdd = array("NAME" => null, "IBLOCK_ID" => $subIBlockId, "ACTIVE" => "Y");
@@ -485,8 +464,8 @@ if(!$bReadOnly && check_bitrix_sessid())
 			$idNewElement = $obIBlockElement->Add($arIBlockElementAdd, false, true, true);
 			if($idNewElement)
 			{
-
-				CCatalogProduct::Add(array("ID" => $idNewElement, "WEIGHT" => $_POST["IB_SEG_WEIGHT"], "LENGTH" => $_POST["IB_SEG_BASE_LENGTH"], "WIDTH" => $_POST["IB_SEG_BASE_WIDTH"], "HEIGHT" => $_POST["IB_SEG_BASE_HEIGHT"], "VAT_ID" => $_POST["IB_SEG_VAT_ID"], "VAT_INCLUDED" => $_POST["IB_SEG_VAT_INCLUDED"]));
+				$productData['ID'] = $idNewElement;
+				CCatalogProduct::Add($productData, false);
 				foreach($arPriceGroup as $price)
 					CPrice::Add(array("PRODUCT_ID" => $idNewElement, "CURRENCY" => $price["CURRENCY"], "PRICE" => $price["PRICE"], "CATALOG_GROUP_ID" => $price["TYPE"]));
 				$element = new \Bitrix\Iblock\InheritedProperty\ElementValues($subIBlockId, $idNewElement);
@@ -501,6 +480,7 @@ if(!$bReadOnly && check_bitrix_sessid())
 				break;
 			}
 		}
+		unset($productData);
 
 		if($idNewElement)
 		{
@@ -525,6 +505,46 @@ if(!$bReadOnly && check_bitrix_sessid())
 }
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_after.php");
+
+$arPropertyPopup = array();
+foreach($arResult as $key => $property)
+{
+	$arPropertyPopup[] = array(
+			"TEXT" => htmlspecialcharsbx($property["NAME"]),
+			"ONCLICK" => "obPropertyTable.addPropertyTable('".$key."')",
+	);
+}
+if(count($arPropertyPopup) > 0)
+	__showPopup("mnu_ADD_PROPERTY",	$arPropertyPopup);
+
+$arPropertyPopupIB1 = array();
+foreach($arResult as $key => $property)
+{
+	$arPropertyPopupIB1[$property["CODE"]] = array(
+			"TEXT" => htmlspecialcharsbx($property["NAME"]),
+			"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.".$property["ID"]."}')",
+			"CODE" => $property["CODE"],
+	);
+}
+if(!empty($arPropertyPopupIB1))
+	__showPopup("IB_SEG_ADD_PROP_IN_TITLE",	$arPropertyPopupIB1);
+
+$arPropertyPopupIB2 = array("NAME" => array(
+		"TEXT" => GetMessage("IB_SEG_TITLE"),
+		"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.CML2_LINK.NAME}')",
+		"CODE" => 'NAME',
+));
+foreach($arAllParentProperties as $key => $property)
+{
+	$arPropertyPopupIB2[$property["CODE"]] = array(
+			"TEXT" => htmlspecialcharsbx($property["NAME"]),
+			"ONCLICK" => "obPropertyTable.addPropertyInTitle('{=this.property.CML2_LINK.property.".$property["CODE"]."}')",
+			"CODE" => $property["CODE"],
+	);
+}
+if(!empty($arPropertyPopupIB2))
+	__showPopup("IB_SEG_ADD_PROP_IN_TITLE2", $arPropertyPopupIB2);
+
 if($errorMessage)
 {
 	CAdminMessage::ShowMessage($errorMessage);
@@ -541,7 +561,6 @@ else
 	);
 
 	CAdminMessage::ShowMessage($errorMessage);
-
 	?>
 	<form enctype="multipart/form-data" method="POST" action="<?echo $APPLICATION->GetCurPage()?>?" name="iblock_generator_form" id="iblock_generator_form">
 	<input type="hidden" name="lang" value="<?echo LANGUAGE_ID; ?>">
@@ -554,246 +573,241 @@ else
 	<?=bitrix_sessid_post();
 
 	$tabControl = new CAdminTabControl("tabControl", $aTabs, true, true);
-	$strFormAction = $APPLICATION->GetCurPage();
-
-	$tabControl->Begin(array(
-		"FORM_ACTION" => $strFormAction,
-	));
-
+	$tabControl->Begin();
 	$tabControl->BeginNextTab();
 	?>
-	<script type="text/javascript">
-		BX('edit_edit_table').className += ' adm-shop-page-table';
+<script type="text/javascript">
+	BX('edit_edit_table').className += ' adm-shop-page-table';
 
-		var CellTPL = [];
-		<?
-		foreach ($arCellTemplates as $key => $value)
-		{
-			?>CellTPL[<? echo $key; ?>] = '<? echo $value; ?>';
-		<?
-		}
-		?>
-
-		var CellAttr = [];
-		<?
-		foreach ($arCellTemplates as $key => $value)
-		{
-			?>CellAttr[<? echo $key; ?>] = '<? echo $value; ?>';
-		<?
-		}
-		?>
-		var obPricesTable = new JCCatTblEdit({
-			'PREFIX': 'IB_SEG_',
-			'TABLE_PROP_ID': 'generator_price_table',
-			'PROP_COUNT_ID': 'generator_price_table_max_id'
-		});
-		obPricesTable.SetCells(CellTPL, CellAttr);
-
-		var obPropertyTable = new JCIBlockGenerator({
-			'PREFIX': 'IB_SEG_',
-			'TABLE_PROP_ID': 'generator_property_table',
-			'PROP_COUNT_ID': 'generator_price_table_max_id',
-			'AR_ALL_PROPERTIES': <?=CUtil::PhpToJSObject($arResult)?>,
-			'IMAGE_TABLE_ID': "adm-shop-table",
-			'AR_FILE_PROPERTIES': <?=CUtil::PhpToJSObject($arFileProperties)?>
-		});
-
-		function addProperty(arFileProperties)
-		{
-			var fileProperties = eval(arFileProperties);
-			var id = 0;
-			var needAdd = true;
-			if(BX('ib_seg_max_property_id'))
-			{
-				id = BX('ib_seg_max_property_id').value;
-				if(id >= obPropertyTable.AR_FILE_PROPERTIES.length + 2)
-				{
-					return;
-				}
-				BX('ib_seg_max_property_id').value = Number(BX('ib_seg_max_property_id').value) + 1;
-			}
-			for(var eachValue in obPropertyTable.SELECTED_PROPERTIES)
-			{
-				if(obPropertyTable.SELECTED_PROPERTIES.hasOwnProperty(eachValue) && obPropertyTable.SELECTED_PROPERTIES[eachValue] == 'DETAIL')
-				{
-					needAdd = false;
-				}
-			}
-			if(needAdd)
-				obPropertyTable.SELECTED_PROPERTIES[id] = 'DETAIL';
-
-			var propertySpan = BX('ib_seg_property_span');
-			if(propertySpan)
-			{
-				var options = [];
-				for(var key in fileProperties)
-				{
-					if(fileProperties.hasOwnProperty(key))
-						options[options.length] = BX.create('OPTION', {
-								'props': {'value':fileProperties[key]["ID"], 'selected':(fileProperties[key]["ID"] == 'DETAIL')},
-								'text': fileProperties[key]["NAME"]
-							}
-						);
-				}
-				var span = BX.create('span', {
-					props: {
-						className: 'adm-select-wrap'
-					}
-				});
-				var content = BX.create('select', {
-					props: {
-						name:"SELECTED_PROPERTY[]",
-						id:"SELECTED_PROPERTY[]",
-						className:"adm-select ib_seg_add_property_but"
-					},
-					style : {
-						width : '130px'
-					},
-					children : options,
-					'events': {
-						change : function()
-						{
-							for(eachValue in obPropertyTable.SELECTED_PROPERTIES)
-							{
-								if(obPropertyTable.SELECTED_PROPERTIES.hasOwnProperty(eachValue) && obPropertyTable.SELECTED_PROPERTIES[eachValue] == this.value)
-								{
-									return;
-								}
-							}
-							obPropertyTable.SELECTED_PROPERTIES[id] = this.value;
-						}
-					}
-				});
-				span.appendChild(content);
-				propertySpan.appendChild(span);
-			}
-		}
-	</script>
-	<tr>
-		<td colspan="2" class="adm-detail-content-cell">
-			<div class="adm-detail-content-item-block-view-tab">
-				<div class="adm-shop-block-wrap">
-					<table width="100%" border="0" cellspacing="7" cellpadding="0">
-						<tr>
-							<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_TITLE") ?>:</td>
-							<td class="adm-detail-content-cell-r" style="white-space: nowrap !important;">
-								<input type="text" style="width: 637px;" class="adm-input" id="IB_SEG_TITLE" name="IB_SEG_TITLE" >
-								<input type="button" id="IB_SEG_ADD_PROP_IN_TITLE" title="..." value="<?= GetMessage("IB_SEG_SKU_PROPERTIES") ?>">
-								<input type="button" id="IB_SEG_ADD_PROP_IN_TITLE2" title="..." value="<?= GetMessage("IB_SEG_PARENT_PROPERTIES") ?>">
-								<a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_TITLE')?>')" href="#"></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_WEIGHT") ?>:</td>
-							<td class="adm-detail-content-cell-r">
-								<input type="text" style="width: 120px; margin-right: 10px" class="adm-input" name="IB_SEG_WEIGHT">
-								<?echo GetMessage("IB_SEG_BASE_LENGTH")?>:
-								<input type="text" id="CAT_BASE_LENGTH" name="IB_SEG_BASE_LENGTH" style="width: 120px;  margin-right: 10px">
-								<?echo GetMessage("IB_SEG_BASE_WIDTH")?>:
-								<input type="text" id="CAT_BASE_WIDTH" name="IB_SEG_BASE_WIDTH" style="width: 120px;  margin-right: 10px">
-								<?echo GetMessage("IB_SEG_BASE_HEIGHT")?>:
-								<input type="text" id="CAT_BASE_HEIGHT" name="IB_SEG_BASE_HEIGHT" style="width: 120px;">
-								<a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_WEIGHT')?>')" href="#"></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="adm-detail-content-cell-l"><?echo GetMessage("IB_SEG_VAT")?>:</td>
-							<td class="adm-detail-content-cell-r">
-								<span class="adm-select-wrap">
-								<?
-									$arVATRef = CatalogGetVATArray(array(), true);
-									echo SelectBoxFromArray('IB_SEG_VAT_ID', $arVATRef, '', "", ($bReadOnly ? "disabled readonly" : '').'class="adm-select" style="width: 169px;"');
-								?>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<td class="adm-detail-content-cell-l"><?echo GetMessage("IB_SEG_VAT_INCLUDED")?></td>
-							<td class="adm-detail-content-cell-r">
-								<input type="hidden" name="IB_SEG_VAT_INCLUDED" id="IB_SEG_VAT_INCLUDED_N" value="N">
-								<input class="adm-designed-checkbox" type="checkbox" name="IB_SEG_VAT_INCLUDED" id="IB_SEG_VAT_INCLUDED" value="Y" />
-								<label class="adm-designed-checkbox-label" for="IB_SEG_VAT_INCLUDED"></label>
-							</td>
-						</tr>
-						<tr>
-							<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_PRICE_SHORT") ?>:</td>
-							<td class="adm-detail-content-cell-r">
-								<table class="internal" id="generator_price_table">
-									<tr class="heading">
-										<td><?= GetMessage("IB_SEG_PRICE_TYPE") ?>:</td>
-										<td><?= GetMessage("IB_SEG_PRICE") ?>:</td>
-										<td><?= GetMessage("IB_SEG_CURRENCY") ?>:</td>
-									</tr>
-									<tbody>
-									<?
-										$intCount = 0;
-										echo __AddRangeRow($intCount, IB_SEG_ROW_PREFIX);
-									?>
-									</tbody>
-								</table>
-								<span class="adm-btn adm-btn-add" style="margin-top: 12px;" onclick="obPricesTable.addRow();"><?= GetMessage("IB_SEG_PRICE_ROW_ADD") ?></span>
-								<input type="hidden" value="1" id="generator_price_table_max_id">
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="adm-detail-content-cell" style="padding-bottom: 0;">
-			<div class="adm-shop-toolbar">
-				<span class="adm-btn adm-btn-add" id="mnu_ADD_PROPERTY"><?= GetMessage("IB_SEG_PROPERTY_ADD") ?></span><span class="adm-btn adm-btn-download" id="mnu_ADD_ALL_PROPERTY" onclick="obPropertyTable.loadAllProperties()"><?= GetMessage("IB_SEG_PROPERTY_ADD_ALL") ?></span><a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_PROPERTIES')?>')" href="#"></a>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="adm-detail-content-cell" style="padding-top: 0;">
-			<div class="adm-detail-content-item-block-view-tab">
-				<div class="adm-detail-title-view-tab"><?= GetMessage("IB_SEG_SELECTED_PROPERTIES") ?></div>
-				<input type="hidden" value="0" id="generator_property_table_max_id">
-				<div class="adm-shop-table-block" id="generator_property_table">
-					<script type="text/javascript">
-						<?
-						foreach($arResult as $key => $arProperty)
-						{?>
-						obPropertyTable.addPropertyTable(<?=$key?>);
-						<?
-						}
-						?>
-					</script>
-				</div>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="adm-detail-content-cell">
-			<div class="adm-detail-content-item-block-view-tab">
-				<div class="adm-detail-title-view-tab"><?= GetMessage("IB_SEG_PICTURES") ?></div>
-				<div class="adm-shop-block-wrap">
-					<div class="adm-shop-select-bar" id="ib_seg_select_prop_bar">
-						<input type="hidden" value="0" id="ib_seg_max_property_id">
-						<input type="hidden" value="0" id="ib_seg_max_image_row_id">
-						<?$arFileProperties[]=array("ID" => "DETAIL", "NAME" => GetMessage("IB_SEG_DETAIL"), "SELECTED" => 'Y');?>
-						<?$arFileProperties[]=array("ID" => "ANNOUNCE", "NAME" => GetMessage("IB_SEG_ANNOUNCE")); ?>
-						<span class="adm-btn" onclick="obPropertyTable.addPropertyImages();" id='ib_seg_add_images_button'><?= GetMessage("IB_SEG_ADD_PICTURES") ?></span>
-							<span class="adm-shop-bar-btn-wrap" id='ib_seg_property_span'>
-								<script type="text/javascript">
-									addProperty(<?=CUtil::PhpToJSObject($arFileProperties)?>);
-								</script>
-							</span>
-						<span id='ib_seg_property_add_button_span'>
-							<span id="ib_seg_property_add_button_span_click" class="adm-btn adm-btn-add" onclick="addProperty(<?=CUtil::PhpToJSObject($arFileProperties)?>)"></span>
-						</span>
-					</div>
-					<table class="internal adm-shop-page-internal" id="adm-shop-table">
-					</table>
-				</div>
-			</div>
-		</td>
-	</tr>
+	var CellTPL = [];
 	<?
-	$properties = CIBlockProperty::GetList(Array("ID"=>"asc", "name"=>"asc"), Array("ACTIVE"=>"Y", "PROPERTY_TYPE"=>'F', "MULTIPLE" => 'Y', "CHECK_PERMISSIONS"=>"N"));
+	foreach ($arCellTemplates as $key => $value)
+	{
+		?>CellTPL[<? echo $key; ?>] = '<? echo $value; ?>';
+	<?
+	}
+	?>
+
+	var CellAttr = [];
+	<?
+	foreach ($arCellTemplates as $key => $value)
+	{
+		?>CellAttr[<? echo $key; ?>] = '<? echo $value; ?>';
+	<?
+	}
+	?>
+	var obPricesTable = new JCCatTblEdit({
+		'PREFIX': 'IB_SEG_',
+		'TABLE_PROP_ID': 'generator_price_table',
+		'PROP_COUNT_ID': 'generator_price_table_max_id'
+	});
+	obPricesTable.SetCells(CellTPL, CellAttr);
+
+	var obPropertyTable = new JCIBlockGenerator({
+		'PREFIX': 'IB_SEG_',
+		'TABLE_PROP_ID': 'generator_property_table',
+		'PROP_COUNT_ID': 'generator_price_table_max_id',
+		'AR_ALL_PROPERTIES': <?=CUtil::PhpToJSObject($arResult)?>,
+		'IMAGE_TABLE_ID': "adm-shop-table",
+		'AR_FILE_PROPERTIES': <?=CUtil::PhpToJSObject($arFileProperties)?>
+	});
+
+	function addProperty(arFileProperties)
+	{
+		var fileProperties = eval(arFileProperties),
+			id = 0;
+		if(BX('ib_seg_max_property_id'))
+		{
+			id = BX('ib_seg_max_property_id').value;
+			if(id >= obPropertyTable.AR_FILE_PROPERTIES.length + 2)
+			{
+				return;
+			}
+			BX('ib_seg_max_property_id').value = Number(BX('ib_seg_max_property_id').value) + 1;
+		}
+		obPropertyTable.SELECTED_PROPERTIES[id] = 'DETAIL';
+
+		var propertySpan = BX('ib_seg_property_span');
+		if(propertySpan)
+		{
+			var options = [];
+			for(var key in fileProperties)
+			{
+				if(fileProperties.hasOwnProperty(key))
+					options[options.length] = BX.create('OPTION', {
+							'props': {'value':fileProperties[key]["ID"], 'selected':(fileProperties[key]["ID"] == 'DETAIL')},
+							'text': fileProperties[key]["NAME"]
+						}
+					);
+			}
+			var span = BX.create('span', {
+				props: {
+					className: 'adm-select-wrap'
+				}
+			});
+			var content = BX.create('select', {
+				props: {
+					name:"SELECTED_PROPERTY[]",
+					id:"SELECTED_PROPERTY[]",
+					className:"adm-select ib_seg_add_property_but"
+				},
+				style : {
+					width : '130px'
+				},
+				children : options,
+				'events': {
+					change : function()
+					{
+						obPropertyTable.SELECTED_PROPERTIES[id] = this.value;
+					}
+				}
+			});
+			span.appendChild(content);
+			propertySpan.appendChild(span);
+		}
+	}
+</script>
+<tr><td colspan="2" class="adm-detail-content-cell">
+	<div class="adm-detail-content-item-block-view-tab"><div class="adm-shop-block-wrap">
+	<table width="100%" border="0" cellspacing="7" cellpadding="0">
+		<tr>
+			<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_TITLE") ?>:</td>
+			<td class="adm-detail-content-cell-r" style="white-space: nowrap !important;">
+				<input type="text" style="width: 637px;" class="adm-input" id="IB_SEG_TITLE" name="IB_SEG_TITLE" >
+				<input type="button" id="IB_SEG_ADD_PROP_IN_TITLE" title="..." value="<?= GetMessage("IB_SEG_SKU_PROPERTIES") ?>">
+				<input type="button" id="IB_SEG_ADD_PROP_IN_TITLE2" title="..." value="<?= GetMessage("IB_SEG_PARENT_PROPERTIES") ?>">
+				<a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_TITLE')?>')" href="#"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_WEIGHT") ?>:</td>
+			<td class="adm-detail-content-cell-r">
+				<input type="text" style="width: 120px; margin-right: 10px" class="adm-input" name="IB_SEG_WEIGHT">
+				<?echo GetMessage("IB_SEG_BASE_LENGTH")?>:
+				<input type="text" id="CAT_BASE_LENGTH" name="IB_SEG_BASE_LENGTH" style="width: 120px;  margin-right: 10px">
+				<?echo GetMessage("IB_SEG_BASE_WIDTH")?>:
+				<input type="text" id="CAT_BASE_WIDTH" name="IB_SEG_BASE_WIDTH" style="width: 120px;  margin-right: 10px">
+				<?echo GetMessage("IB_SEG_BASE_HEIGHT")?>:
+				<input type="text" id="CAT_BASE_HEIGHT" name="IB_SEG_BASE_HEIGHT" style="width: 120px;">
+				<a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_WEIGHT')?>')" href="#"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="adm-detail-content-cell-l"><?= GetMessage((!$useStoreControl ? 'IB_SEG_QUANTITY' : 'IB_SEG_MEASURE')); ?></td>
+			<td class="adm-detail-content-cell-r"><?
+			if (!$useStoreControl)
+			{
+				?><input type="text" style="width: 120px; margin-right: 10px" class="adm-input" name="IB_SEG_QUANTITY">
+				<? echo GetMessage('IB_SEG_MEASURE');
+			}
+			?> <span class="adm-select-wrap" style="vertical-align: top;"><select name="IB_SEG_MEASURE" class="adm-select" style="width: 169px;"><?
+			$measureIterator = CCatalogMeasure::getList(
+				array(), array(), false, false, array("ID", "CODE", "MEASURE_TITLE", "SYMBOL_INTL", "IS_DEFAULT")
+			);
+			while($measure = $measureIterator->Fetch())
+			{
+				?><option value="<?=$measure['ID']?>"<? echo ($measure['IS_DEFAULT'] == 'Y' ? ' selected' : '');?>><?
+				echo htmlspecialcharsEx($measure['MEASURE_TITLE']); ?></option><?
+			}
+			unset($measure, $measureIterator);
+			?></select></span></td>
+		</tr>
+		<tr>
+			<td class="adm-detail-content-cell-l"><?echo GetMessage("IB_SEG_VAT")?>:</td>
+			<td class="adm-detail-content-cell-r">
+				<span class="adm-select-wrap">
+				<?
+					$arVATRef = CatalogGetVATArray(array(), true);
+					echo SelectBoxFromArray('IB_SEG_VAT_ID', $arVATRef, '', "", ($bReadOnly ? "disabled readonly" : '').'class="adm-select" style="width: 169px;"');
+				?>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="adm-detail-content-cell-l"><?echo GetMessage("IB_SEG_VAT_INCLUDED")?></td>
+			<td class="adm-detail-content-cell-r">
+				<input type="hidden" name="IB_SEG_VAT_INCLUDED" id="IB_SEG_VAT_INCLUDED_N" value="N">
+				<input class="adm-designed-checkbox" type="checkbox" name="IB_SEG_VAT_INCLUDED" id="IB_SEG_VAT_INCLUDED" value="Y" />
+				<label class="adm-designed-checkbox-label" for="IB_SEG_VAT_INCLUDED"></label>
+			</td>
+		</tr>
+		<tr>
+			<td class="adm-detail-content-cell-l"><?= GetMessage("IB_SEG_PRICE_SHORT") ?>:</td>
+			<td class="adm-detail-content-cell-r">
+				<table class="internal" id="generator_price_table" style="width: auto;">
+					<tr class="heading">
+						<td><?= GetMessage("IB_SEG_PRICE_TYPE") ?>:</td>
+						<td><?= GetMessage("IB_SEG_PRICE") ?>:</td>
+						<td><?= GetMessage("IB_SEG_CURRENCY") ?>:</td>
+					</tr>
+					<tbody>
+					<?
+						$intCount = 0;
+						echo __AddRangeRow($intCount, IB_SEG_ROW_PREFIX);
+					?>
+					</tbody>
+				</table>
+				<span class="adm-btn adm-btn-add" style="margin-top: 12px;" onclick="obPricesTable.addRow();"><?= GetMessage("IB_SEG_PRICE_ROW_ADD") ?></span>
+				<input type="hidden" value="1" id="generator_price_table_max_id">
+			</td>
+		</tr>
+	</table>
+	</div></div>
+</td></tr>
+<tr>
+	<td colspan="2" class="adm-detail-content-cell" style="padding-bottom: 0;">
+		<div class="adm-shop-toolbar">
+			<span class="adm-btn adm-btn-add" id="mnu_ADD_PROPERTY"><?= GetMessage("IB_SEG_PROPERTY_ADD") ?></span><span class="adm-btn adm-btn-download" id="mnu_ADD_ALL_PROPERTY" onclick="obPropertyTable.loadAllProperties()"><?= GetMessage("IB_SEG_PROPERTY_ADD_ALL") ?></span><a class="adm-input-help-icon" onmouseover="BX.hint(this, '<?=GetMessage('IB_SEG_TOOLTIP_PROPERTIES')?>')" href="#"></a>
+		</div>
+	</td>
+</tr>
+<tr>
+	<td colspan="2" class="adm-detail-content-cell" style="padding-top: 0;">
+		<div class="adm-detail-content-item-block-view-tab">
+			<div class="adm-detail-title-view-tab"><?= GetMessage("IB_SEG_SELECTED_PROPERTIES") ?></div>
+			<input type="hidden" value="0" id="generator_property_table_max_id">
+			<div class="adm-shop-table-block" id="generator_property_table">
+				<script type="text/javascript">
+					<?
+					foreach($arResult as $key => $arProperty)
+					{?>
+					obPropertyTable.addPropertyTable(<?=$key?>);
+					<?
+					}
+					?>
+				</script>
+			</div>
+		</div>
+	</td>
+</tr>
+<tr>
+	<td colspan="2" class="adm-detail-content-cell">
+		<div class="adm-detail-content-item-block-view-tab">
+			<div class="adm-detail-title-view-tab"><?= GetMessage("IB_SEG_PICTURES") ?></div>
+			<div class="adm-shop-block-wrap">
+				<div class="adm-shop-select-bar" id="ib_seg_select_prop_bar">
+					<input type="hidden" value="0" id="ib_seg_max_property_id">
+					<input type="hidden" value="0" id="ib_seg_max_image_row_id">
+					<?$arFileProperties[]=array("ID" => "DETAIL", "NAME" => GetMessage("IB_SEG_DETAIL"), "SELECTED" => 'Y');?>
+					<?$arFileProperties[]=array("ID" => "ANNOUNCE", "NAME" => GetMessage("IB_SEG_ANNOUNCE")); ?>
+					<span class="adm-btn" onclick="obPropertyTable.addPropertyImages();" id='ib_seg_add_images_button'><?= GetMessage("IB_SEG_ADD_PICTURES") ?></span>
+						<span class="adm-shop-bar-btn-wrap" id='ib_seg_property_span'>
+							<script type="text/javascript">
+								addProperty(<?=CUtil::PhpToJSObject($arFileProperties)?>);
+							</script>
+						</span>
+					<span id='ib_seg_property_add_button_span'>
+						<span id="ib_seg_property_add_button_span_click" class="adm-btn adm-btn-add" onclick="addProperty(<?=CUtil::PhpToJSObject($arFileProperties)?>)"></span>
+					</span>
+				</div>
+				<table class="internal adm-shop-page-internal" id="adm-shop-table">
+				</table>
+			</div>
+		</div>
+	</td>
+</tr>
+	<?
+	$properties = CIBlockProperty::GetList(Array("SORT" => "ASC", "NAME" => "ASC"), Array("ACTIVE"=>"Y", "PROPERTY_TYPE"=>'F', "MULTIPLE" => 'Y', "CHECK_PERMISSIONS"=>"N"));
 	if($prop_fields = $properties->Fetch())
 	{
 		echo '<tr><td colspan="2"><div style="display: none;">';
@@ -802,7 +816,7 @@ else
 		_ShowPropertyField('PROP['.$prop_fields["ID"].']', $prop_fields, $prop_fields["VALUE"], false, false, 50000, 'iblock_generator_form');
 		echo '</div></td></tr>';
 	}
-	$properties = CIBlockProperty::GetList(Array("ID"=>"asc", "name"=>"asc"), Array("ACTIVE"=>"Y", "PROPERTY_TYPE"=>'F', "MULTIPLE" => 'N', "CHECK_PERMISSIONS"=>"N"));
+	$properties = CIBlockProperty::GetList(Array("SORT" => "ASC", "NAME" => "ASC"), Array("ACTIVE"=>"Y", "PROPERTY_TYPE"=>'F', "MULTIPLE" => 'N', "CHECK_PERMISSIONS"=>"N"));
 	if($prop_fields = $properties->Fetch())
 	{
 		echo '<tr><td colspan="2"><div style="display: none;">';
